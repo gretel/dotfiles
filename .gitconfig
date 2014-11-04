@@ -1,0 +1,36 @@
+[user]
+  name = tom hensel
+  email = tom@jitter.eu
+[push]
+  default = simple
+[core]
+  pager = less -R
+  excludesfile = ~/.gitignore_global
+  attributesfile = ~/.gitattribute_global
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  ui = auto
+  interactive = auto
+  grep = auto
+[push]
+  default = tracking
+[pull]
+  rebase = true
+[grep]
+  lineNumbers = true
+[status]
+  relativePaths = true
+  showUntrackedFiles = no
+[alias]
+  st = status
+  ci = commit
+  br = branch
+  co = checkout
+  df = diff
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  up = !sh -c 'git pull --rebase --prune && git log --pretty=format:\"%Cred%ae %Creset- %C(yellow)%s %Creset(%ar)\" HEAD@{1}..'
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+  ls = ls-files
