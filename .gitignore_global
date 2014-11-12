@@ -3,6 +3,8 @@
 .idea
 *.sublime-project
 *.sublime-workspace
+*.iml
+*.log
 log/
 run/
 tmp/
