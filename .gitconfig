@@ -1,9 +1,9 @@
 [user]
-name = Tom Hensel
-email = tom@jitter.eu
+	name = Tom Hensel
+	email = tom@jitter.eu
 
 [core]
-excludesfile = ~/.gitignore_global
+	excludesfile = /Users/tom/.gitignore_global
 editor = "subl -wn"
 pager = less -R
 autocrlf = input
@@ -11,12 +11,12 @@ safecrlf = true
 whitespace = fix, -indent-with-non-tab, space-before-tab, trailing-space, cr-at-eol
 
 [difftool "sourcetree"]
-cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-path =
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
 
 [mergetool "sourcetree"]
-cmd = /Applications/Apps/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-trustExitCode = true
+	cmd = /opt/homebrew-cask/Caskroom/sourcetree/2.0.3/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
 
 [mergetool]
 keepBackup = true
@@ -179,5 +179,5 @@ autocorrect = 1
 
 [filter "media"]
 required = true
-clean = git media clean %f
-smudge = git media smudge %f
+	clean = git media clean %f
+	smudge = git media smudge %f
