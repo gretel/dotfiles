@@ -1,4 +1,4 @@
-> _Wahoo_: The Fishshell Framework
+> _Wahoo_: The [Fishshell][Fishshell] Framework
 
 ![](https://img.shields.io/badge/100% -Fresh-00cc00.svg?style=flat-square)
 ![](https://img.shields.io/badge/Wahoo-Framework-00b0ff.svg?style=flat-square)
@@ -25,11 +25,11 @@
 |
 <b><a href="#usage">Usage</a></b>
 |
-<b><a href="#dependencies">Dependencies</a></b>
-|
 <b><a href="#contributing">Contributing</a></b>
 |
-<b><a href="DOC.md">Documentation</a></b>
+<b><a href="DOC.md">Docs</a></b>
+|
+<b><a href="https://github.com/bucaran/wahoo/wiki">Wiki</a></b>
 
 </p>
 
@@ -98,12 +98,6 @@ Display the help page on the console.
 
 Display version.
 
-# Dependencies
-
-[![](https://img.shields.io/badge/Fish-Shell-fb0044.svg?style=flat-square)
-][Fishshell]
-[![](https://img.shields.io/badge/git-scm-ff8f00.svg?style=flat-square)] [git]
-
 # Contributing
 
 Just start using Wahoo to handle your fish configuration. If you think something is missing, make a theme or find a bug, consider creating a PR.
@@ -118,5 +112,5 @@ Consult the [documentation](DOC.md) to learn how to create packages.
 [TravisLogo]: http://img.shields.io/travis/bucaran/wahoo.svg?style=flat-square
 [Travis]: https://travis-ci.org/bucaran/wahoo
 [Fishshell]: http://fishshell.com
-[git]: http://git-scm.com/
+
 
