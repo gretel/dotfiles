@@ -35,7 +35,7 @@ function wa -d "Wahoo"
 
     case "u" "use"
       if test (count $argv) -eq 1
-        WAHOO::util::themes
+        WAHOO::util::list_themes
       else if test (count $argv) -eq 2
         WAHOO::cli::use $argv[2]
       else
@@ -72,6 +72,15 @@ function wa -d "Wahoo"
       end
       WAHOO::cli::submit $argv[2]
 
+    case "n" "nw" "new"
+      if test (count $argv) -ne 3
+        echo (bold)(line)(err)"Argument missing"(off) 1^&2
+        echo "Usage: $_ "(em)"$argv[1]"(off)" "\
+          (bold)"pkg|theme"(off)" <name>" 1^&2
+        return $WAHOO_MISSING_ARG
+      end
+      WAHOO::cli::new $argv[2..-1]
+
     case "*"
       echo (bold)(line)(err)"$argv[1] option not recognized"(off) 1^&2
       return $WAHOO_UNKNOWN_OPT
@@ -83,7 +92,7 @@ function WAHOO::cli::version
 end
 
 function WAHOO::cli::help
-  echo "\
+  echo \n"\
   "(bold)"Wahoo"(off)"
     The Fishshell Framework
 
@@ -91,16 +100,17 @@ function WAHOO::cli::help
     wa "(line)"action"(off)" [package]
 
   "(bold)"Actions"(off)"
-     u"(bold)(line)"p"(off)"date  Update Wahoo.
-       "(bold)(line)"h"(off)"elp  Open Documentation.
+       "(bold)(line)"l"(off)"ist  List local packages.
         "(bold)(line)"g"(off)"et  Install one or more packages.
-       "(bold)(line)"l"(off)"ist  List installed packages.
-        "(bold)(line)"u"(off)"se  Display / apply themes.
+        "(bold)(line)"u"(off)"se  List / Apply themes.
      "(bold)(line)"r"(off)"emove  Remove a package.
+     u"(bold)(line)"p"(off)"date  Update Wahoo.
+        "(bold)(line)"n"(off)"ew  Create a new package from a template.
      "(bold)(line)"s"(off)"ubmit  Submit a package to the registry.
-    "(bold)(line)"v"(off)"ersion  Show version.
+       "(bold)(line)"h"(off)"elp  Display this help.
+    "(bold)(line)"v"(off)"ersion  Display version.
 
-  For more information visit → "(bold)(line)"git.io/wahoo-doc"(off)
+  For more information visit → "(bold)(line)"git.io/wahoo-doc"(off)\n
 end
 
 function WAHOO::cli::use
@@ -271,6 +281,37 @@ function WAHOO::cli::submit
   open "https://github.com"/$user/wahoo
 end
 
+function WAHOO::cli::new -a option name
+  switch $option
+    case "p" "pkg" "pack" "packg" "package"
+      set pkg "pkg"
+    case "t" "th" "thm" "theme"
+      set pkg "themes"
+    case "*"
+      echo (bold)(line)(err)"$option is not a valid option."(off) 1^&2
+      return $WAHOO_INVALID_ARG
+  end
+
+  if not WAHOO::util::validate_package "$name"
+    echo (bold)(line)(err)"$name is not a valid package/theme name"(off) 1^&2
+    return $WAHOO_INVALID_ARG
+  end
+
+  if set -l dir (WAHOO::util::mkdir "$pkg/$name")
+    cd $dir
+    if test $pkg = "pkg"
+      echo "function $name"\n"end"\n > "$dir/$name.fish"
+    else
+      cp "$WAHOO_PATH/themes/default/fish_prompt.fish" "$dir/fish_prompt.fish"
+    end
+    echo "# $name"\n > "$dir/README.md"
+    echo (em)"Directory changed to "(line)"$dir"(off)
+  else
+    WAHOO::util::die $WAHOO_UNKNOWN_ERR \
+      (bold)(line)(err)"\$WAHOO_CUSTOM and \$WAHOO_PATH undefined."(off)
+  end
+end
+
 function WAHOO::util::validate_package
   set -l pkg $argv[1]
   for default in wahoo wa
@@ -313,7 +354,7 @@ function WAHOO::util::db
   end
 end
 
-function WAHOO::util::themes
+function WAHOO::util::list_themes
   set -l seen ""
   set -l theme (cat $WAHOO_CONFIG/theme)
   set -l regex "[[:<:]]($theme)[[:>:]]"

@@ -80,6 +80,10 @@ Apply a theme. If the theme is not installed, Wahoo will download it from the re
 
 Remove a theme or package. Packages listening to `uninstall` events will be called before the package is removed from disk to allow custom cleanup of resources, etc. See [Documentation](DOC.md#uninstall).
 
+## `new pkg|theme <name>`
+
+Create a new directory in `$WAHOO_CUSTOM/[themes|pkg]/<name>` or `$WAHOO_PATH/[themes|pkg]/<name>` if that fails and copy a starting template for the new package. The template for packages is the same as `themes/default/fish_prompt.fish`. For regular packages it's created in the fly.
+
 ## `submit <package>`
 
 > Current directory must be under `git` source control and have a remote origin.
