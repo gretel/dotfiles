@@ -60,7 +60,7 @@ You don't need to use `sudo` if you already have `fish` installed or use [Homebr
 
 ## `update`
 
-Update the framework using [`git`][git].
+Update the framework using [`Git`][Git].
 
 Updates are constructive. Unstaged changes are [stashed](https://git-scm.com/book/no-nb/v1/Git-Tools-Stashing) and reapplied after pulling updates from upstream. Similarly, if you have committed changes to the repo they are [rebased](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) with master.
 
@@ -116,5 +116,6 @@ Consult the [documentation](DOC.md) to learn how to create packages.
 [TravisLogo]: http://img.shields.io/travis/bucaran/wahoo.svg?style=flat-square
 [Travis]: https://travis-ci.org/bucaran/wahoo
 [Fishshell]: http://fishshell.com
+[Git]: https://git-scm.com/
 
 
