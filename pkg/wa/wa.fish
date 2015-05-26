@@ -26,11 +26,11 @@ function wa -d "Wahoo"
       WAHOO::cli::help
 
     case "l" "li" "lis" "lst" "list"
-      WAHOO::cli::list $WAHOO_PATH/pkg/*
+      WAHOO::cli::list $WAHOO_PATH/pkg
 
     case "g" "ge" "get" "install"
       test (count $argv) -eq 1
-        and WAHOO::cli::list $WAHOO_PATH/db/*.pkg .pkg $WAHOO_PATH/pkg
+        and WAHOO::cli::list $WAHOO_PATH/db .pkg $WAHOO_PATH/pkg
         or WAHOO::cli::get $argv[2..-1]
 
     case "u" "use"
@@ -132,14 +132,12 @@ function WAHOO::cli::use
   WAHOO::util::apply_theme $argv[1]
 end
 
-function WAHOO::cli::list
-  set -l path $argv[1]
-  set -l ext ""
-  set -l exclude ""
-  set -q argv[2]; and set ext $argv[2]
-  set -q argv[3]; and set exclude (basename $argv[3]/*)
+function WAHOO::cli::list -a path ext exclude
+  set -q exclude
+    and set exclude (basename "$exclude"/*)
+    or set -l exclude ""
 
-  for item in (printf "%s\n" $path)
+  for item in (printf "%s\n" "$path"/*"$ext")
     set item (basename "$item" "$ext")
     if not contains $item $exclude
       echo $item
@@ -193,7 +191,11 @@ end
 function WAHOO::cli::remove
   for pkg in $argv
     if not WAHOO::util::validate_package $pkg
-      echo (bold)(line)(err)"$pkg is not a valid package/theme name"(off) 1^&2
+      if test $pkg = "wa"
+        echo (bold)(line)(err)"You can't remove wa!"(off) 1^&2
+      else
+        echo (bold)(line)(err)"$pkg is not a valid package/theme name"(off) 1^&2
+      end
       return $WAHOO_INVALID_ARG
     end
 
