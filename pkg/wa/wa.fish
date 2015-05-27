@@ -264,9 +264,9 @@ function WAHOO::cli::submit
 
   if not git remote show remote >/dev/null ^&1
     WAHOO::util::fork_github_repo "$user" "bucaran/wahoo"
-    git remote rm origin
-    git remote add origin "https://github.com"/$user/wahoo
-    git remote add upstream "https://github.com"/bucaran/wahoo
+    git remote rm origin >/dev/null ^&1
+    git remote add origin "https://github.com"/$user/wahoo >/dev/null ^&1
+    git remote add upstream "https://github.com"/bucaran/wahoo >/dev/null ^&1
   end
 
   git checkout -b add-$name
