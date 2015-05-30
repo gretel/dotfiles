@@ -19,30 +19,32 @@
 <br>
 
 <p align="center">
-<b><a href="#about">About</a></b>
+<b><a href="#about">Start</a></b>
 |
 <b><a href="#install">Install</a></b>
 |
 <b><a href="#usage">Usage</a></b>
 |
-<b><a href="#contributing">Contributing</a></b>
-|
-<b><a href="DOC.md">Docs</a></b>
+
+<b><a href="DOC.md">Documentation</a></b>
 |
 <b><a href="https://github.com/bucaran/wahoo/wiki">Wiki</a></b>
-
+|
+<b><a href="#contributing">Contributing</a></b>
+|
+<b><a href="#uninstall">Uninstall</a></b>
 </p>
 
 <br>
 
-# About [![][TravisLogo]][Travis]
+# About [![Join the chat at https://gitter.im/bucaran/wahoo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bucaran/wahoo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 _Wahoo_ is an all-purpose framework and decentralized package manager for the [fishshell][Fishshell]. It looks after your configuration and packages. It's light, fast and easy to use.
 
 > Packages, plugins, libraries, themes, it's all the same to Wahoo.
 
 
-# Install
+# Install [![][TravisLogo]][Travis]
 > Requires `sudo` to install [fish][Fishshell] and other [dependencies](#deps).
 
 ```sh
@@ -102,11 +104,20 @@ Display the help page on the console.
 
 Display version.
 
+## `destroy`
+
+Uninstall _Wahoo_. See [uninstall](#uninstall) for more information.
+
 # Contributing
 
 Just start using Wahoo to handle your fish configuration. If you think something is missing, make a theme or find a bug, consider creating a PR.
 
-Consult the [documentation](DOC.md) to learn how to create packages.
+Consult the [documentation](DOC.md) to learn more about creating packages.
+
+
+# Uninstall
+
+To remove Wahoo, run `wa destroy`. This removes the directories in `$HOME/.wahoo` and `$HOME/.config/wahoo`, restores you `fish` configuration in `$HOME/config/fish/config.fish` and attempts to uninstall each plugin by emitting `uninstall_<pkg>` event to which packages can subscribe to correctly remove their own configuration, resources, etc
 
 # License
 
