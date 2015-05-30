@@ -37,11 +37,14 @@
 
 <br>
 
-# About [![][TravisLogo]][Travis]
+# About [![Join the chat at https://gitter.im/bucaran/wahoo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bucaran/wahoo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 _Wahoo_ is an all-purpose framework and decentralized package manager for the [fishshell][Fishshell]. It looks after your configuration and packages. It's light, fast and easy to use.
 
-# Install
+> Packages, plugins, libraries, themes, it's all the same to Wahoo.
+
+
+# Install [![][TravisLogo]][Travis]
 > Requires `sudo` to install [fish][Fishshell] and other [dependencies](#deps).
 
 ```sh
