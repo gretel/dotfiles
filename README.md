@@ -41,11 +41,8 @@
 
 _Wahoo_ is an all-purpose framework and decentralized package manager for the [fishshell][Fishshell]. It looks after your configuration and packages. It's light, fast and easy to use.
 
-> Packages, plugins, libraries, themes, it's all the same to Wahoo.
-
-
 # Install [![][TravisLogo]][Travis]
-> Requires `sudo` to install [fish][Fishshell] and other [dependencies](#deps).
+> Use `sudo` if you need to install [fish][Fishshell].
 
 ```sh
 curl -L git.io/wa | sh
@@ -54,70 +51,73 @@ wa help
 
 ### About `sudo`
 
-You don't need to use `sudo` if you already have `fish` installed or use [Homebrew](http://brew.sh/), but if you are starting from scratch you need to `sudo` in order to install `fish`, its dependencies and change the system's default shell.
+You don't need to use `sudo` if you already have `fish` installed or use [Homebrew](http://brew.sh/), but if you are starting from scratch you need to `sudo` in order to install `fish` along with its dependencies and change the system's default shell.
 
 # Usage
 
-> Each command is preceded by `wa`, e.g, `wa help`
-
-## `update`
+## `wa update`
 
 Update the framework using [`Git`][Git].
 
 Updates are constructive. Unstaged changes are [stashed](https://git-scm.com/book/no-nb/v1/Git-Tools-Stashing) and reapplied after pulling updates from upstream. Similarly, if you have committed changes to the repo they are [rebased](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) with master.
 
-## `get <package>`
+## `wa get` _`<package>`_
 
-Install one or more themes or packages. Discover packages with `wa get` and themes with `wa use` _without_ arguments. If the package is already installed Wahoo will update it.
+Install one or more themes or packages. Discover packages with `wa get` and themes with `wa use` . _If_ the package is already installed Wahoo will __update__ it.
 
 ## `list`
 
-List all packages in the registry. Same as `wa get` _without_ arguments.
+List all installed packages.
 
-## `use <theme>`
+## `use` _`<theme>`_
 
-Apply a theme. If the theme is not installed, Wahoo will download it from the registry. To list all available themes type `wa use`.
+Apply a theme. To list all available themes type `wa use`.
 
-## `remove <package>`
+## `remove` _`<package>`_
 
-Remove a theme or package. Packages listening to `uninstall` events will be called before the package is removed from disk to allow custom cleanup of resources, etc. See [Documentation](DOC.md#uninstall).
+Remove a theme or package. Packages subscribed to `uninstall_<pkg>` events will be called before the package is removed to allow custom cleanup of resources, etc. See [Documentation](DOC.md#uninstall).
 
-## `new pkg|theme <name>`
+## `new pkg/theme` _`<name>`_
 
-Create a new directory in `$WAHOO_CUSTOM/[themes|pkg]/<name>` or `$WAHOO_PATH/[themes|pkg]/<name>` if that fails and copy a starting template for the new package. The template for packages is the same as `themes/default/fish_prompt.fish`. For regular packages it's created in the fly.
 
-## `submit <package>`
+Create a new package or theme from a template.
+
+A new directory is created under `$WAHOO_CUSTOM/[themes|pkg]/` (or `$WAHOO_PATH/[themes|pkg]/` if that fails).
+
+## `submit` _`<package>`_
 
 > Current directory must be under `git` source control and have a remote origin.
 
-Creates a new branch `add-<package name>` in your local fork of Wahoo and adds a new entry to the local registry under `$WAHOO_PATH/db` using the [`$PWD`](http://en.wikipedia.org/wiki/Working_directory) git remote origin. If you haven't forked Wahoo, this forks the project on GitHub and updates your local clone remote [origin](http://stackoverflow.com/questions/9529497/what-is-origin-in-git) and [upstream](http://stackoverflow.com/questions/2739376/definition-of-downstream-and-upstream).
+Create a new branch `add-<package name>` in your local fork of Wahoo and adds a new entry to the local registry under `$WAHOO_PATH/db` using the [`$PWD`](http://en.wikipedia.org/wiki/Working_directory) git remote origin.
 
-Finally, the GitHub's repository is opened in your preferred browser. You can submit a PR from there.
+This also forks Wahoo (if you haven't already) and updates your clone's remote [origin](http://stackoverflow.com/questions/9529497/what-is-origin-in-git) and [upstream](http://stackoverflow.com/questions/2739376/definition-of-downstream-and-upstream).
 
-If you prefer to roll your own, simply add a new file `<package name>.pkg` or `<theme name>.theme` with the remote URL to `$WAHOO_PATH/db` and submit your PR. See [Documentation](DOC.md#submitting-a-package).
+See [Submitting a Package](https://github.com/bucaran/wahoo/wiki/Screencasts#submitting-a-package).
 
-## `help`
+If you prefer to roll your own, simply add a new file `<package name>.pkg` or `<theme name>.theme` with the remote URL in `$WAHOO_PATH/db` and _submit your PR_. See [Documentation](DOC.md#submitting-a-package).
 
-Display the help page on the console.
+## `wa help`
 
-## `version`
+Display help on the console.
+
+## `wa version`
 
 Display version.
 
-## `destroy`
+## `wa destroy`
 
 Uninstall _Wahoo_. See [uninstall](#uninstall) for more information.
 
 # Contributing
 
-Just start using Wahoo to handle your fish configuration. If you think something is missing, make a theme or find a bug, consider creating a PR.
+Just try Wahoo to handle your fish configuration. If you think something is missing, want a new theme or find a bug, please [open an issue](https://git.io/wahoo-issues) or create a PR.
 
 Consult the [documentation](DOC.md) to learn more about creating packages.
 
 
 # Uninstall
 
-To remove Wahoo, run `wa destroy`. This removes the directories in `$HOME/.wahoo` and `$HOME/.config/wahoo`, restores you `fish` configuration in `$HOME/config/fish/config.fish` and attempts to uninstall each plugin by emitting `uninstall_<pkg>` event to which packages can subscribe to correctly remove their own configuration, resources, etc
+To remove Wahoo, run `wa destroy`. This removes both `$HOME/.wahoo` and `$HOME/.config/wahoo`, restores you `fish` configuration in `$HOME/config/fish/config.fish` and attempts to uninstall each plugin by emitting `uninstall_<pkg>` events to subscribed packages. Packages can use this event to correctly remove their own configuration, resources, etc
 
 # License
 
