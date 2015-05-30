@@ -1,17 +1,29 @@
-set -g WAHOO_MISSING_ARG   1
-set -g WAHOO_UNKNOWN_OPT   2
-set -g WAHOO_INVALID_ARG   3
-set -g WAHOO_UNKNOWN_ERR   4
+# SYNOPSIS
+#   Wahoo CLI
+#
+# GLOBALS
+#   WAHOO_VERSION   Version
+#   WAHOO_CONFIG    Wahoo configuration
+#
+# OVERVIEW
+#   Provides options to list, download and remove packages, update
+#   the framework, create / submit a new package, etc.
+
+set -l WAHOO_MISSING_ARG   1
+set -l WAHOO_UNKNOWN_OPT   2
+set -l WAHOO_INVALID_ARG   3
+set -l WAHOO_UNKNOWN_ERR   4
 
 set -g WAHOO_VERSION "0.1.0"
 set -g WAHOO_CONFIG  "$HOME/.config/wahoo"
 
 function wa -d "Wahoo"
-  function line; set_color -u; end
-  function bold; set_color -o; end
-  function em; set_color cyan; end
-  function off; set_color normal; end
-  function err; set_color red; end
+  function em    ;  set_color cyan    ; end
+  function dim   ;  set_color gray    ; end
+  function off   ;  set_color normal  ; end
+  function err   ;  set_color red     ; end
+  function line  ;  set_color -u      ; end
+  function bold  ;  set_color -o      ; end
 
   if test (count $argv) -eq 0
     WAHOO::cli::help
@@ -26,16 +38,25 @@ function wa -d "Wahoo"
       WAHOO::cli::help
 
     case "l" "li" "lis" "lst" "list"
-      WAHOO::cli::list $WAHOO_PATH/pkg
+      WAHOO::util::list_installed | column
 
     case "g" "ge" "get" "install"
-      test (count $argv) -eq 1
-        and WAHOO::cli::list $WAHOO_PATH/db .pkg $WAHOO_PATH/pkg
-        or WAHOO::cli::get $argv[2..-1]
+      if test (count $argv) -eq 1
+        WAHOO::util::list_available | column
+      else
+        WAHOO::cli::get $argv[2..-1]
+      end
 
     case "u" "use"
       if test (count $argv) -eq 1
-        WAHOO::util::list_themes
+        set -l theme (cat $WAHOO_CONFIG/theme)
+        set -l regex "[[:<:]]($theme)[[:>:]]"
+        test (uname) != "Darwin"; and set regex "\b($theme)\b"
+
+        WAHOO::util::list_themes \
+        | column | sed -E "s/$regex/"(line)(bold)(em)"\1"(off)"/"
+        set_color normal
+
       else if test (count $argv) -eq 2
         WAHOO::cli::use $argv[2]
       else
@@ -81,6 +102,9 @@ function wa -d "Wahoo"
       end
       WAHOO::cli::new $argv[2..-1]
 
+    case "destroy"
+      WAHOO::cli::destroy; and reload # So long!
+
     case "*"
       echo (bold)(line)(err)"$argv[1] option not recognized"(off) 1^&2
       return $WAHOO_UNKNOWN_OPT
@@ -93,22 +117,20 @@ end
 
 function WAHOO::cli::help
   echo \n"\
-  "(bold)"Wahoo"(off)"
-    The Fishshell Framework
-
   "(bold)"Usage"(off)"
-    wa "(line)"action"(off)" [package]
+    wa "(line)(dim)"action"(off)" [package]
 
   "(bold)"Actions"(off)"
-       "(bold)(line)"l"(off)"ist  List local packages.
-        "(bold)(line)"g"(off)"et  Install one or more packages.
-        "(bold)(line)"u"(off)"se  List / Apply themes.
-     "(bold)(line)"r"(off)"emove  Remove a package.
-     u"(bold)(line)"p"(off)"date  Update Wahoo.
-        "(bold)(line)"n"(off)"ew  Create a new package from a template.
-     "(bold)(line)"s"(off)"ubmit  Submit a package to the registry.
-       "(bold)(line)"h"(off)"elp  Display this help.
-    "(bold)(line)"v"(off)"ersion  Display version.
+       "(bold)(line)(dim)"l"(off)"ist  List local packages.
+        "(bold)(line)(dim)"g"(off)"et  Install one or more packages.
+        "(bold)(line)(dim)"u"(off)"se  List / Apply themes.
+     "(bold)(line)(dim)"r"(off)"emove  Remove a theme or package.
+     u"(bold)(line)(dim)"p"(off)"date  Update Wahoo.
+        "(bold)(line)(dim)"n"(off)"ew  Create a new package from a template.
+     "(bold)(line)(dim)"s"(off)"ubmit  Submit a package to the registry.
+       "(bold)(line)(dim)"h"(off)"elp  Display this help.
+    "(bold)(line)(dim)"v"(off)"ersion  Display version.
+    "(dim)(bold)(line)"destroy"(off)"  Display version.
 
   For more information visit → "(bold)(line)"git.io/wahoo-doc"(off)\n
 end
@@ -132,18 +154,6 @@ function WAHOO::cli::use
   WAHOO::util::apply_theme $argv[1]
 end
 
-function WAHOO::cli::list -a path ext exclude
-  set -q exclude
-    and set exclude (basename "$exclude"/*)
-    or set -l exclude ""
-
-  for item in (printf "%s\n" "$path"/*"$ext")
-    set item (basename "$item" "$ext")
-    if not contains $item $exclude
-      echo $item
-    end
-  end | column
-end
 
 function WAHOO::cli::update
   set -l repo "upstream"
@@ -265,8 +275,8 @@ function WAHOO::cli::submit
   if not git remote show remote >/dev/null ^&1
     WAHOO::util::fork_github_repo "$user" "bucaran/wahoo"
     git remote rm origin >/dev/null ^&1
-    git remote add origin "https://github.com"/$user/wahoo >/dev/null ^&1
-    git remote add upstream "https://github.com"/bucaran/wahoo >/dev/null ^&1
+    git remote add origin   "https://github.com"/$user/wahoo    >/dev/null ^&1
+    git remote add upstream "https://github.com"/bucaran/wahoo  >/dev/null ^&1
   end
 
   git checkout -b add-$name
@@ -332,6 +342,40 @@ function WAHOO::util::validate_package
   end
 end
 
+function WAHOO::cli::destroy -d "Remove Wahoo"
+  echo (bold)(set_color 555)"Removing Wahoo..."(off)
+  for pkg in $WAHOO_PATH/pkg/*
+    test $pkg != "wa"; and echo WAHOO::cli::remove (basename $pkg)
+  end
+
+  if test -e "$HOME/.config/fish/config.copy"
+    mv "$HOME/.config/fish/config".{copy,fish}
+  end
+
+  if test (basename "$WAHOO_CONFIG") = "wahoo"
+    rm -rf "$WAHOO_CONFIG"
+  end
+
+  if test "$WAHOO_PATH" != "$HOME"
+    rm -rf "$WAHOO_PATH"
+  end
+end
+
+function WAHOO::util::list_installed
+  for item in (basename {$WAHOO_PATH,$WAHOO_CUSTOM}/pkg/*)
+    if not test $item = wa
+      echo $item
+    end
+  end
+end
+function WAHOO::util::list_available
+  for item in (basename -s .pkg $WAHOO_PATH/db/*.pkg)
+    if not contains $item (basename {$WAHOO_PATH,$WAHOO_CUSTOM}/pkg/*)
+      echo $item
+    end
+  end
+end
+
 function WAHOO::util::fork_github_repo
   set -l user $argv[1]
   set -l repo $argv[2]
@@ -358,16 +402,11 @@ end
 
 function WAHOO::util::list_themes
   set -l seen ""
-  set -l theme (cat $WAHOO_CONFIG/theme)
-  set -l regex "[[:<:]]($theme)[[:>:]]"
-  test (uname) != "Darwin"; and set regex "\b($theme)\b"
-
   for theme in (basename $WAHOO_PATH/themes/* $WAHOO_CUSTOM/themes/*) \
   (WAHOO::util::db theme)
     contains $theme $seen; or echo $theme
     set seen $seen $theme
-  end | column | sed -E "s/$regex/"(line)(bold)(em)"\1"(off)"/"
-  set_color normal
+  end
 end
 
 function WAHOO::util::apply_theme
