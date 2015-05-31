@@ -1,7 +1,8 @@
 function wa_destroy -d "Remove Wahoo"
   echo (bold)(set_color 555)"Removing Wahoo..."(off)
-  for pkg in $WAHOO_PATH/pkg/*
-    test $pkg != "wa"; and echo wa_remove_package (basename $pkg)
+
+  for pkg in (basename $WAHOO_PATH/pkg/*)
+    test $pkg != "wa"; and wa_remove_package "$pkg"
   end
 
   if test -e "$HOME/.config/fish/config.copy"

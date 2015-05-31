@@ -1,6 +1,8 @@
 function fish_prompt
+  set -e fish_greeting
   set -l code $status
-  echo (prompt_pwd)" "(begin
+  set -l prompt (prompt_pwd)
+  echo "$prompt "(begin
     if test $code -ne 0
       set_color -o red
     else if test -d ".git"
@@ -8,5 +10,5 @@ function fish_prompt
     else
       set_color -o green
     end
-  end)"$color»» "(set_color normal)
+  end)"$color -->> "(set_color normal)
 end
