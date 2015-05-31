@@ -82,7 +82,7 @@ function wa -d "Wahoo"
         echo "Please open a new issue here → "(line)"git.io/wahoo-issues"(off)
       end
       popd
-      reload
+      refresh
 
     case "s" "su" "sub" "submit"
       switch (count $argv)

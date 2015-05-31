@@ -21,5 +21,5 @@ function wa_get_package
         and echo (em)"$search succesfully installed."(off)
     end
   end
-  reload
+  refresh
 end

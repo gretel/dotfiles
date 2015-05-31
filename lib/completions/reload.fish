@@ -1,1 +1,0 @@
-complete --no-files -c reload -a "-"

@@ -4,7 +4,7 @@
 # ENV
 #   WAHOO_PATH    Set in ~/.config/fish/config.fish
 #   WAHOO_CUSTOM  Same as WAHOO_PATH. ~/.dotfiles by default.
-#   RESET_PATH    Original PATH. To preseve across Wahoo reloads.
+#   RESET_PATH    Original PATH. To preseve across Wahoo refreshs.
 #
 # OVERVIEW
 #   Autoloads Wahoo's packages, themes and custom path (in that order),

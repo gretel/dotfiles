@@ -5,7 +5,7 @@
 # OVERVIEW
 #   Wrap basename so it can handle multiple arguments on Linux.
 
-function basename -d "Get the filename or directory part of a path."
+function basename -d "Get the filename or directory part of a path"
   if test (uname) = "Darwin"
     command basename $argv
   else

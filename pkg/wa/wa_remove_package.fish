@@ -22,5 +22,5 @@ function wa_remove_package
       echo (bold)(line)(err)"$pkg could not be found"(off) 1^&2
     end
   end
-  reload
+  refresh
 end

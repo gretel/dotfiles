@@ -15,5 +15,5 @@ function wa_use
     end
   end
   echo $argv[1] > $WAHOO_CONFIG/theme
-  reload
+  refresh
 end

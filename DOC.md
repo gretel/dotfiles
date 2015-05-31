@@ -49,9 +49,9 @@ Modify the `$fish_function_path` and autoload functions and/or completions.
 autoload "mypkg/utils" "mypkg/core" "mypkg/lib/completions"
 ```
 
-### `reload`
+### `refresh`
 
-Reload Wahoo.
+refresh Wahoo.
 
 ## Packages
 

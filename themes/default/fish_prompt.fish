@@ -7,5 +7,5 @@ function fish_prompt
   else
     set_color -o green
   end
-  echo (prompt_pwd)" -->> "(set_color normal)
+  echo (prompt_pwd)"~>> "(set_color normal)
 end
