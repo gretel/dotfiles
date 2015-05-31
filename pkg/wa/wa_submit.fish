@@ -1,4 +1,11 @@
-function wa_submit -a name
+# SYNOPSIS
+#   Submit a package to the registry
+#
+# OPTIONS
+#   name  Name of the package.
+#   bare  Only add (echo bare > name<.pkg|.theme>) under db/
+
+function wa_submit -a name bare -d "Submit a package to the registry"
   set -l ext ""
   switch $name
     case \*.pkg
@@ -10,6 +17,17 @@ function wa_submit -a name
       return $WAHOO_INVALID_ARG
   end
   set name (basename $name $ext)
+
+  if not wa_util_valid_package $name
+    echo (bold)(line)(err)"$pkg is not a valid package/theme name"(off) 1^&2
+    return $WAHOO_INVALID_ARG
+  end
+
+  if test -n "$bare"
+    echo "$bare" > $WAHOO_PATH/db/$name$ext
+    echo (em)"$name added to the registry."(off)
+    return 0
+  end
 
   set -l url (git config --get remote.origin.url)
   if test -z "$url"
@@ -28,11 +46,6 @@ function wa_submit -a name
   if test -z "$user"
     echo (bold)(line)(err)"GitHub user configuration not available"(off) 1^&2
     echo "Try: git config github.user "(line)"username"(off) 1^&2
-    return $WAHOO_INVALID_ARG
-  end
-
-  if not wa_util_valid_package $name
-    echo (bold)(line)(err)"$pkg is not a valid package/theme name"(off) 1^&2
     return $WAHOO_INVALID_ARG
   end
 

@@ -85,12 +85,21 @@ function wa -d "Wahoo"
       reload
 
     case "s" "su" "sub" "submit"
-      if test (count $argv) -ne 2
-        echo (bold)(line)(err)"Argument missing"(off) 1^&2
-        echo "Usage: $_ "(em)"$argv[1]"(off)" <package/theme name>" 1^&2
-        return $WAHOO_MISSING_ARG
+      switch (count $argv)
+        case 2 4
+          wa_submit $argv[2] (begin
+            if set -q argv[3]
+              switch $argv[3]
+                case "-u" "--url"
+                  echo "$argv[4]"
+              end
+            end
+          end)
+        case "*"
+          echo (bold)(line)(err)"Argument missing"(off) 1^&2
+          echo "Usage: $_ "(em)"$argv[1]"(off)" <package/theme name>" 1^&2
+          return $WAHOO_MISSING_ARG
       end
-      wa_submit $argv[2]
 
     case "n" "nw" "new"
       if test (count $argv) -ne 3

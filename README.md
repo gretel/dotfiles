@@ -92,6 +92,10 @@ Create a new branch `add-<package name>` in your local fork of Wahoo and adds a 
 
 This also forks Wahoo (if you haven't already) and updates your clone's remote [origin](http://stackoverflow.com/questions/9529497/what-is-origin-in-git) and [upstream](http://stackoverflow.com/questions/2739376/definition-of-downstream-and-upstream).
 
+### `submit` _`<package>`_ `--url` _`<url>`_
+
+Add _`package`_ and  _`url`_ to the local registry without opening a PR.
+
 See [Submitting a Package](https://github.com/bucaran/wahoo/wiki/Screencasts#submitting-a-package).
 
 If you prefer to roll your own, simply add a new file `<package name>.pkg` or `<theme name>.theme` with the remote URL in `$WAHOO_PATH/db` and _submit your PR_. See [Documentation](DOC.md#submitting-a-package).

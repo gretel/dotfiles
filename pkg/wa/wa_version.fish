@@ -1,3 +1,3 @@
-function wahoo_version
+function wa_version
   echo "Wahoo $WAHOO_VERSION"
 end
