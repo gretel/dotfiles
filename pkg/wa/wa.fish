@@ -111,7 +111,6 @@ function wa -d "Wahoo"
 
     case "destroy"
       wa_destroy
-      reload
 
     case "*"
       echo (bold)(line)(err)"$argv[1] option not recognized"(off) 1^&2
