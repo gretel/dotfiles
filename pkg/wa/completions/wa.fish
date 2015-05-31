@@ -25,9 +25,9 @@ __wa_complete version "Display version"
 __wa_complete destroy "Remove Wahoo"
 
 complete -c wa -n "__wa_option_is r rm remove"  -a \
-  (printf "%s " (WAHOO::util::list_installed))
+  (printf "%s " (wa_list_local_packages))
 complete -c wa -n "__wa_option_is g get" -a \
-  (printf "%s " (WAHOO::util::list_available))
+  (printf "%s " (wa_list_db_packages))
 complete -c wa -n "__wa_option_is u use" -a \
-  (printf "%s " (WAHOO::util::list_themes))
+  (printf "%s " (wa_list_themes))
 
