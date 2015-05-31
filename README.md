@@ -30,8 +30,6 @@
 |
 <b><a href="https://github.com/bucaran/wahoo/wiki">Wiki</a></b>
 |
-<b><a href="#contributing">Contributing</a></b>
-|
 <b><a href="#uninstall">Uninstall</a></b>
 </p>
 
