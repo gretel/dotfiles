@@ -57,6 +57,10 @@ Reload Wahoo.
 
 Every directory inside `$WAHOO_PATH/pkg` is a _package_. Although themes are similar to other packages, only one theme can be activated at a time, so they are kept in a different directory under `$WAHOO_PATH/themes`.
 
+### Package Names
+
+A package name may only contain lowercase letters without spaces. Hyphens `-` may be used to separate words.
+
 ### Submitting
 
 Use `wahoo submit <package/theme name>` from the package's directory, or by hand, add a plain text file to `$WAHOO_PATH/db/<mpkg>[.pkg|.theme]` with the URL to your repository and submit a [pull request](https://github.com/bucaran/wahoo/pulls).

@@ -103,9 +103,8 @@ function wa -d "Wahoo"
 
     case "n" "nw" "new"
       if test (count $argv) -ne 3
-        echo (bold)(line)(err)"Argument missing"(off) 1^&2
-        echo "Usage: $_ "(em)"$argv[1]"(off)" "\
-          (bold)"pkg|theme"(off)" <name>" 1^&2
+        echo (bold)(line)(err)"Package type missing"(off) 1^&2
+        echo "Usage: $_ "(em)"$argv[1]"(off)" "(bold)"pkg|theme"(off)" <name>" 1^&2
         return $WAHOO_MISSING_ARG
       end
       wa_new $argv[2..-1]
