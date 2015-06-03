@@ -115,7 +115,7 @@ Uninstall _Wahoo_. See [uninstall](#uninstall) for more information.
 + [Packages](#packages)
   + [Names](#package-names)
   + [Submitting](#submitting)
-  + [Directory Structure](#directory-structure)
+  + [Directory Structure](#package-directory-structure)
   + [Initialization](#initialization)
 + [Uninstall](#uninstall)
 
