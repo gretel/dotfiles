@@ -9,9 +9,10 @@ end
 
 complete --no-files -c wa -d "Wahoo"
 
-complete -c wa -a (printf "%s " (wa_list_local_packages)) -n "__wa_option r rm remove"
-complete -c wa -a (printf "%s " (wa_list_db_packages))    -n "__wa_option g get"
-complete -c wa -a (printf "%s " (wa_list_themes))         -n "__wa_option u use"
+complete -c wa -a (printf "%s " (wa_list_local_packages) \
+  (wa_list_installed_themes)) -n "__wa_option r rm remove"
+complete -c wa -a (printf "%s " (wa_list_db_packages)) -n "__wa_option g get"
+complete -c wa -a (printf "%s " (wa_list_themes))      -n "__wa_option u use"
 
 complete -c wa -a list    -n "__wa_single_option" -d "List local packages"
 complete -c wa -a get     -n "__wa_single_option" -d "Install one or more packages"

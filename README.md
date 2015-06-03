@@ -61,7 +61,7 @@ Updates are constructive. Unstaged changes are [stashed](https://git-scm.com/boo
 
 ## `wa get` _`<package>`_
 
-Install one or more themes or packages. Discover packages with `wa get` and themes with `wa use` . _If_ the package is already installed Wahoo will __update__ it.
+Install one or more themes or packages. Discover packages with `wa get` and themes with `wa use`. If the package is already installed Wahoo will _update_ it.
 
 ## `list`
 
@@ -80,7 +80,7 @@ Remove a theme or package. Packages subscribed to `uninstall_<pkg>` events will 
 
 Create a new package or theme from a template.
 
-A new directory is created under `$WAHOO_CUSTOM/[themes|pkg]/` (or `$WAHOO_PATH/[themes|pkg]/` if that fails).
+A new directory is created under `$WAHOO_CUSTOM/[themes|pkg]/`.
 
 ## `submit` _`<package>`_
 
@@ -94,17 +94,14 @@ This also forks Wahoo (if you haven't already) and updates your clone's remote [
 
 Add _`package`_ and  _`url`_ to the local registry without opening a PR.
 
-See [Submitting a Package](https://github.com/bucaran/wahoo/wiki/Screencasts#submitting-a-package).
+> See [Submitting a Package](https://github.com/bucaran/wahoo/wiki/Screencasts#submitting-a-package).
 
-If you prefer to roll your own, simply add a new file `<package name>.pkg` or `<theme name>.theme` with the remote URL in `$WAHOO_PATH/db` and _submit your PR_. See [Documentation](DOC.md#submitting-a-package).
+If you prefer to roll your own, simply add a new `pkg/<package name>` or `themes/<theme name>` with your URL under `$WAHOO_PATH/db` and _submit a PR_.
+
 
 ## `wa help`
 
 Display help on the console.
-
-## `wa version`
-
-Display version.
 
 ## `wa destroy`
 

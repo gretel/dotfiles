@@ -63,17 +63,18 @@ A package name may only contain lowercase letters without spaces. Hyphens `-` ma
 
 ### Submitting
 
-Use `wahoo submit <package/theme name>` from the package's directory, or by hand, add a plain text file to `$WAHOO_PATH/db/<mpkg>[.pkg|.theme]` with the URL to your repository and submit a [pull request](https://github.com/bucaran/wahoo/pulls).
+Run `wa submit <package/theme name>` from the package's directory, or by hand, add a plain text file to `$WAHOO_PATH/db/[pkg/themes]/name` with the URL to your repository and submit a [pull request](https://github.com/bucaran/wahoo/pulls).
 
 _Directory Structure_
 ```
 wahoo/
   db/
-    mypkg.pkg
+    pkg/
+      mypkg
 ```
-_Contents of_ `mypkg.pkg`
+_Contents of_ `mypkg`
 ```
-https://github.com/$USER/wahoo-mypkg
+https://github.com/<USER>/wa-mypkg
 ```
 
 ### Package Directory Structure

@@ -13,9 +13,15 @@ function wa_remove_package
       emit uninstall_$pkg
       rm -rf $WAHOO_PATH/pkg/$pkg
     else if test -d $WAHOO_PATH/themes/$pkg
+      if test $pkg = default
+        echo (bold)(line)(err)"You can't remove the default theme"(off) 1^&2
+        return $WAHOO_INVALID_ARG
+      end
+      if test $pkg = (cat $WAHOO_CONFIG/theme)
+        wa_use "default"
+      end
       rm -rf $WAHOO_PATH/themes/$pkg
     end
-
     if test $status -eq 0
       echo (em)"$pkg succesfully removed."(off)
     else

@@ -97,7 +97,8 @@ function wa -d "Wahoo"
           end)
         case "*"
           echo (bold)(line)(err)"Argument missing"(off) 1^&2
-          echo "Usage: $_ "(em)"$argv[1]"(off)" <package/theme name>" 1^&2
+          echo "Usage: $_ "(em)"$argv[1]"(off)" "(bold)"pkg|themes"(off)"/<name>" 1^&2
+          echo "Usage: $_ "(em)"$argv[1]"(off)" "(bold)"pkg|themes"(off)"/<name> "(bold)"--url"(off)" <url>" 1^&2
           return $WAHOO_MISSING_ARG
       end
 
