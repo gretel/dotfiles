@@ -110,7 +110,7 @@ Uninstall _Wahoo_. See [uninstall](#uninstall) for more information.
 
 # Advanced
 
-+ [Bootstrap](#bootstrap)
++ [Bootstrap](#bootstrap-process)
 + [Core Library](#core-library)
 + [Packages](#packages)
   + [Names](#names)
