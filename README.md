@@ -27,7 +27,7 @@
 <b><a href="#usage">Getting Started</a></b>
 |
 
-<b><a href="DOC.md">Advanced</a></b>
+<b><a href="#advanced">Advanced</a></b>
 |
 <b><a href="https://github.com/bucaran/wahoo/wiki/Screencasts">Screencasts</a></b>
 </p>
