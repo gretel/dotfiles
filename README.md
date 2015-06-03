@@ -24,7 +24,7 @@
 |
 <b><a href="#install">Install</a></b>
 |
-<b><a href="#usage">Getting Started</a></b>
+<b><a href="#getting-started">Getting Started</a></b>
 |
 
 <b><a href="#advanced">Advanced</a></b>
