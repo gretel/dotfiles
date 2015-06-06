@@ -20,7 +20,7 @@ set -q RESET_PATH
 
 set -l user_function_path $fish_function_path[1]
 set fish_function_path[1] $WAHOO_PATH/lib
-set fish_complete_path    $WAHOO_PATH/lib/completions
+set fish_complete_path    $WAHOO_PATH/lib/completions $fish_complete_path
 
 set -l theme  {$WAHOO_PATH,$WAHOO_CUSTOM}/themes/(cat $HOME/.config/wahoo/theme)
 set -l paths  $WAHOO_PATH/pkg/*
