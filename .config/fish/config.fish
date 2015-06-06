@@ -27,25 +27,27 @@ if status --is-interactive
   #
   set fish_path $HOME/.oh-my-fish
 
+  # Load oh-my-fish configuration.
+  . $fish_path/oh-my-fish.fish
+
   # Plugins to load
   #
-  # author's choice:
-  set fish_plugins bundler direnv greeting jump keychain osx_manpath peco pyenv screen sublime
-  #
-  # leighweight defaults:
-  # set fish_plugins extract fishmarks greeting osx_manpath
-
+  Plugin "direnv"
+  # Plugin "extract"
+  # Plugin "fishmarks"
+  Plugin "greeting"
+  Plugin "jump"
+  Plugin "keychain"
+  Plugin "osx_manpath"
+  Plugin "peco"
+  Plugin "pyenv"
+  Plugin "screen"
+  Plugin "sublime"
   # Path to your custom folder (default path is $FISH/custom)
   # set fish_custom $HOME/dotfiles/oh-my-fish
 
   # Theme
   #
-  # please initialize submodule once:
-  #  $ git pull; git submodule init; git submodule update; git submodule status
-  #
-  # set fish_theme gianu
-  set fish_theme agnoster
-
-  # Load oh-my-fish configuration.
-  . $fish_path/oh-my-fish.fish
+  # Theme "agnoster"
+  Theme "l"
 end
