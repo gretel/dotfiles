@@ -2,6 +2,6 @@
 pkg/**
 !pkg/wa
 !pkg/wa/completions/*
-!pkg/wa/*
+!pkg/wa/**
 themes/**
 !themes/default/*
