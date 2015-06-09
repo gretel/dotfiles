@@ -63,7 +63,7 @@ Updates are constructive. Unstaged changes are [stashed](https://git-scm.com/boo
 
 Install one or more themes or packages. Discover packages and themes with `wa get` or `wa use` _without_ arguments. If the package is already installed Wahoo will try to _update_ it.
 
-You may also specify one or more URLs and Wahoo will try to clone any valid repositories under `$WAHOO_PATH/pkg` via `Git`.
+You may also specify one or more URLs and Wahoo will try to clone the repository under `$WAHOO_PATH/pkg` via `Git`.
 
 ## `list`
 
@@ -99,6 +99,9 @@ Add _`package`_ and  _`url`_ to the local registry without opening a PR.
 
 If you prefer to roll your own, simply add a new `pkg/<package name>` or `themes/<theme name>` with your URL under `$WAHOO_PATH/db` and _submit a PR_.
 
+## `wa query` _`<variable name>`_
+
+Use `wa query` to inspect any variables. It's useful to pretty print _path_ variables like `$fish_function_path`, `$fish_complete_path`, `$PATH`, etc.
 
 ## `wa help`
 
@@ -119,6 +122,7 @@ Uninstall _Wahoo_. See [uninstall](#uninstall) for more information.
   + [Submitting](#submitting)
   + [Directory Structure](#package-directory-structure)
   + [Initialization](#initialization)
+  + [Ignoring Packages](#ignore)
 + [Uninstall](#uninstall)
 
 ## Bootstrap Process
@@ -202,7 +206,15 @@ end
 
 Use the `init` event set up your package environment, load resources, autoload functions, etc.
 
-> Writing an event handler for the `init` event is optional.
+> The `init` event is optional.
+
+### Ignoring
+
+Remove any packages you wish to turn off using `wa remove <package name>`. If you prefer to ignore packages locally without uninstalling them simply set a new global `$WAHOO_IGNORE` in your `~/.config/fish/config.fish`. For example:
+
+```fish
+set -g WAHOO_IGNORE this that ...
+```
 
 ### Uninstall
 
