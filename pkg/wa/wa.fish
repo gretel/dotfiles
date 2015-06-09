@@ -18,12 +18,25 @@ set -g WAHOO_VERSION "0.1.0"
 set -g WAHOO_CONFIG  "$HOME/.config/wahoo"
 
 # set_color Helpers
-function em    ;  set_color cyan    ; end
-function dim   ;  set_color 555     ; end
-function off   ;  set_color normal  ; end
-function err   ;  set_color red     ; end
-function line  ;  set_color -u      ; end
-function bold  ;  set_color -o      ; end
+function wa::dim; set_color -o 888  ; end
+function wa::err; set_color -o red  ; end
+function wa::em;  set_color -o yellow ; end
+function wa::off; set_color normal  ; end
+
+function init -a path --on-event init_wa
+  autoload $path/cli $path/util
+end
+
+function wa_ff
+  set -l path fish_function_path
+  if set -q argv[1]
+    set path $argv[1]
+  end
+
+  printf "%s\n" $$path   \
+  | sed "s|$HOME|"(wa::em)"~"(wa::off)"|g" \
+  | sed "s|/|"(wa::em)"/"(wa::off)"|g"
+end
 
 function wa -d "Wahoo"
   if test (count $argv) -eq 0
@@ -33,6 +46,8 @@ function wa -d "Wahoo"
   switch $argv[1]
     case "v" "ver" "version"
       wa_version
+
+    # case ""
 
     case "h" "help"
       wa_help
@@ -53,33 +68,33 @@ function wa -d "Wahoo"
         set -l regex "[[:<:]]($theme)[[:>:]]"
         test (uname) != "Darwin"; and set regex "\b($theme)\b"
 
-        wa_list_themes | column | sed -E "s/$regex/"(line)(bold)(em)"\1"(off)"/"
-        set_color normal
+        wa_list_themes | column | sed -E "s/$regex/"(wa::em)"\1"(wa::off)"/"
+        wa::off
 
       else if test (count $argv) -eq 2
         wa_use $argv[2]
       else
-        echo (bold)(line)(err)"Invalid number of arguments"(off) 1^&2
-        echo "Usage: $_ "(em)"$argv[1]"(off)" [<theme name>]" 1^&2
+        echo (wa::err)"Invalid number of arguments"(wa::off) 1^&2
+        echo "Usage: $_ "(wa::em)"$argv[1]"(wa::off)" [<theme name>]" 1^&2
         return $WAHOO_INVALID_ARG
       end
 
     case "r" "rm" "remove" "uninstall"
       if test (count $argv) -ne 2
-        echo (bold)(line)(err)"Invalid number of arguments"(off) 1^&2
-        echo "Usage: $_ "(em)"$argv[1]"(off)" <[package|theme] name>" 1^&2
+        echo (wa::err)"Invalid number of arguments"(wa::off) 1^&2
+        echo "Usage: $_ "(wa::em)"$argv[1]"(wa::off)" <[package|theme] name>" 1^&2
         return $WAHOO_INVALID_ARG
       end
       wa_remove_package $argv[2..-1]
 
     case "p" "up" "upd" "update"
       pushd $WAHOO_PATH
-      echo (bold)"Updating Wahoo..."(off)
+      echo (wa::em)"Updating Wahoo..."(wa::off)
       if wa_update
-        echo (em)"Wahoo is up to date."(off)
+        echo (wa::em)"Wahoo is up to date."(wa::off)
       else
-        echo (line)"Wahoo failed to update."(off)
-        echo "Please open a new issue here → "(line)"git.io/wahoo-issues"(off)
+        echo (wa::err)"Wahoo failed to update."(wa::off)
+        echo "Please open a new issue here → "(wa::em)"git.io/wahoo-issues"(wa::off)
       end
       popd
       refresh
@@ -96,16 +111,16 @@ function wa -d "Wahoo"
             end
           end)
         case "*"
-          echo (bold)(line)(err)"Argument missing"(off) 1^&2
-          echo "Usage: $_ "(em)"$argv[1]"(off)" "(bold)"pkg|themes"(off)"/<name>" 1^&2
-          echo "Usage: $_ "(em)"$argv[1]"(off)" "(bold)"pkg|themes"(off)"/<name> "(bold)"--url"(off)" <url>" 1^&2
+          echo (wa::err)"Argument missing"(wa::off) 1^&2
+          echo "Usage: $_ "(wa::em)"$argv[1]"(wa::off)" "(wa::em)"pkg|themes"(wa::off)"/<name>" 1^&2
+          echo "Usage: $_ "(wa::em)"$argv[1]"(wa::off)" "(wa::em)"pkg|themes"(wa::off)"/<name> "(wa::em)"--url"(wa::off)" <url>" 1^&2
           return $WAHOO_MISSING_ARG
       end
 
     case "n" "nw" "new"
       if test (count $argv) -ne 3
-        echo (bold)(line)(err)"Package type or name missing"(off) 1^&2
-        echo "Usage: $_ "(em)"$argv[1]"(off)" "(bold)"pkg|theme"(off)" <name>" 1^&2
+        echo (wa::err)"Package type or name missing"(wa::off) 1^&2
+        echo "Usage: $_ "(wa::em)"$argv[1]"(wa::off)" "(wa::em)"pkg|theme"(wa::off)" <name>" 1^&2
         return $WAHOO_MISSING_ARG
       end
       wa_new $argv[2..-1]
@@ -114,7 +129,7 @@ function wa -d "Wahoo"
       wa_destroy
 
     case "*"
-      echo (bold)(line)(err)"$argv[1] option not recognized"(off) 1^&2
+      echo (wa::err)"$argv[1] option not recognized"(wa::off) 1^&2
       return $WAHOO_UNKNOWN_OPT
   end
 end

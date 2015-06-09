@@ -59,9 +59,11 @@ Update the framework using [`Git`][Git].
 
 Updates are constructive. Unstaged changes are [stashed](https://git-scm.com/book/no-nb/v1/Git-Tools-Stashing) and reapplied after pulling updates from upstream. Similarly, if you have committed changes to the repo they are [rebased](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) with master.
 
-## `wa get` _`<package>`_
+## `wa get` _`<package>`_ `|` _`<url>`_
 
-Install one or more themes or packages. Discover packages with `wa get` and themes with `wa use`. If the package is already installed Wahoo will _update_ it.
+Install one or more themes or packages. Discover packages and themes with `wa get` or `wa use` _without_ arguments. If the package is already installed Wahoo will try to _update_ it.
+
+You may also specify one or more URLs and Wahoo will try to clone any valid repositories under `$WAHOO_PATH/pkg` via `Git`.
 
 ## `list`
 
