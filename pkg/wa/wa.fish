@@ -17,25 +17,13 @@ set -g WAHOO_UNKNOWN_ERR   4
 set -g WAHOO_VERSION "0.1.0"
 set -g WAHOO_CONFIG  "$HOME/.config/wahoo"
 
-# set_color Helpers
-function wa::dim; set_color -o 888  ; end
-function wa::err; set_color -o red  ; end
 function wa::em;  set_color -o yellow ; end
-function wa::off; set_color normal  ; end
+function wa::dim; set_color -o 888    ; end
+function wa::err; set_color -o red    ; end
+function wa::off; set_color normal    ; end
 
 function init -a path --on-event init_wa
   autoload $path/cli $path/util
-end
-
-function wa_ff
-  set -l path fish_function_path
-  if set -q argv[1]
-    set path $argv[1]
-  end
-
-  printf "%s\n" $$path   \
-  | sed "s|$HOME|"(wa::em)"~"(wa::off)"|g" \
-  | sed "s|/|"(wa::em)"/"(wa::off)"|g"
 end
 
 function wa -d "Wahoo"
@@ -47,7 +35,17 @@ function wa -d "Wahoo"
     case "v" "ver" "version"
       wa_version
 
-    # case ""
+    case "q" "query"
+      switch (count $argv)
+        case 1
+          wa_query_env
+        case 2
+          wa_query_env "$argv[2]"
+        case "*"
+          echo (wa::err)"Invalid number of arguments"(wa::off) 1^&2
+          echo "Usage: $_ "(wa::em)"$argv[1]"(wa::off)" [<variable name>]" 1^&2
+          return $WAHOO_INVALID_ARG
+      end
 
     case "h" "help"
       wa_help

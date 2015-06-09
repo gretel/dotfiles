@@ -3,8 +3,9 @@
 #
 # ENV
 #   WAHOO_PATH    Set in ~/.config/fish/config.fish
+#   WAHOO_IGNORE  List of packages to ignore.
 #   WAHOO_CUSTOM  Same as WAHOO_PATH. ~/.dotfiles by default.
-#   RESET_PATH    Original PATH. To preseve across Wahoo refreshs.
+#   RESET_PATH    Original $PATH to preseve across Wahoo refreshes.
 #
 # OVERVIEW
 #   Autoloads Wahoo's packages, themes and custom path (in that order),
@@ -25,12 +26,14 @@ set fish_complete_path    $WAHOO_PATH/lib/completions $fish_complete_path
 set -l theme  {$WAHOO_PATH,$WAHOO_CUSTOM}/themes/(cat $HOME/.config/wahoo/theme)
 set -l paths  $WAHOO_PATH/pkg/*
 set -l custom $WAHOO_CUSTOM/pkg/*
+set -l ignore $WAHOO_IGNORE
 
 for path in $paths
   set custom $WAHOO_CUSTOM/(basename $path) $custom
 end
 
 for path in $paths $theme $custom
+  contains -- (basename $path) $ignore; and continue
   autoload $path $path/completions
   source $path/(basename $path).fish
     and emit init_(basename $path) $path
