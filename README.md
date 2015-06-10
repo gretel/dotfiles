@@ -122,7 +122,7 @@ Uninstall _Wahoo_. See [uninstall](#uninstall) for more information.
   + [Submitting](#submitting)
   + [Directory Structure](#package-directory-structure)
   + [Initialization](#initialization)
-  + [Ignoring Packages](#ignore)
+  + [Ignoring Packages](#ignoring)
 + [Uninstall](#uninstall)
 
 ## Bootstrap Process
