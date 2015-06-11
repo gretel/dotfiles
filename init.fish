@@ -32,7 +32,7 @@ for path in $paths
   set custom $WAHOO_CUSTOM/(basename $path) $custom
 end
 
-for path in $paths $theme $custom
+for path in $WAHOO_PATH/lib $WAHOO_PATH/lib/git $paths $theme $custom
   contains -- (basename $path) $ignore; and continue
   autoload $path $path/completions
   source $path/(basename $path).fish
