@@ -1,5 +1,5 @@
 function git_ahead -a ahead behind diverged none
-  if git_is_repo
+  git_is_repo; and begin
     test -z "$ahead"; and set ahead "+"
     test -z "behind"; and set behind "-"
     test -z "diverged"; and set diverged "±"

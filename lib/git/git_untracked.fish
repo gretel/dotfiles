@@ -1,5 +1,5 @@
 function git_untracked -d "Print list of untracked files"
-  if git_is_repo
+  git_is_repo; and begin
     command git ls-files --other --exclude-standard
   end
 end
