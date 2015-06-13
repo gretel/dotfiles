@@ -28,4 +28,3 @@ complete -c wa -a query   -n "__wa_is_single_opt" -d "Query environment variable
 complete -c wa -a help    -n "__wa_is_single_opt" -d "Display this help"
 complete -c wa -a version -n "__wa_is_single_opt" -d "Display version"
 complete -c wa -a destroy -n "__wa_is_single_opt" -d "Remove Wahoo"
-

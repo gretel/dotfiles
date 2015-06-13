@@ -64,7 +64,7 @@ function wa -d "Wahoo"
       if test (count $argv) -eq 1
         set -l theme (cat $WAHOO_CONFIG/theme)
         set -l regex "[[:<:]]($theme)[[:>:]]"
-        test (uname) != "Darwin"; and set regex "\b($theme)\b"
+        test "$OSTYPE" != "Darwin"; and set regex "\b($theme)\b"
 
         wa_list_themes | column | sed -E "s/$regex/"(wa::em)"\1"(wa::off)"/"
         wa::off
@@ -131,7 +131,3 @@ function wa -d "Wahoo"
       return $WAHOO_UNKNOWN_OPT
   end
 end
-
-
-
-

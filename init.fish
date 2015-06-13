@@ -2,10 +2,11 @@
 #   Initialize Wahoo.
 #
 # ENV
+#   OSTYPE        Operating system.
+#   RESET_PATH    Original $PATH preseved across Wahoo refreshes.
 #   WAHOO_PATH    Set in ~/.config/fish/config.fish
 #   WAHOO_IGNORE  List of packages to ignore.
 #   WAHOO_CUSTOM  Same as WAHOO_PATH. ~/.dotfiles by default.
-#   RESET_PATH    Original $PATH to preseve across Wahoo refreshes.
 #
 # OVERVIEW
 #   Autoloads Wahoo's packages, themes and custom path (in that order),
@@ -15,13 +16,19 @@
 #   Autoloads functions directory and sources init.fish under
 #   the custom path if available.
 
-set -q RESET_PATH
-  and set PATH $RESET_PATH
-  or set --export RESET_PATH $PATH
+if not set -q OSTYPE
+  set -g OSTYPE (uname)
+end
 
+if set -q RESET_PATH
+  set PATH $RESET_PATH
+else
+  set -gx RESET_PATH $PATH
+end
+
+# Save the head of function path and autoload our core library.
 set -l user_function_path $fish_function_path[1]
 set fish_function_path[1] $WAHOO_PATH/lib
-set fish_complete_path    $WAHOO_PATH/lib/completions $fish_complete_path
 
 set -l theme  {$WAHOO_PATH,$WAHOO_CUSTOM}/themes/(cat $HOME/.config/wahoo/theme)
 set -l paths  $WAHOO_PATH/pkg/*
@@ -39,6 +46,7 @@ for path in $WAHOO_PATH/lib $WAHOO_PATH/lib/git $paths $theme $custom
     and emit init_(basename $path) $path
 end
 
+# Optional. Custom function library and shell initialization.
 autoload $WAHOO_CUSTOM/functions
 autoload $user_function_path
 source $WAHOO_CUSTOM/init.fish
