@@ -22,7 +22,7 @@ function wa_get_package
       pushd $WAHOO_PATH/$target
       wa_util_sync "origin" >/dev/null ^&1
       popd
-      echo (em)"✔ $search up to date."(wa::off)
+      echo (wa::em)"✔ $search up to date."(wa::off)
     else
       echo (wa::em)"Installing $search..."(wa::off)
       git clone (cat $WAHOO_PATH/db/$target) $WAHOO_PATH/$target >/dev/null ^&1
