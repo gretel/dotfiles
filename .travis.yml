@@ -6,7 +6,7 @@ os:
 sudo: required
 
 script:
-  - echo "ok"
+  - echo "Wahoo"
 
 before_install:
   - curl -L git.io/wa | sh

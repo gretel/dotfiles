@@ -4,7 +4,7 @@
 # OVERVIEW
 #   Autoload a function or completion path. Add the specified list of
 #   directories to $fish_function_path. Any `completions` directories
-#   are automatically added to the $fish_complete_path.
+#   are correctly added to the $fish_complete_path.
 
 function autoload -d "autoload a function or completion path"
   for path in $argv
