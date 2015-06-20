@@ -1,5 +1,5 @@
 [![](https://img.shields.io/badge/Wahoo-Package-00b0ff.svg?style=flat-square)][Wahoo]
-![](https://img.shields.io/badge/License-MIT-707070.svg?style=flat-square) :part_alternation_mark:
+![](https://img.shields.io/badge/License-MIT-707070.svg?style=flat-square) :fish_cake:
 
 # Core Library
 
@@ -7,7 +7,7 @@ These functions are inmediately available after installing Wahoo. Use in your ow
 
 ## Basic Functions
 
-#### `autoload`
+#### `autoload` _`<path>`_
 Autoload a function or completion path. Add the specified list of directories to `$fish_function_path`.
 
 Any `completions` directories are correctly added to the `$fish_complete_path`.
@@ -16,7 +16,7 @@ Any `completions` directories are correctly added to the `$fish_complete_path`.
 autoload $mypath $mypath/completions
 ```
 
-#### `available`
+#### `available` _`<utility name>`_
 
 Check if a program is available to run. Set `$status` to `0` if the program is available.
 
@@ -28,11 +28,16 @@ if available battery
 end
 ```
 
-#### `basename`
+#### `basename` _`<paths> ...`_
 
 Wrap basename so it can handle multiple arguments on Linux.
 
 #### `refresh`
+
+Extract the root (top-most parent directory), dirname and basename from [`fish_prompt`](http://fishshell.com/docs/current/faq.html#faq-prompt).
+
+
+#### `prompt_segments`
 
 Replace the running instance of fishshell with a new one causing Wahoo to reload as well.
 
