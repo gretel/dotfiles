@@ -37,7 +37,7 @@ if status --is-interactive
   # Plugin "fishmarks"
   Plugin "greeting"
   Plugin "jump"
-  Plugin "keychain"
+  # Plugin "keychain"
   Plugin "osx_manpath"
   Plugin "peco"
   Plugin "pyenv"
