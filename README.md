@@ -3,8 +3,6 @@
 [![][TravisLogo]][Travis]
 ![](https://img.shields.io/badge/100% -Fresh-00cc00.svg?style=flat-square)
 ![](https://img.shields.io/badge/Wahoo-Framework-00b0ff.svg?style=flat-square)
-![](https://img.shields.io/badge/Mac-OSX-FF0066.svg?style=flat-square)
-![](https://img.shields.io/badge/Linux-Common-FF0066.svg?style=flat-square)
 ![](https://img.shields.io/badge/License-MIT-707070.svg?style=flat-square)
 
 <a name="wahoo"></a>
@@ -30,6 +28,8 @@
 <b><a href="#advanced">Advanced</a></b>
 |
 <b><a href="https://github.com/bucaran/wahoo/wiki/Screencasts">Screencasts</a></b>
+|
+<b><a href="/CONTRIBUTING.md">Contributing</a></b>
 </p>
 
 <br>
@@ -234,5 +234,3 @@ end
 [Travis]: https://travis-ci.org/bucaran/wahoo
 [Fishshell]: http://fishshell.com
 [Git]: https://git-scm.com/
-
-
