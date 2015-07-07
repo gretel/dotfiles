@@ -1,6 +1,6 @@
 # https://github.com/zimbatm/direnv
 
-local rb_version=2.2.1
+local rb_version=2.2.2
 local py_version=2.7.8
 local hb_token=""
 
@@ -38,7 +38,7 @@ use python $py_version
 
 local local_path=/usr/local
 
-PATH_add "$local_path/sbin"
+# PATH_add "$local_path/sbin"
 PATH_add "$local_path/bin"
 
 export HOMEBREW_PATH=$local_path
