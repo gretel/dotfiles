@@ -11,7 +11,7 @@
 
 <p align="center">
 <a href="https://github.com/bucaran/wahoo/blob/master/README.md">
-<img width="40%" src="https://cloud.githubusercontent.com/assets/8317250/7772540/c6929db6-00d9-11e5-86bc-4f65533243e9.png">
+<img width="35%" src="https://cloud.githubusercontent.com/assets/8317250/7772540/c6929db6-00d9-11e5-86bc-4f65533243e9.png">
 </a>
 </p>
 
@@ -30,68 +30,85 @@
 <b><a href="https://github.com/bucaran/wahoo/wiki/Screencasts">Screencasts</a></b>
 |
 <b><a href="/CONTRIBUTING.md">Contributing</a></b>
+
+<p align="center">
+  <a href="https://gitter.im/bucaran/wahoo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge">
+    <img src="https://badges.gitter.im/Join%20Chat.svg">
+  </a>
+</p>
+
 </p>
 
 <br>
 
 # About
-[![Join the chat at https://gitter.im/bucaran/wahoo](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bucaran/wahoo?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-_Wahoo_ is an all-purpose framework and decentralized package manager for the [fishshell][Fishshell]. It looks after your configuration and packages. It's light, fast and easy to use.
+_Wahoo_ is an all-purpose framework and decentralized package manager for the [fishshell][Fishshell]. It looks after your configuration and packages. It's lightining fast and easy to use.
 
 # Install
-> Use `sudo` if you need to install [fish][Fishshell].
 
 ```sh
 curl -L git.io/wa | sh
 wa help
 ```
 
+You can also download the script and run it directly:
+
+```sh
+curl -L git.io/wa > install
+chmod +x install
+./install
+```
+
 ### `sudo`?
 
-You don't need to use `sudo` if you already have `fish` installed or use [Homebrew](http://brew.sh/), but if you are starting from scratch you need to `sudo` in order to install `fish` along with its dependencies and change the system's default shell.
+You _don't_ need to use `sudo` if you already have `fish` installed or use [Homebrew](http://brew.sh/), but if you are starting from scratch you _do_ need to `sudo` in order to install its dependencies and change the system's default shell.
 
 # Getting Started
 
+Wahoo includes a small utility `wa` to fetch and install new packages and themes. Read along to see what other commands are available or type `wa help` in your console.
+
 ## `wa update`
 
-Update the framework using [`Git`][Git].
+Update the framework.
 
-Updates are constructive. Unstaged changes are [stashed](https://git-scm.com/book/no-nb/v1/Git-Tools-Stashing) and reapplied after pulling updates from upstream. Similarly, if you have committed changes to the repo they are [rebased](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) with master.
+> Updates are constructive. Unstaged changes are [stashed](https://git-scm.com/book/no-nb/v1/Git-Tools-Stashing) and reapplied after pulling updates from upstream. Similarly, if you have committed changes to the repo they are [rebased](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) with master.
 
 ## `wa get` _`<package>`_ `|` _`<url>`_
 
 Install one or more themes or packages. Discover packages and themes with `wa get` or `wa use` _without_ arguments. If the package is already installed Wahoo will try to _update_ it.
 
-You may also specify one or more URLs and Wahoo will try to clone the repository under `$WAHOO_PATH/pkg` via `Git`.
+> You may also specify one or more URLs and Wahoo will try to clone the repository under `$WAHOO_PATH/pkg` via `Git`.
 
-## `list`
+## `wa list`
 
-List all installed packages.
+List _installed_ packages. To get a list of the packages you can download use `wa get`.
 
-## `use` _`<theme>`_
+## `wa use` _`<theme>`_
 
-Apply a theme. To list all available themes type `wa use`.
+Apply a theme. To list available themes type `wa use`.
 
-## `remove` _`<package>`_
+## `wa remove` _`<package>`_
 
-Remove a theme or package. Packages subscribed to `uninstall_<pkg>` events will be invoked before the package is removed to allow custom cleanup of resources, etc. See [Advanced](#uninstall).
+Remove a theme or package.
 
-## `new pkg/theme` _`<name>`_
+> Packages subscribed to `uninstall_<pkg>` events will be notified before the package is removed to allow custom cleanup of resources, etc. See [Uninstall](#uninstall).
+
+## `wa new pkg/theme` _`<name>`_
 
 Create a new package or theme from a template.
 
 A new directory will be created under `$WAHOO_CUSTOM/[pkg|themes]/`.
 
-## `submit` _`<package>`_
+## `wa submit` _`<package>`_
 
 > The current directory must be under `git` source control and have a remote origin.
 
-Create a new branch `add-<package name>` in your local fork of Wahoo and adds a new entry to the local registry under `$WAHOO_PATH/db` using the [`$PWD`](http://en.wikipedia.org/wiki/Working_directory) git remote origin.
+Creates a new branch `add-<package name>` in your local fork of Wahoo and adds a new entry to the local registry under `$WAHOO_PATH/db` using the [`$PWD`](http://en.wikipedia.org/wiki/Working_directory) git remote origin.
 
 This also forks Wahoo (if you haven't already) and updates your clone's remote [origin](http://stackoverflow.com/questions/9529497/what-is-origin-in-git) and [upstream](http://stackoverflow.com/questions/2739376/definition-of-downstream-and-upstream).
 
-### `submit` _`<package>`_ `--url` _`<url>`_
+### `wa submit` _`<package>`_ `--url` _`<url>`_
 
 Add _`package`_ and  _`url`_ to the local registry without opening a PR.
 
@@ -101,17 +118,13 @@ If you prefer to roll your own, simply add a new `pkg/<package name>` or `themes
 
 ## `wa query` _`<variable name>`_
 
-Use `wa query` to inspect any variables. It's useful to pretty print _path_ variables like `$fish_function_path`, `$fish_complete_path`, `$PATH`, etc.
-
-## `wa help`
-
-Display help on the console.
+Use `wa query` to inspect all session variables. Useful to pretty dump _path_ variables like `$fish_function_path`, `$fish_complete_path`, `$PATH`, etc.
 
 ## `wa destroy`
 
-> Does not remove fish.
-
 Uninstall _Wahoo_. See [uninstall](#uninstall) for more information.
+
+> Does not remove fish.
 
 # Advanced
 
@@ -153,7 +166,8 @@ autoload "mypkg/utils" "mypkg/core" "mypkg/lib/completions"
 
 ### `refresh`
 
-refresh Wahoo.
+Basically `exec fish < /dev/tty` causing the fish session to restart.
+
 
 ## Packages
 
@@ -227,7 +241,7 @@ end
 
 # License
 
-[MIT](http://opensource.org/licenses/MIT) © [Jorge Bucaran][Author] et [al](https://github.com/bucaran/wahoo/graphs/contributors)
+[MIT](http://opensource.org/licenses/MIT) © [Jorge Bucaran][Author] et [al](https://github.com/bucaran/wahoo/graphs/contributors) :heart:
 
 [Author]: http://about.bucaran.me
 [TravisLogo]: http://img.shields.io/travis/bucaran/wahoo.svg?style=flat-square
