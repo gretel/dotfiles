@@ -1,9 +1,0 @@
-.DS_Store
-**/.DS_Store
-
-pkg/**
-!pkg/wa
-!pkg/wa/**
-
-themes/**
-!themes/default/*

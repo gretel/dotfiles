@@ -3,7 +3,7 @@
 local rb_version=2.2.2
 local py_version=2.7.10
 
-local hb_token=""
+local hb_token="05dc4223853b6e57293d91017888b794e980229e"
 
 local local_path=/usr/local
 

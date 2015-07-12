@@ -1,169 +1,184 @@
 [user]
-name = Tom Hensel
-email = github@jitter.eu
+
+    name = Tom Hensel
+    email = github@jitter.eu
 
 [github]
-user = gretel
 
-[core]
-excludesfile = /Users/tom/.gitignore_global
-editor = "subl -wn"
-pager = less -R
-autocrlf = input
-safecrlf = true
-whitespace = fix, -indent-with-non-tab, space-before-tab, trailing-space, cr-at-eol
+    user = gretel
 
-[credential]
-helper = cache --timeout=3600
-
-[push]
-default = matching
-
-[help]
-autocorrect = 1
-
-[filter "media"]
-required = true
-clean = git media clean %f
-smudge = git media smudge %f
-
-[color "branch"]
-local = yellow
-remote = green
-current = yellow reverse
-
-[color "diff"]
-old = red bold
-new = blue bold
-meta = normal
-frag = magenta bold
-#  whitespace = Resourcesed reverse
-
-[color "status"]
-added = yellow
-changed = green
-untracked = cyan
-
-[diff]
-renames = copy
-
-[log]
-decorate = full
 
 [alias]
-# Base commands
-ci = commit
-br = branch
-co = checkout
-df = diff
-lg = log -p
-st = log status --short
-cia = commit --allow-empty-message -a
 
-# Stash commands
-sl = stash list
-sa = stash apply
-ss = stash save
+    # View abbreviated SHA, description, and history graph of the latest 20 commits
+    l = log --pretty=oneline -n 20 --graph --abbrev-commit
 
-# Log related
-l  = log
-lh = log --graph
-la = !git lh --date-order --all 2> /dev/null
-lb = log --graph --simplify-by-decoration
-lba = !git lb --all
-h  = !git --no-pager log --graph -n 15
-a  = !git --no-pager la -n 15
+    # View the current working tree status using the short format
+    s = status -s
 
-# some resets without explanation
-r  = reset
-r1 = reset HEAD^
-r2 = reset HEAD^^
-rh = reset --hard
-rh1 = reset HEAD^ --hard
-rh2 = reset HEAD^^ --hard
+    # Show the diff between the latest commit and the current state
+    d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
 
-# basic shortcuts
-cp = cherry-pick
-cl = clone
-ci = commit
-co = checkout
-br = branch
-diff = diff --word-diff
-dc = diff --cached
+    # `git di $number` shows the diff between the state `$number` revisions ago and the current state
+    di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
 
-# stash shortcuts
-sl = stash list
-sa = stash apply
-ss = stash save
+    # Pull in remote changes for the current repository and all its submodules
+    p = !"git pull; git submodule foreach git pull origin master"
 
-# Diff your staged changes == review before committing
-ds = diff --staged
-# Smarter status - include tag and branch info
-st = status -sb
+    # Clone a repository including all submodules
+    c = clone --recursive
 
-# Pretty one-line log with tags, branches and authors
-#ls = log --pretty=format:"%C(yellow)%h %C(blue)%ad%C(red)%d %C(reset)%s%C(green) [%cn]" --decorate --date=short
-# A verbose ls, shows changed files too
-#lsv = log --pretty=format:"%C(yellow)%h %C(blue)%ad%C(red)%d %C(reset)%s%C(green) [%cn]" --decorate --date=short --numstat
+    # Commit all changes
+    ca = !git add -A && git commit -av
 
-# Show all prfiles
-ls = !git rev-parse --abbrev-ref HEAD | xargs git ls-tree -r --full-tree --full-name --name-only
+    # Switch to a branch, creating it if necessary
+    go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
 
-# Push into current remote branch
-pc = !git rev-parse --abbrev-ref HEAD | xargs git push origin
+    # Show verbose output about tags, branches or remotes
+    tags = tag -l
+    branches = branch -a
+    remotes = remote -v
 
-# Show untracked files
-stu = status --untracked-files=no
+    # Amend the currently staged files to the latest commit
+    amend = commit --amend --reuse-message=HEAD
 
-# Show history
-history = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+    # Credit an author on the latest commit
+    credit = "!f() { git commit --amend --author \"$1 <$2>\" -C HEAD; }; f"
 
-# Show git commands
-commitmmands = help -a
+    # Interactive rebase with the given number of latest commits
+    reb = "!r() { git rebase -i HEAD~$1; }; r"
 
-# Get object type
-type = cat-file -t
+    # Remove the old tag with this name and tag the latest commit with it.
+    retag = "!r() { git tag -d $1 && git push origin :refs/tags/$1 && git tag $1; }; r"
 
-# Gett file info
-info = cat-file -p
+    # Find branches containing commit
+    fb = "!f() { git branch -a --contains $1; }; f"
 
-# Show commit logs
-logs = Show !git shortlog --summary | sort --reverse --numeric-sort
+    # Find tags containing commit
+    ft = "!f() { git describe --always --contains $1; }; f"
 
-# Show conflicts
-conflicts = !git ls-files --unmerged | cut -f2 | sort -u | xargs  grep -El '<<<<<<<|=======|>>>>>>>'
+    # Find commits by source code
+    fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
 
-# Show unmergd files
-unmerged = files !git ls-files --unmerged | cut -f2 | sort -u
+    # Find commits by commit message
+    fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
-# Show aliases
-aliases = !git config -l | grep alias | cut -c 7-
+    # Remove branches that have already been merged with master
+    # a.k.a. ‘delete merged’
+    dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
 
-# Find files
-find = !git ls-files -r HEAD | grep -ii
+    # List contributors with number of commits
+    contributors = shortlog --summary --numbered
 
-# Remove files which have been diffeleted
-remove = !git ls-files -z --deleted | xargs -0 git rm
+    # Merge GitHub pull request on top of the `master` branch
+    mpr = "!f() { \
+        if [ $(printf \"%s\" \"$1\" | grep '^[0-9]\\+$' > /dev/null; printf $?) -eq 0 ]; then \
+            git fetch origin refs/pull/$1/head:pr/$1 && \
+            git rebase master pr/$1 && \
+            git checkout master && \
+            git merge pr/$1 && \
+            git branch -D pr/$1 && \
+            git commit --amend -m \"$(git log -1 --pretty=%B)\n\nCloses #$1.\"; \
+        fi \
+    }; f"
 
-# Ignore a file
-ignore = !([ ! -e .gitignore ] && touch .gitignore) |gitignore echo $1 >> .gitignore
+[apply]
 
-# Assume a file as unchanged
-assume = !gitt update-index --assume-unchanged
+    # Detect whitespace errors when applying a patch
+    whitespace = fix
 
-# Unassume a file
-unassume = !gitignoret update-index --no-assume-unchanged
+[core]
 
-# Show assumed files
-assumed = !git ls-files -v | grep ^h | cut -c 3-
+    editor = "subl -wn"
 
-# Pull from remote repository
-fork = !git config --get remote.origin.url | xargs git pull
+    # Use custom `.gitignore` and `.gitattributes`
+    excludesfile = ~/.gitignore_global
+    attributesfile = ~/.gitattributes
 
-# Delete multiple branches
-#git branch -D `git for-each-ref --format=for-each-ref"%(refname:short)" refs/heads/...`
+    # Treat spaces before tabs and all kinds of trailing whitespace as an error
+    # [default] trailing-space: looks for spaces at the end of a line
+    # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
 
-go = !gitgo
-springcleaning = for-each-ref --sort=-committerdate --format='%(refname:short) %(committerdate:short)'
+    # Make `git rebase` safer on OS X
+    # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+    trustctime = false
 
-#revert = checkout --
+    # Prevent showing files whose names contain non-ASCII symbols as unversioned.
+    # http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+    precomposeunicode = false
+
+[color]
+
+    # Use colors in Git commands that are capable of colored output when
+    # outputting to the terminal. (This is the default setting in Git ≥ 1.8.4.)
+    ui = auto
+
+[color "branch"]
+
+    current = yellow reverse
+    local = yellow
+    remote = green
+
+[color "diff"]
+
+    meta = yellow bold
+    frag = magenta bold # line info
+    old = red # deletions
+    new = green # additions
+
+[color "status"]
+
+    added = yellow
+    changed = green
+    untracked = cyan
+
+[diff]
+
+    # Detect copies as well as renames
+    renames = copies
+
+[diff "bin"]
+    # Use `hexdump` to diff binary files
+    textconv = hexdump -v -C
+
+[help]
+
+    # Automatically correct and execute mistyped commands
+    autocorrect = 1
+
+[merge]
+
+    # Include summaries of merged commits in newly created merge commit messages
+    log = true
+
+[push]
+
+    # Use the Git 1.x.x default to avoid errors on machines with old Git
+    # installations. To use `simple` instead, add this to your `~/.extra` file:
+    # `git config --global push.default simple`. See http://git.io/mMah-w.
+    default = matching
+    # Make `git push` push relevant annotated tags when pushing branches out.
+    followTags = true
+
+# URL shorthands
+
+[url "git@github.com:"]
+
+    insteadOf = "gh:"
+    pushInsteadOf = "github:"
+    pushInsteadOf = "git://github.com/"
+
+[url "git://github.com/"]
+
+    insteadOf = "github:"
+
+[url "git@gist.github.com:"]
+
+    insteadOf = "gst:"
+    pushInsteadOf = "gist:"
+    pushInsteadOf = "git://gist.github.com/"
+
+[url "git://gist.github.com/"]
+
+    insteadOf = "gist:"
