@@ -1,0 +1,98 @@
+# Configuration
+config checkDefaultsOnLoad true
+config defaultToCurrentScreen true
+config focusCheckWidthMax 3000
+config nudgePercentOf screenSize
+config resizePercentOf screenSize
+config secondsBetweenRepeat 0.1
+config undoOps move,resize
+
+#config windowHintsOrder persist
+config windowHintsBackgroundColor 96;96;64;0.5
+config windowHintsIgnoreHiddenWindows false
+config windowHintsShowIcons true
+config windowHintsSpread true
+config windowHintsSpreadPadding 40
+config windowHintsSpreadSearchHeight 80
+config windowHintsSpreadSearchWidth 80
+
+config switchBackgroundColor 50;53;58;0.7
+config switchFontSize 14
+config switchIconPadding 2
+config switchIconSize 128
+config switchRoundedCornerSize 4
+config switchSelectedPadding 4
+config switchShowTitles true
+
+# The "HYPER" key (bound using Seil and Karabiner)
+# https://pqrs.org/osx/karabiner/seil.html
+# https://pqrs.org/osx/karabiner/
+#
+alias hyper ctrl;shift;alt;cmd
+
+# Abstract positions
+alias bottomhalf   push   top bar-resize:screenSizeY/2
+alias bottomleft   corner bottom-left resize:screenSizeX/2;screenSizeY/2
+alias bottomright  corner bottom-right resize:screenSizeX/2;screenSizeY/2
+alias centerpad    move   screenOriginX+screenSizeX/8;screenOriginY+screenSizeY/8 screenSizeX/1.3;screenSizeY/1.3
+alias centersmall  move   screenOriginX+screenSizeX/4;screenOriginY+screenSizeY/4 screenSizeX/2;screenSizeY/2
+alias full         move   screenOriginX;screenOriginY screenSizeX;screenSizeY
+alias lefthalf     move   screenOriginX;screenOriginY screenSizeX/2;screenSizeY
+alias righthalf    move   screenOriginX+screenSizeX/2;screenOriginY screenSizeX/2;screenSizeY
+alias tophalf      push   bottom bar-resize:screenSizeY/2
+alias topleft      corner top-left resize:screenSizeX/2;screenSizeY/2
+alias topright     corner top-right resize:screenSizeX/2;screenSizeY/2
+
+# Location Bindings
+bind ':${hyper} ${centersmall}
+bind a:${hyper} ${lefthalf}
+bind c:${hyper} ${bottomright}
+bind d:${hyper} ${righthalf}
+bind e:${hyper} ${topright}
+bind q:${hyper} ${topleft}
+bind return:${hyper} ${centerpad}
+bind s:${hyper} ${full}
+bind w:${hyper} push top bar-resize:screenSizeY/2
+bind x:${hyper} ${tophalf}
+bind z:${hyper} ${bottomleft}
+
+# Grid
+bind tab:${hyper} grid padding:8 0:4,2 0:4,2
+
+# Throws
+bind space:${hyper} hint YUIOPHJKLNM # use whatever keys you want to use for throwing
+bind space:${hyper} throw next
+bind k:${hyper} throw 1     resize
+bind l:${hyper} throw 0     resize
+bind o:${hyper} throw right resize
+bind p:${hyper} throw left  resize
+
+# Misc
+bind `:${hyper} undo
+
+# Slate
+bind delete:${hyper} relaunch
+
+# Run Applications
+#bind esc:cmd shell /Applications/Utilities/Terminal.app/Contents/MacOS/Terminal
+
+# Layout
+layout 1monitor '1Password 5':REPEAT ${centersmall}
+layout 1monitor 'Adium':REPEAT ${centersmall}
+layout 1monitor 'Adobe Photoshop CC 2014':REPEAT ${full}
+layout 1monitor 'Calendar':REPEAT ${centersmall}
+layout 1monitor 'Chromium':REPEAT ${centerpad}
+layout 1monitor 'Nightly':REPEAT ${centerpad}
+layout 1monitor 'Safari':REPEAT ${centerpad}
+layout 1monitor 'App Store':REPEAT ${centersmall}
+layout 1monitor 'Contacts':REPEAT ${centersmall}
+layout 1monitor 'GitHub':REPEAT ${centersmall}
+layout 1monitor 'IntelliJ IDEA':REPEAT ${lefthalf}
+layout 1monitor 'iTerm2':REPEAT ${lefthalf}
+layout 1monitor 'Mail':REPEAT ${centerpad}
+layout 1monitor 'Sublime Text':REPEAT ${righthalf}
+layout 1monitor 'System Preferences':REPEAT ${centersmall}
+layout 1monitor 'Telegram':REPEAT ${centersmall}
+
+# Layout Bindings
+bind =:${hyper} layout 1monitor
