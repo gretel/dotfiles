@@ -3,11 +3,6 @@
     name = Tom Hensel
     email = github@jitter.eu
 
-[github]
-
-    user = gretel
-
-
 [alias]
 
     # View abbreviated SHA, description, and history graph of the latest 20 commits
@@ -182,3 +177,5 @@
 [url "git://gist.github.com/"]
 
     insteadOf = "gist:"
+[credential]
+	helper = osxkeychain
