@@ -27,6 +27,7 @@ echo "\npip:";
 pip install -U setuptools
 pip install -U pip
 pip list --outdated | sed 's/(.*//g' | xargs pip install -U
+pyenv rehash
 
 echo "\nnpm:"
 npm update -g # > /dev/null
