@@ -7,8 +7,22 @@ local hb_token=""
 
 local local_path=/usr/local
 
-use_ruby() {
+use_ruby_home() {
   local ruby_dir=$HOME/.rubies/ruby-$rb_version
+
+  export GEM_HOME=$HOME/.gem/ruby/$rb_version
+  export GEM_PATH=$HOME/.gem/ruby/$rb_version
+
+  export BUNDLE_BIN=$HOME/.gem/ruby/$rb_version/bin
+
+  path_add MANPATH "$ruby_dir/share/man"
+  PATH_add "$ruby_dir/bin"
+  PATH_add "$GEM_HOME/bin"
+  PATH_add "$BUNDLE_BIN"
+}
+
+use_ruby_brew() {
+  local ruby_dir=/usr/local/Cellar/ruby/$rb_version
 
   export GEM_HOME=$HOME/.gem/ruby/$rb_version
   export GEM_PATH=$HOME/.gem/ruby/$rb_version
@@ -45,10 +59,10 @@ use_node() {
   export NODE_PATH=$local_path/lib/node_modules
 }
 
-export X11_PATH=/opt/X11
-export EDITOR='/usr/local/bin/subl'
+# export X11_PATH="/opt/X11"
+export EDITOR="/usr/local/bin/subl"
 
-use homebrew
-use node
-use ruby
+# use node
+use ruby_brew
 use python
+use homebrew
