@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gem 'bundler'
 
 # misc tooling
+gem 'pry' # https://github.com/pry/pry
 gem 'metric_fu' # https://github.com/metricfu/metric_fu/
 gem 'tailor' # https://github.com/turboladen/tailor
 gem 'looksee' # https://github.com/oggy/looksee
