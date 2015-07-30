@@ -59,10 +59,16 @@ use_node() {
   export NODE_PATH=$local_path/lib/node_modules
 }
 
-# export X11_PATH="/opt/X11"
-export EDITOR="/usr/local/bin/subl"
-
-# use node
+use_sublime() {
+  local subl_path='/Applications/Sublime Text.app/Contents/SharedSupport/bin'
+  PATH_add "$subl_path"
+  export EDITOR="${subl_path}/subl -w -n"
+}  
+ 
+use node
+# use ruby_home
 use ruby_brew
 use python
 use homebrew
+use sublime
+
