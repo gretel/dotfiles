@@ -18,6 +18,6 @@ module RibPP
   Rib::Shell.send(:include, self)
 
   def format_result result
-    result_prompt + ap(result)
+    "#{result_prompt} #{ap(result)}"
   end
 end
