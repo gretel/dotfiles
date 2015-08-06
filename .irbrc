@@ -1,6 +1,6 @@
 begin
   require 'awesome_print'
-  require 'awesome_print_colors'
+  AwesomePrint.irb!
 rescue LoadError => e
   warn "error: #{e}"
 end
