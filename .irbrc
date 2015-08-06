@@ -1,17 +1,6 @@
-if defined?(::Bundler)
-  global_gemset = ENV['GEM_PATH'].split(':').grep(/ruby.*@global/).first
-  if global_gemset
-    all_global_gem_paths = Dir.glob("#{global_gemset}/gems/*")
-    all_global_gem_paths.each do |p|
-      gem_path = "#{p}/lib"
-      $LOAD_PATH << gem_path
-    end
-  end
+begin
+  require 'awesome_print'
+  require 'awesome_print_colors'
+rescue LoadError => e
+  warn "error: #{e}"
 end
-# Use Pry everywhere
-require 'rubygems'
-require 'pry'
-require 'looksee'
-require 'pp'
-Pry.start
-exit
