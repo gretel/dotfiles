@@ -1,33 +1,12 @@
 # https://github.com/zimbatm/direnv
 
-local rb_version=2.2.2
-local py_version=2.7.10
+use_ruby() {
+  local ruby_ver=$1
+  local ruby_dir=$2
 
-local hb_token=""
-
-local local_path=/usr/local
-
-use_ruby_home() {
-  local ruby_dir=$HOME/.rubies/ruby-$rb_version
-
-  export GEM_HOME=$HOME/.gem/ruby/$rb_version
-  export GEM_PATH=$HOME/.gem/ruby/$rb_version
-
-  export BUNDLE_BIN=$HOME/.gem/ruby/$rb_version/bin
-
-  path_add MANPATH "$ruby_dir/share/man"
-  PATH_add "$ruby_dir/bin"
-  PATH_add "$GEM_HOME/bin"
-  PATH_add "$BUNDLE_BIN"
-}
-
-use_ruby_brew() {
-  local ruby_dir=/usr/local/Cellar/ruby/$rb_version
-
-  export GEM_HOME=$HOME/.gem/ruby/$rb_version
-  export GEM_PATH=$HOME/.gem/ruby/$rb_version
-
-  export BUNDLE_BIN=$HOME/.gem/ruby/$rb_version/bin
+  export GEM_HOME=$HOME/.gem/ruby/$ruby_ver
+  export GEM_PATH=$HOME/.gem/ruby/$ruby_ver
+  export BUNDLE_BIN=$HOME/.gem/ruby/$ruby_ver/bin
 
   path_add MANPATH "$ruby_dir/share/man"
   PATH_add "$ruby_dir/bin"
@@ -36,13 +15,18 @@ use_ruby_brew() {
 }
 
 use_python() {
-  local python_bin=$HOME/.pyenv/shims
+  local python_ver=$1
+  local python_dir=$2
+
+  local python_bin=$python_dir/bin
+  local python_shims=$HOME/.pyenv/shims
 
   unset PYTHONHOME
-
   export PYENV_ROOT=$HOME/.pyenv
-  export PYENV_VERSION=$py_version
+  export PYENV_VERSION=$python_ver
 
+  path_add MANPATH "$python_dir/share/man"
+  PATH_add "$python_shims"
   PATH_add "$python_bin"
 }
 
@@ -63,12 +47,30 @@ use_sublime() {
   local subl_path='/Applications/Sublime Text.app/Contents/SharedSupport/bin'
   PATH_add "$subl_path"
   export EDITOR="${subl_path}/subl -w -n"
-}  
- 
-use node
-# use ruby_home
-use ruby_brew
-use python
-use homebrew
-use sublime
+}
 
+use_atom() {
+  export EDITOR="atom -n"
+}
+
+### ruby
+local rb_version=2.2.3
+# use ruby $rb_version /usr/local/Cellar/ruby/$rb_version
+use ruby $rb_version $HOME/.rubies/ruby-$rb_version
+
+### python
+# local py_version=2.7.10
+local py_version=3.4.3
+use python $py_version $HOME/.pyenv/versions/$py_version
+
+### node.js
+use node
+
+### homebrew
+local hb_token="7064c85309368eee1e27efcfa4c815128ed3ab1f"
+local local_path=/usr/local
+use homebrew
+
+### editor
+use atom
+# use sublime
