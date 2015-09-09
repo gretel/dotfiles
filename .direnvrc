@@ -31,8 +31,8 @@ use_python() {
 }
 
 use_homebrew() {
-  PATH_add "$local_path/sbin"
   PATH_add "$local_path/bin"
+#  PATH_add "$local_path/sbin"
 
   export HOMEBREW_PATH=$local_path
   export HOMEBREW_GITHUB_API_TOKEN=$hb_token
@@ -67,7 +67,7 @@ use python $py_version $HOME/.pyenv/versions/$py_version
 use node
 
 ### homebrew
-local hb_token="7064c85309368eee1e27efcfa4c815128ed3ab1f"
+local hb_token=""
 local local_path=/usr/local
 use homebrew
 
