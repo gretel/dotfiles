@@ -30,6 +30,12 @@ use_python() {
   PATH_add "$python_bin"
 }
 
+use_go() {
+  PATH_add "/usr/local/opt/go/libexec/bin"
+  export GOPATH=$HOME/.go
+}
+
+
 use_homebrew() {
   PATH_add "$local_path/bin"
 #  PATH_add "$local_path/sbin"
@@ -53,6 +59,8 @@ use_atom() {
   export EDITOR="atom -n"
 }
 
+export LC_ALL=en_US.UTF-8
+
 ### ruby
 local rb_version=2.2.3
 # use ruby $rb_version /usr/local/Cellar/ruby/$rb_version
@@ -63,11 +71,15 @@ use ruby $rb_version $HOME/.rubies/ruby-$rb_version
 local py_version=3.4.3
 use python $py_version $HOME/.pyenv/versions/$py_version
 
+### go
+use go
+
 ### node.js
 use node
 
 ### homebrew
 local hb_token=""
+
 local local_path=/usr/local
 use homebrew
 
