@@ -84,7 +84,7 @@
 
 [core]
 
-    editor = "subl -wn"
+    editor = "atom -nw"
 
     # Use custom `.gitignore` and `.gitattributes`
     excludesfile = ~/.gitignore_global
