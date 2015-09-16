@@ -1,0 +1,25 @@
+{
+    "Prompt": "[peco]",
+    "StickySelection": true,
+    "Style": {
+        "Basic": ["on_default", "on_default"],
+        "SavedSelection": ["on_green", "white", "bold"],
+        "Selected": ["underline", "on_blue", "black"],
+        "Query": ["bold", "white", "on_bold"],
+        "Matched": ["yellow"]
+    },
+    "Action": {
+        "foo.ToggleRangeMode": [
+            "peco.ToggleSelection",
+            "peco.ToggleRangeMode"
+        ],
+        "foo.SelectMoreDown": [
+            "peco.ToggleSelection",
+            "peco.SelectDown"
+        ]
+    },
+    "Keymap": {
+        "/": "foo.SelectMoreDown",
+        "z": "foo.ToggleRangeMode"
+    }
+}
