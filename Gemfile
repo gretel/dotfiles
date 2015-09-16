@@ -10,8 +10,6 @@ gem 'awesome_print'
 gem 'readline_buffer'
 gem 'gist'
 
-gem 'maid'
-
 # gem 'metric_fu' # https://github.com/metricfu/metric_fu/
 # gem 'tailor' # https://github.com/turboladen/tailor
 # gem 'looksee' # https://github.com/oggy/looksee
