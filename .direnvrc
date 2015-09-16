@@ -50,9 +50,7 @@ use_node() {
 }
 
 use_sublime() {
-  local subl_path='/Applications/Sublime Text.app/Contents/SharedSupport/bin'
-  PATH_add "$subl_path"
-  export EDITOR="${subl_path}/subl -w -n"
+  export EDITOR="subl -w -n"
 }
 
 use_atom() {
@@ -84,5 +82,5 @@ local local_path=/usr/local
 use homebrew
 
 ### editor
-use atom
-# use sublime
+# use atom
+use sublime
