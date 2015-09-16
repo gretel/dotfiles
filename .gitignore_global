@@ -1,8 +1,3 @@
-!pkg/wa
-!pkg/wa/**
-!themes/default/*
-themes/**
-pkg/**
 **/.DS_Store
 *.iml
 *.log
@@ -13,3 +8,6 @@ pkg/**
 log/
 run/
 tmp/
+.kitchen/
+__*
+gem_graph.png

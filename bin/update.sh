@@ -30,10 +30,16 @@ pip list --outdated | sed 's/(.*//g' | xargs pip install -U
 pyenv rehash
 
 echo "\nnpm:"
-npm update -g # > /dev/null
+npm update -g
 
-#echo "\ntaskpaper:"
-#~/bin/TaskPaperDaily.rb
+echo "\nperu:"
+peru -v sync
+
+echo "\nmaid:"
+maid clean --force
+
+echo "\nomf:"
+omf update
 
 terminal-notifier -message 'update done yo' -title 'toolchain' -subtitle $0 -sound Morse
 
