@@ -6,11 +6,11 @@ gem 'bundler'
 gem 'bond'
 gem 'hirb'
 gem 'rib'
-
 gem 'awesome_print'
 gem 'readline_buffer'
-
 gem 'gist'
+
+gem 'maid'
 
 # gem 'metric_fu' # https://github.com/metricfu/metric_fu/
 # gem 'tailor' # https://github.com/turboladen/tailor
