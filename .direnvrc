@@ -21,7 +21,6 @@ use_python() {
   local python_bin=$python_dir/bin
   local python_shims=$HOME/.pyenv/shims
 
-  unset PYTHONHOME
   export PYENV_ROOT=$HOME/.pyenv
   export PYENV_VERSION=$python_ver
 
@@ -32,9 +31,10 @@ use_python() {
 
 use_go() {
   PATH_add "/usr/local/opt/go/libexec/bin"
+  PATH_add "$HOME/.go/bin"
+
   export GOPATH=$HOME/.go
 }
-
 
 use_homebrew() {
   PATH_add "$local_path/bin"
@@ -60,24 +60,21 @@ use_atom() {
 export LC_ALL=en_US.UTF-8
 
 ### ruby
-local rb_version=2.2.3
-# use ruby $rb_version /usr/local/Cellar/ruby/$rb_version
-use ruby $rb_version $HOME/.rubies/ruby-$rb_version
+# local rb_version=2.2.3
+# use ruby $rb_version $HOME/.rubies/ruby-$rb_version
 
 ### python
 # local py_version=2.7.10
-local py_version=3.4.3
-use python $py_version $HOME/.pyenv/versions/$py_version
+# use python $py_version $HOME/.pyenv/versions/$py_version
 
 ### go
 use go
 
-### node.js
+### node
 use node
 
 ### homebrew
 local hb_token=""
-
 local local_path=/usr/local
 use homebrew
 
