@@ -8,8 +8,10 @@
 #git reset --hard origin/master
 
 echo "brew:"
-brew update; brew upgrade
-brew tap Homebrew/bundle; brew bundle
+brew update
+brew upgrade
+#brew tap Homebrew/bundle;
+brew bundle
 brew cleanup; brew cask cleanup; brew prune; brew linkapps
 
 echo "\nrubygems:"
@@ -31,11 +33,8 @@ npm update -g
 echo "\nperu:"
 peru -v sync
 
-echo "\nmaid:"
-maid clean --force
-
-echo "\nomf:"
-omf update
+echo "\nfish:"
+fish -c 'wa update'
 
 echo "\nsyncthing:"
 launchctl unload ~/Library/LaunchAgents/homebrew.mxcl.syncthing.plist
