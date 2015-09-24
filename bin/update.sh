@@ -2,14 +2,16 @@
 #
 
 #echo "homebrew fix:"
-#cd `brew --prefix`
-#git remote add origin https://github.com/mxcl/homebrew.git
+echo "brew:"
+#cd $(brew --prefix)
 #git fetch origin
 #git reset --hard origin/master
-
-echo "brew:"
-brew update
-brew upgrade
+cd $(brew --repository)
+git reset --hard FETCH_HEAD
+cd $(brew --repository)/Library
+git clean -fd
+cd ~
+brew update; brew upgrade
 #brew tap Homebrew/bundle;
 brew bundle
 brew cleanup; brew cask cleanup; brew prune; brew linkapps
@@ -19,7 +21,7 @@ yes | gem update --system --quiet
 yes | gem update --quiet
 
 echo "\nbundler:"
-cd ~; bundle update
+bundle update
 
 echo "\npip:";
 pip install -U setuptools
@@ -30,8 +32,8 @@ pyenv rehash
 echo "\nnpm:"
 npm update -g
 
-echo "\nperu:"
-peru -v sync
+#echo "\nperu:"
+#peru -v sync
 
 echo "\nfish:"
 fish -c 'wa update'
