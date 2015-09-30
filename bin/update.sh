@@ -1,7 +1,6 @@
 #!/bin/sh
 #
 
-#echo "homebrew fix:"
 echo "brew:"
 #cd $(brew --prefix)
 #git fetch origin
@@ -32,8 +31,8 @@ pyenv rehash
 echo "\nnpm:"
 npm update -g
 
-#echo "\nperu:"
-#peru -v sync
+echo "\nperu:"
+peru -v sync
 
 echo "\nfish:"
 fish -c 'wa update'
