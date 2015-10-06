@@ -20,6 +20,7 @@ yes | gem update --system --quiet
 yes | gem update --quiet
 
 echo "\nbundler:"
+gem install bundler
 bundle update
 
 echo "\npip:";
