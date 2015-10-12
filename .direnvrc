@@ -29,6 +29,10 @@ use_python() {
   PATH_add "$python_bin"
 }
 
+use_pyenv() {
+  pyenv local $1
+}
+
 use_go() {
   PATH_add "/usr/local/opt/go/libexec/bin"
   PATH_add "$HOME/.go/bin"
@@ -64,8 +68,11 @@ export LC_ALL=en_US.UTF-8
 # use ruby $rb_version $HOME/.rubies/ruby-$rb_version
 
 ### python
-# local py_version=2.7.10
+local py_version=2.7.10
+
+### pyenv
 # use python $py_version $HOME/.pyenv/versions/$py_version
+use pyenv $py_version
 
 ### go
 use go
