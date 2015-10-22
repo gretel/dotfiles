@@ -1,4 +1,5 @@
 tap 'caskroom/cask'
+tap 'caskroom/fonts'
 tap 'caskroom/versions'
 tap 'domt4/chromium'
 tap 'homebrew/bundle'
