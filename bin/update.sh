@@ -33,7 +33,7 @@ echo "\nnpm:"
 npm update -g
 
 echo "\nperu:"
-pyenv locaal 3.4.3
+pyenv local 3.4.3
 peru -v sync
 
 echo "\nfish:"
