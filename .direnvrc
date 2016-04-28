@@ -77,6 +77,17 @@ use sublime
 use homebrew
 use go
 use node
-use pyenv $py_version
-#use python $py_version $HOME/.pyenv/versions/$py_version
-use ruby $rb_version $HOME/.rubies/ruby-$rb_version
+if test ! -f "$PWD/.python-version"; then
+  echo "using default python!"
+  use pyenv $py_version
+  #use python $py_version $HOME/.pyenv/versions/$py_version
+else
+  echo "explicitly using python-`pyenv local`!"; 
+fi
+
+if test ! -f "$PWD/.ruby-version"; then
+  echo "using default ruby!"
+  use ruby $rb_version $HOME/.rubies/ruby-$rb_version
+else
+  echo "explicitly using `chruby`!"; 
+fi
