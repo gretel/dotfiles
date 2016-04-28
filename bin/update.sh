@@ -16,14 +16,6 @@ brew update; brew upgrade
 brew bundle
 brew cleanup; brew cask cleanup; brew prune; brew linkapps
 
-echo "\nrubygems:"
-yes | gem update --system --quiet
-yes | gem update --quiet
-
-echo "\nbundler:"
-gem install bundler
-bundle update
-
 # TODO: abstraction
 for p in 2.7.11 3.5.1
 do
@@ -34,10 +26,19 @@ do
   pip list --outdated | sed 's/(.*//g' | xargs pip install -U
 done
 
+echo "\nrubygems:"
+yes | gem update --system --quiet
+yes | gem update --quiet
+
+echo "\nbundler:"
+gem install bundler
+bundle update
+
 echo "\nnpm:"
 npm update -g
 
 echo "\nperu:"
+# TODO: abstraction
 pyenv local 3.5.1
 peru -v sync
 
