@@ -1,4 +1,11 @@
+# https://github.com/gretel/dotfiles
 # https://github.com/zimbatm/direnv
+
+### primary versions to use
+local py_version=3.5.1
+local rb_version=2.3.1
+local hb_token=""
+local local_path=/usr/local
 
 use_ruby() {
   local ruby_ver=$1
@@ -14,20 +21,20 @@ use_ruby() {
   PATH_add "$BUNDLE_BIN"
 }
 
-use_python() {
-  local python_ver=$1
-  local python_dir=$2
-
-  local python_bin=$python_dir/bin
-  local python_shims=$HOME/.pyenv/shims
-
-  export PYENV_ROOT=$HOME/.pyenv
-  export PYENV_VERSION=$python_ver
-
-  path_add MANPATH "$python_dir/share/man"
-  PATH_add "$python_shims"
-  PATH_add "$python_bin"
-}
+#use_python() {
+#  local python_ver=$1
+#  local python_dir=$2
+#
+#  local python_bin=$python_dir/bin
+#  local python_shims=$HOME/.pyenv/shims
+#
+#  export PYENV_ROOT=$HOME/.pyenv
+#  export PYENV_VERSION=$python_ver
+#
+#  path_add MANPATH "$python_dir/share/man"
+#  PATH_add "$python_shims"
+#  PATH_add "$python_bin"
+#}
 
 use_pyenv() {
   pyenv local $1
@@ -42,7 +49,7 @@ use_go() {
 
 use_homebrew() {
   PATH_add "$local_path/bin"
-#  PATH_add "$local_path/sbin"
+  PATH_add "$local_path/sbin"
 
   export HOMEBREW_PATH=$local_path
   export HOMEBREW_GITHUB_API_TOKEN=$hb_token
@@ -61,30 +68,26 @@ use_atom() {
   export EDITOR="atom -n"
 }
 
+### encoding
 export LC_ALL=en_US.UTF-8
 
-### ruby
-# local rb_version=2.2.3
-# use ruby $rb_version $HOME/.rubies/ruby-$rb_version
-
-### python
-local py_version=2.7.10
-
-### pyenv
-# use python $py_version $HOME/.pyenv/versions/$py_version
-use pyenv $py_version
-
-### go
-use go
-
-### node
-use node
-
-### homebrew
-local hb_token=""
-local local_path=/usr/local
-use homebrew
-
-### editor
+### enable use
 # use atom
 use sublime
+use homebrew
+use go
+use node
+if test ! -f "$PWD/.python-version"; then
+  echo "using default python!"
+  use pyenv $py_version
+  #use python $py_version $HOME/.pyenv/versions/$py_version
+else
+  echo "explicitly using python-`pyenv local`!"; 
+fi
+
+if test ! -f "$PWD/.ruby-version"; then
+  echo "using default ruby!"
+  use ruby $rb_version $HOME/.rubies/ruby-$rb_version
+else
+  echo "explicitly using `chruby`!"; 
+fi
