@@ -5,11 +5,12 @@ echo "brew:"
 #cd $(brew --prefix)
 #git fetch origin
 #git reset --hard origin/master
-
-cd $(brew --repository)
-git reset --hard FETCH_HEAD
-cd $(brew --repository)/Library
-git clean -fd
+#
+# cd $(brew --repository)
+# git reset --hard FETCH_HEAD
+# cd $(brew --repository)/Library
+# git clean -fd
+#
 cd ~
 brew update; brew upgrade
 #brew tap Homebrew/bundle;
@@ -42,9 +43,9 @@ echo "\nperu:"
 pyenv local 3.5.1
 peru -v sync
 
-echo "\nsyncthing:"
-launchctl unload /usr/local/opt/syncthing/homebrew.mxcl.syncthing.plist
-launchctl load /usr/local/opt/syncthing/homebrew.mxcl.syncthing.plist
+#echo "\nsyncthing:"
+#launchctl unload /usr/local/opt/syncthing/homebrew.mxcl.syncthing.plist
+#launchctl load /usr/local/opt/syncthing/homebrew.mxcl.syncthing.plist
 
 terminal-notifier -message 'update done yo' -title 'toolchain' -subtitle $0 -sound Morse
 
