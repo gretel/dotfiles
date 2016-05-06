@@ -2,42 +2,49 @@
 # https://github.com/zimbatm/direnv
 
 ### primary versions to use
-local py_version=3.5.1
+local py_version=2.7.11
 local rb_version=2.3.1
 local hb_token=""
 local local_path=/usr/local
 
-use_ruby() {
-  local ruby_ver=$1
-  local ruby_dir=$2
+# use_ruby() {
+#   local ruby_ver=$1
+#   local ruby_dir=$2
 
-  export GEM_HOME=$HOME/.gem/ruby/$ruby_ver
-  export GEM_PATH=$HOME/.gem/ruby/$ruby_ver
-  export BUNDLE_BIN=$HOME/.gem/ruby/$ruby_ver/bin
+#   export GEM_HOME=$HOME/.gem/ruby/$ruby_ver
+#   export GEM_PATH=$HOME/.gem/ruby/$ruby_ver
+#   export BUNDLE_BIN=$HOME/.gem/ruby/$ruby_ver/bin
 
-  path_add MANPATH "$ruby_dir/share/man"
-  PATH_add "$ruby_dir/bin"
-  PATH_add "$GEM_HOME/bin"
-  PATH_add "$BUNDLE_BIN"
+#   path_add MANPATH "$ruby_dir/share/man"
+#   PATH_add "$ruby_dir/bin"
+#   PATH_add "$GEM_HOME/bin"
+#   PATH_add "$BUNDLE_BIN"
+# }
+
+use_chruby() {
+  local ver=$1
+  source /usr/local/share/chruby/chruby.sh
+  chruby $ver
 }
 
-#use_python() {
+# use_python() {
 #  local python_ver=$1
 #  local python_dir=$2
-#
+
 #  local python_bin=$python_dir/bin
 #  local python_shims=$HOME/.pyenv/shims
-#
+
 #  export PYENV_ROOT=$HOME/.pyenv
 #  export PYENV_VERSION=$python_ver
-#
+
 #  path_add MANPATH "$python_dir/share/man"
 #  PATH_add "$python_shims"
 #  PATH_add "$python_bin"
-#}
+# }
 
 use_pyenv() {
-  pyenv local $1
+  local ver=$1
+  pyenv local $ver
 }
 
 use_go() {
@@ -77,17 +84,7 @@ use sublime
 use homebrew
 use go
 use node
-if test ! -f "$PWD/.python-version"; then
-  echo "using default python!"
-  use pyenv $py_version
-  #use python $py_version $HOME/.pyenv/versions/$py_version
-else
-  echo "explicitly using python-`pyenv local`!"; 
-fi
-
-if test ! -f "$PWD/.ruby-version"; then
-  echo "using default ruby!"
-  use ruby $rb_version $HOME/.rubies/ruby-$rb_version
-else
-  echo "explicitly using `chruby`!"; 
-fi
+use pyenv $py_version
+# use python $py_version
+use chruby $rb_version
+# use ruby $rb_version
