@@ -8,7 +8,7 @@ local rb_version=2.3.1
 
 ### variables
 local hb_token=""
-local local_path=/usr/local
+local local_path="/usr/local"
 
 # # ruby
 # use_ruby() {
@@ -29,6 +29,7 @@ local local_path=/usr/local
 use_chruby() {
   local ver=$1
   source /usr/local/share/chruby/chruby.sh
+  source /usr/local/share/chruby/auto.sh
   chruby $ver
 }
 
@@ -59,22 +60,25 @@ use_go() {
   PATH_add "/usr/local/opt/go/libexec/bin"
   PATH_add "$HOME/.go/bin"
 
-  export GOPATH=$HOME/.go
+  export GOPATH="$HOME/.go"
 }
 
 ### homebrew osx
 use_homebrew() {
+  local hb_sbin="$local_path/sbin"
   PATH_add "$local_path/bin"
-  PATH_add "$local_path/sbin"
+  if test -d $hb_sbin; then
+    PATH_add "$hb_sbin"
+  fi
 
-  export HOMEBREW_PATH=$local_path
-  export HOMEBREW_GITHUB_API_TOKEN=$hb_token
+  export HOMEBREW_PATH="$local_path"
+  export HOMEBREW_GITHUB_API_TOKEN="$hb_token"
 }
 
 ### node.js
 use_node() {
-  export NODE_HOME=$local_path
-  export NODE_PATH=$local_path/lib/node_modules
+  export NODE_HOME="$local_path"
+  export NODE_PATH="$local_path/lib/node_modules"
 }
 
 ### editors
@@ -87,7 +91,7 @@ use_atom() {
 }
 
 ### encoding
-export LC_ALL=en_US.UTF-8
+export LC_ALL="en_US.UTF-8"
 
 ### enable use
 use go
