@@ -2,12 +2,15 @@
 # https://github.com/gretel/dotfiles
 # https://github.com/zimbatm/direnv
 
-# primary versions to use
+### primary versions to use
 local py_version=2.7.11
 local rb_version=2.3.1
+
+### variables
 local hb_token=""
 local local_path=/usr/local
 
+# # ruby
 # use_ruby() {
 #   local ruby_ver=$1
 #   local ruby_dir=$2
@@ -22,12 +25,14 @@ local local_path=/usr/local
 #   PATH_add "$BUNDLE_BIN"
 # }
 
+# chruby (automatic)
 use_chruby() {
   local ver=$1
   source /usr/local/share/chruby/chruby.sh
   chruby $ver
 }
 
+# # python
 # use_python() {
 #  local python_ver=$1
 #  local python_dir=$2
@@ -43,11 +48,13 @@ use_chruby() {
 #  PATH_add "$python_bin"
 # }
 
+# python virtualenv (automatic)
 use_pyenv() {
   local ver=$1
   pyenv local $ver
 }
 
+# go osx
 use_go() {
   PATH_add "/usr/local/opt/go/libexec/bin"
   PATH_add "$HOME/.go/bin"
@@ -55,6 +62,7 @@ use_go() {
   export GOPATH=$HOME/.go
 }
 
+### homebrew osx
 use_homebrew() {
   PATH_add "$local_path/bin"
   PATH_add "$local_path/sbin"
@@ -63,11 +71,13 @@ use_homebrew() {
   export HOMEBREW_GITHUB_API_TOKEN=$hb_token
 }
 
+### node.js
 use_node() {
   export NODE_HOME=$local_path
   export NODE_PATH=$local_path/lib/node_modules
 }
 
+### editors
 use_sublime() {
   export EDITOR="subl -w -n"
 }
