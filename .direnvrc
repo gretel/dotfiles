@@ -1,7 +1,8 @@
+# host "pacman"
 # https://github.com/gretel/dotfiles
 # https://github.com/zimbatm/direnv
 
-### primary versions to use
+# primary versions to use
 local py_version=2.7.11
 local rb_version=2.3.1
 local hb_token=""
@@ -79,12 +80,12 @@ use_atom() {
 export LC_ALL=en_US.UTF-8
 
 ### enable use
-# use atom
-use sublime
-use homebrew
 use go
+use homebrew
 use node
-use pyenv $py_version
-# use python $py_version
 use chruby $rb_version
 # use ruby $rb_version
+use pyenv $py_version
+# use python $py_version
+# use atom
+use sublime
