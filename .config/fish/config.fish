@@ -11,9 +11,9 @@ set -x PYENV_HOME $HOME/.pyenv
 . (pyenv init - | psub)
 . (pyenv virtualenv-init - | psub)
 
-# # chruby handles ruby
-# . /usr/local/share/chruby/chruby.fish
-# . /usr/local/share/chruby/auto.fish
+# chruby handles ruby
+. /usr/local/share/chruby/chruby.fish
+. /usr/local/share/chruby/auto.fish
 
 # direnv last so chruby and pyenv will have stuff set
 eval (direnv hook fish)
