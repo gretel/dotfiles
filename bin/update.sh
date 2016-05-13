@@ -13,6 +13,12 @@ brew update; brew upgrade
 cd ~; brew tap Homebrew/bundle; brew bundle --global
 brew cleanup; brew cask cleanup; brew prune; brew linkapps
 
+brew services list
+
+echo "\nmas:"
+# mas install 443126292
+mas upgrade
+
 for p in 2.7.11 3.5.1
 do
   echo "\npip for ${p}:"

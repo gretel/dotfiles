@@ -6,5 +6,5 @@
 :bulk_threshold: 1000
 :backtrace: true
 :verbose: true
-install: --no-document
-update: --no-document
+install: --no-document --env-shebang
+update: --no-document --env-shebang

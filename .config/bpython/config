@@ -1,0 +1,4 @@
+[general]
+color_scheme = default
+hist_file = ~/.python/.python_history
+hist_lenght = 1000
