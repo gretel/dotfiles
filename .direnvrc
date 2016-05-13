@@ -55,9 +55,6 @@ use_pyenv() {
   pyenv local $ver
 }
 
-<<<<<<< HEAD
-# go osx
-=======
 use_ansible_dev() {
   local location=$1
   if test -d "$location"; then
@@ -69,7 +66,7 @@ use_ansible_dev() {
   fi
 }
 
->>>>>>> dd8430a8f4ab48c514c0faa462472e7c77e98b3b
+# go osx
 use_go() {
   PATH_add "/usr/local/opt/go/libexec/bin"
   PATH_add "$HOME/.go/bin"
@@ -116,7 +113,5 @@ use pyenv $py_version
 # use_ansible_dev "${HOME}/Sync/prjcts/ansible"
 use chruby $rb_version
 # use ruby $rb_version
-use pyenv $py_version
-# use python $py_version
 # use atom
 use sublime
