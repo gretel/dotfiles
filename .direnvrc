@@ -111,7 +111,7 @@ use node
 use pyenv $py_version
 # use python $py_version
 # use_ansible_dev "${HOME}/Sync/prjcts/ansible"
-use chruby $rb_version
+# use chruby $rb_version
 # use ruby $rb_version
 # use atom
 use sublime
