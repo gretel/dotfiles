@@ -1,6 +1,58 @@
 [user]
-    name = Tom Hensel
-    email = github@jitter.eu
+  name = Tom Hensel
+  email = github@jitter.eu
 
 [credential]
-    helper = osxkeychain
+  helper = osxkeychain
+
+[core]
+  pager = cat
+  editor = joe
+
+[color]
+  ui = auto
+
+[color "branch"]
+  current = bold
+  upstream = cyan
+
+[pager]
+  blame = less -S
+
+[diff]
+  algorithm = patience
+
+[grep]
+  extendRegexp = true
+
+[status]
+  showUntrackedFiles = all
+
+[branch]
+  autosetupmerge = true
+
+[rerere]
+  enabled = true
+
+[tag]
+  sort = version:refname
+
+[fetch]
+  prune = true
+  fsckobjects = true
+
+[push]
+  default = upstream
+
+[transfer]
+  fsckobjects = true
+
+[receive]
+  fsckObjects = true
+
+[github]
+  user = gretel
+
+[git-up "bundler"]
+  check = true
+
