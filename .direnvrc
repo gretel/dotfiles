@@ -24,6 +24,7 @@ local local_path=/usr/local
 use_chruby() {
   local ver=$1
   source /usr/local/share/chruby/chruby.sh
+  source /usr/local/share/chruby/auto.sh
   chruby $ver
 }
 
@@ -45,6 +46,17 @@ use_chruby() {
 use_pyenv() {
   local ver=$1
   pyenv local $ver
+}
+
+use_ansible_dev() {
+  local location=$1
+  if test -d "$location"; then
+    export ANSIBLE_HOME=$location
+    source "$location/hacking/env-setup" > /dev/null
+  else
+    echo Ansible could not be found at "$location"!
+    exit 1
+  fi
 }
 
 use_go() {
@@ -86,5 +98,6 @@ use go
 use node
 use pyenv $py_version
 # use python $py_version
+# use_ansible_dev "${HOME}/Sync/prjcts/ansible"
 use chruby $rb_version
 # use ruby $rb_version
