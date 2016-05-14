@@ -5,18 +5,18 @@
 set ssh_keys $HOME/.ssh/id_rsa $HOME/.ssh/github
 set gpg_keys 640F9BDD
 
-# https://github.com/yyuu/pyenv-virtualenv
-set -x PYENV_SHELL fish
+# pyenv
 set -x PYENV_ROOT $HOME/.pyenv
+set -x PYENV_SHELL fish
 set -x PATH $PATH $PYENV_ROOT/bin;
 
 . (pyenv init - | psub)
 . (pyenv virtualenv-init - | psub)
 
-# # chruby handles ruby
-# . /usr/local/share/chruby/chruby.fish
-# . /usr/local/share/chruby/auto.fish
+# fried ruby, hmm
 source /usr/local/opt/fry/share/fry/fry.fish
+
+set -x WORKON_HOME $HOME/.pyenv
 
 # direnv last so chruby and pyenv will have stuff set
 eval (direnv hook fish)

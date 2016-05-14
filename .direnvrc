@@ -10,53 +10,64 @@ local rb_version=2.3.1
 local hb_token=""
 local local_path="/usr/local"
 
-# # ruby
-# use_ruby() {
-#   local ruby_ver=$1
-#   local ruby_dir=$2
+# ruby
+use_ruby() {
+  local ruby_ver=$1
 
-#   export GEM_HOME=$HOME/.gem/ruby/$ruby_ver
-#   export GEM_PATH=$HOME/.gem/ruby/$ruby_ver
-#   export BUNDLE_BIN=$HOME/.gem/ruby/$ruby_ver/bin
+  local ruby_dir=$HOME/.rubies/ruby-$ruby_ver
+  local gem_dir=$HOME/.gem/ruby/$ruby_ver
 
-#   path_add MANPATH "$ruby_dir/share/man"
-#   PATH_add "$ruby_dir/bin"
-#   PATH_add "$GEM_HOME/bin"
-#   PATH_add "$BUNDLE_BIN"
-# }
+  export GEM_HOME="$gem_dir"
+  export GEM_PATH="$gem_dir"
+  export BUNDLE_BIN="$ruby_dir/bin"
 
-# chruby (automatic)
-use_chruby() {
-  local ver=$1
-  source /usr/local/share/chruby/chruby.sh
-  source /usr/local/share/chruby/auto.sh
-  chruby $ver
+  path_add MANPATH "$ruby_dir/share/man"
+
+  PATH_add "$HOME/.rubies/ruby-$ruby_ver/bin"
+  PATH_add "$GEM_HOME/bin"
+  PATH_add "$BUNDLE_BIN"
 }
 
-# # python
-# use_python() {
-#  local python_ver=$1
-#  local python_dir=$2
+# python
+use_python() {
+  local python_ver=$1
 
-#  local python_bin=$python_dir/bin
-#  local python_shims=$HOME/.pyenv/shims
+  local python_dir=$HOME/.pyenv/versions/$python_ver
+  local python_shims=$HOME/.pyenv/shims
+  local python_venv_shims=$HOME/.pyenv/plugins/pyenv-virtualenv/shims
 
-#  export PYENV_ROOT=$HOME/.pyenv
-#  export PYENV_VERSION=$python_ver
+  export PYENV_ROOT=$HOME/.pyenv
+  export PYENV_VERSION=$python_ver
 
-#  path_add MANPATH "$python_dir/share/man"
-#  PATH_add "$python_shims"
-#  PATH_add "$python_bin"
-# }
+  path_add MANPATH "$python_dir/share/man"
 
-# python virtualenv (automatic)
+  PATH_add "$python_dir/bin"
+  PATH_add "$python_shims"
+  PATH_add "$python_venv_shims"
+}
+
+# pyenv
 use_pyenv() {
   local ver=$1
+
   pyenv local $ver
 }
 
+# pyenv with direnv
+# https://github.com/direnv/direnv/wiki/Python
+use_pyenv_direnv() {
+  which virtualenv || return # required
+
+  local python_root=$HOME/.pyenv/versions/$1
+
+  load_prefix "$python_root"
+  layout_python "$python_root/bin/python"
+}
+
+# ansible git
 use_ansible_dev() {
   local location=$1
+
   if test -d "$location"; then
     export ANSIBLE_HOME=$location
     source "$location/hacking/env-setup" > /dev/null
@@ -74,9 +85,10 @@ use_go() {
   export GOPATH="$HOME/.go"
 }
 
-### homebrew osx
+# homebrew osx
 use_homebrew() {
   local hb_sbin="$local_path/sbin"
+
   PATH_add "$local_path/bin"
   if test -d $hb_sbin; then
     PATH_add "$hb_sbin"
@@ -86,32 +98,51 @@ use_homebrew() {
   export HOMEBREW_GITHUB_API_TOKEN="$hb_token"
 }
 
-### node.js
+# node.js
 use_node() {
   export NODE_HOME="$local_path"
   export NODE_PATH="$local_path/lib/node_modules"
 }
 
-### editors
+# sublime text
 use_sublime() {
   export EDITOR="subl -w -n"
 }
 
+# github atom
 use_atom() {
   export EDITOR="atom -n"
 }
 
-### encoding
+# encoding
 export LC_ALL="en_US.UTF-8"
 
-### enable use
+### enable use of the above
 use go
 use homebrew
 use node
-use pyenv $py_version
-# use python $py_version
+
+# # use pyenv $py_version
+# if [ -f ".python-version" ]; then
+#   use python `cat .python-version`
+# else
+#   use python $py_version
+# fi
+
+# use_pyenv_direnv
+
 # use_ansible_dev "${HOME}/Sync/prjcts/ansible"
+
 # use chruby $rb_version
 # use ruby $rb_version
+
 # use atom
 use sublime
+
+if [ -n "$GEM_HOME" ]; then
+  echo "ruby: $GEM_HOME"
+fi
+
+if [ -n "$PYENV_VIRTUAL_ENV" ]; then
+  echo "virtualenv: $PYENV_VIRTUAL_ENV"
+fi
