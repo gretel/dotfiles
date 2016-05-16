@@ -1,5 +1,7 @@
 #!/bin/sh
 #
+cd "$HOME" || exit
+
 printf "updating. please wait!\n\n"
 
 ### gpg
@@ -19,21 +21,18 @@ printf "\nhomebrew:\n"
 # cd $(brew --repository)/Library
 # git clean -fd
 brew analytics off
-# update
-brew update; brew upgrade
-# .Brewfile
-cd "$HOME" || exit
-printf "\n"; brew tap Homebrew/bundle; brew bundle --global
-# cask
-brew cask cleanup
-# tidy
-brew cleanup; brew prune; brew linkapps
-# services
+#brew update; brew upgrade
+# printf "\n"; brew tap Homebrew/bundle; brew bundle; brew bundle --cleanup
+printf "\n"; brew install -q rcmdnk/file/brew-file
+brew file --preupdate --no_appstore update cask_upgrade
+
+printf "\n"; brew cleanup; brew prune; brew cask cleanup; brew linkapps
 brew services clean; brew services list
 
 ### fisher
 printf "\nfisherman:\n"
-fish -c 'fisher up'
+# fish -c 'fisher up'
+fisher up
 
 ### ruby
 printf "\nrubygems:\n"
