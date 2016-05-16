@@ -23,7 +23,7 @@ brew analytics off
 brew update; brew upgrade
 # .Brewfile
 cd "$HOME" || exit
-brew tap Homebrew/bundle; brew bundle --global
+printf "\n"; brew tap Homebrew/bundle; brew bundle --global
 # cask
 brew cask cleanup
 # tidy
@@ -31,23 +31,25 @@ brew cleanup; brew prune; brew linkapps
 # services
 brew services clean; brew services list
 
+### fisher
+printf "\nfisherman:\n"
+fish -c 'fisher up'
 
 ### ruby
 printf "\nrubygems:\n"
-yes | gem update --system --quiet
-yes | gem update --quiet
+gem update --system --quiet
+gem update --quiet
 
 printf "\nbundler:\n"
-gem install bundler --no-document
-bundle update
+gem install bundler --no-document --quiet
+bundle update --jobs 4
 
 ### node.js
 printf "\nnpm:\n"
 npm update || npm install -g npm@latest
 
-pys="2.7.11 3.5.1"
-
 ### python
+pys="2.7.11 3.5.1"
 for p in $pys
 do
   printf "\npip for %s:\n" "$p"
