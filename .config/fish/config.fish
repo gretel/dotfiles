@@ -2,21 +2,29 @@
 # $ brew update; brew install chruby chruby-fish direnv hub fasd fzf keychain pyenv thefuck
 
 # my personal ssh keys on the chain
-set ssh_keys $HOME/.ssh/id_rsa $HOME/.ssh/github
-set gpg_keys 640F9BDD
+set ssh_keys $HOME/.ssh/id_rsa $HOME/.ssh/github;
+set gpg_keys 640F9BDD;
 
-# pyenv
-set -x PYENV_ROOT $HOME/.pyenv
-set -x PYENV_SHELL fish
-set -x PATH $PATH $PYENV_ROOT/bin;
+set -x BROWSER 'open';
+# set -x EDITOR 'atom -n';
+set -x EDITOR 'subl -w -n';
+set -x VISUAL 'subl -n';
 
-. (pyenv init - | psub)
-. (pyenv virtualenv-init - | psub)
+set -x PIP_DOWNLOAD_CACHE $HOME/.cache/pip;
+# set -x PIP_REQUIRE_VIRTUALENV 1;
+set -x PYENV_ROOT $HOME/.pyenv;
+set -x PYENV_SHELL fish;
+set -x PYENV_VIRTUALENV_CACHE_PATH $HOME/.cache/pyenv;
+set -x VIRTUALENV_DISTRIBUTE 1;
+set -x WORKON_HOME $HOME/.pyenv;
 
-# fried ruby, hmm
-source /usr/local/opt/fry/share/fry/fry.fish
+# set -x PATH $PATH $PYENV_ROOT/bin;
 
-set -x WORKON_HOME $HOME/.pyenv
+source (pyenv init - | psub)
+source (pyenv virtualenv-init - | psub)
+
+# # fried ruby, hmm
+# source /usr/local/opt/fry/share/fry/fry.fish
 
 # direnv last so chruby and pyenv will have stuff set
 eval (direnv hook fish)
@@ -25,7 +33,7 @@ eval (direnv hook fish)
 if status --is-interactive
 
   # fzf for history fuzzines
-  . /usr/local/Cellar/fzf/**/shell/key-bindings.fish
+  source /usr/local/Cellar/fzf/**/shell/key-bindings.fish
 
   # hub for git
   eval (hub alias -s)
@@ -37,22 +45,17 @@ if status --is-interactive
   eval (keychain --eval --dir $HOME/.keychain --inherit any-once --agents gpg,ssh $ssh_keys $gpg_keys)
   set -x SSH_AUTH_SOCK $HOME/.gnupg/S.gpg-agent
 
-  # fasd autojump to directories
-  function -e fish_preexec _run_fasd
-    fasd --proc (fasd --sanitize "$argv") > "/dev/null" 2>&1
-  end
-
   function j
-    # alias for fasd autojump
-    cd (fasd -d -e 'printf %s' "$argv")
+    cd (command fasd -d -e 'printf %s' "$argv")
   end
 
-  function fish_user_key_bindings
-    # fzf
-    fzf_key_bindings
-    bind \ct -M insert '__fzf_ctrl_t'
-    bind \cr -M insert '__fzf_ctrl_r'
-    bind \ec -M insert '__fzf_alt_c'
-  end
+  alias "l"  "exa -a -lgHhm"
+  alias "le" "exa -a -lgHhm -s extension"
+  alias "ll" "l"
+  alias "lm" "exa -a -lgHh -s modified -uUm"
+  alias "lr" "exa -a -lgHm -R -L 2"
+  alias "ls" "exa"
+  alias "lt" "exa -a -lgHm -R -T -L 2"
+  alias "tree" "exa -a -lgHm -R -T"
 
 end

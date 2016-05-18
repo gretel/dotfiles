@@ -7,6 +7,8 @@ cask alfred
 cask avira-antivirus
 cask blockblock
 cask cyberduck
+cask etrecheck
+cask exa
 cask flux
 cask imagealpha
 cask imageoptim
@@ -15,6 +17,7 @@ cask keka
 cask noejectdelay
 cask prey
 cask qsyncthingtray
+cask slack
 cask telegram
 cask timemachinescheduler
 cask vagrant-manager
@@ -43,9 +46,11 @@ tap homebrew/completions
 brew brew-cask-completion
 
 tap homebrew/core
+brew autoconf
 brew bash
 brew cmake
 brew curl
+brew gnupg2
 brew direnv
 brew fasd
 brew fish --HEAD
@@ -68,11 +73,11 @@ brew libyaml
 brew mas
 brew nmap
 brew node
-brew openssl
+brew openssh --with-ldns --with-libressl --without-openssl
 brew pcre
 brew pcre2
-brew peco
 brew pinentry
+brew pyenv-virtualenv
 brew pyenv
 brew readline
 brew ruby-install --HEAD
