@@ -1,0 +1,117 @@
+
+# tap repositories and their packages
+
+tap caskroom/cask
+cask 0xed
+cask alfred
+cask avira-antivirus
+cask blockblock
+cask cyberduck
+cask etrecheck
+cask exa
+cask flux
+cask imagealpha
+cask imageoptim
+cask insomniax
+cask keka
+cask noejectdelay
+cask prey
+cask qsyncthingtray
+cask slack
+cask telegram
+cask timemachinescheduler
+cask vagrant-manager
+cask vagrant
+cask virtualbox
+cask xld
+
+tap caskroom/fonts
+cask font-liberation-mono-for-powerline
+
+tap caskroom/versions
+cask 1password-beta
+cask atom-beta
+cask firefoxnightly
+cask iterm2-nightly
+cask sublime-text3
+cask vlc-nightly
+
+tap domt4/chromium
+
+tap homebrew/bundle
+
+tap homebrew/command-not-found
+
+tap homebrew/completions
+brew brew-cask-completion
+
+tap homebrew/core
+brew autoconf
+brew bash
+brew cmake
+brew curl
+brew gnupg2
+brew direnv
+brew fasd
+brew fish --HEAD
+brew fzf
+brew gettext
+brew gist
+brew git
+brew go
+brew hub
+brew joe
+brew keybase
+brew keychain
+brew ldns
+brew libffi
+brew libgcrypt
+brew libpng
+brew libressl
+brew libsodium
+brew libyaml
+brew mas
+brew nmap
+brew node
+brew openssh --with-ldns --with-libressl --without-openssl
+brew pcre
+brew pcre2
+brew pinentry
+brew pyenv-virtualenv
+brew pyenv
+brew readline
+brew ruby-install --HEAD
+brew shellcheck
+brew syncthing-inotify
+brew syncthing
+brew tarsnap --with-xz
+brew terminal-notifier
+brew the_platinum_searcher
+brew thefuck
+brew trash
+brew unrar
+brew xz
+
+tap homebrew/dupes
+brew unzip
+
+tap homebrew/fuse
+
+tap homebrew/gui
+
+tap homebrew/head-only
+
+tap homebrew/python
+
+tap homebrew/science
+
+tap homebrew/services
+
+tap homebrew/versions
+
+tap peco/peco
+
+tap rcmdnk/file
+brew brew-file
+
+tap telemachus/desc
