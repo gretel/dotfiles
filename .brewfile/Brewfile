@@ -24,6 +24,7 @@ cask vagrant-manager
 cask vagrant
 cask virtualbox
 cask xld
+cask trashit
 
 tap caskroom/fonts
 cask font-liberation-mono-for-powerline
