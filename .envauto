@@ -1,24 +1,50 @@
 #
+# TODO: add comments
+
 set_log_format "$1"
 
-rv="$curdir/.ruby-version"
-if [ -f "$rv" ]; then
-  echo " {$(user_rel_path "$rv")}"
+if test -z "$cwd"; then
+  log_error "invalid 'cwd', aborting."
+  exit 1
+fi
+
+rv="$cwd/.ruby-version"
+if test -f "$rv"; then
+  log_status "loading {$(user_rel_path "$rv")}"
   use ruby "$(cat "$rv")"
 else
   rb="$(which ruby)"
   if [ ! "$rb" ] || [ "$rb" == "/usr/bin/ruby" ]; then
+    log_error "using default ruby."
     use ruby "${DEFAULT_RUBY_VERSION-2.3.1}"    
   fi
 fi
 
-pv="$curdir/.python-version"
-if [ -f "$pv" ]; then
-  echo " {$(user_rel_path "$pv")}"
+# TODO: refine logic
+#   skip if VIRTUAL_ENV
+#   prefer PYENV_VERSION if set and call pyenv
+#   load .python-version if available
+#   fallback to default py
+#   fault if no py
+
+pv="$cwd/.python-version"
+if test -n "$PYENV_VERSION"; then
+  log_status "pyenv set '$PYENV_VERSION' active, skipping."
+elif test -n "$VIRTUAL_ENV"; then
+  log_status "virtualenv '$(user_rel_path "$VIRTUAL_ENV")' enabled, skipping."
+elif test -f "$pv"; then
+  log_status "loading {$(user_rel_path "$pv")}"
   use python "$(cat "$pv")"
 else
   py="$(which python)"
   if [ ! "$py" ] || [ "$py" == "/usr/bin/python" ]; then
+    log_error "using default python!"
     use python "${DEFAULT_PYTHON_VERSION-2.7.11}"
-  fi  
+  elif test -n "$PYENV_VIRTUALENV_INIT"; then
+    use pyenv "${DEFAULT_PYTHON_VERSION-2.7.11}"
+  fi
 fi
+
+### watch files for changes and reload direnv eventually
+watch_file ".ruby-version"
+watch_file ".python-version"

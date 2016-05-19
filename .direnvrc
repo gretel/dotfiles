@@ -1,13 +1,12 @@
 # https://github.com/gretel/dotfiles
 # https://github.com/zimbatm/direnv
 
-set -e
+set -e -b
 
 set_log_format() {
   f=" [$(user_rel_path "$1")] %s"
   export DIRENV_LOG_FORMAT="$f"
 }
-
 set_log_format "$1"
 
 use_python() {
@@ -54,6 +53,14 @@ use_python() {
   # export PYENV_DEBUG="True"
   # export PYENV_VIRTUALENV_DISABLE_PROMPT="True"
   export VIRTUALENV_DISTRIBUTE="True"
+}
+
+use_pyenv() {
+  local pyenv_version="$1"
+  check_string "$pyenv_version"
+  export PYENV_VERSION="$pyenv_version"
+
+  log_status "$(pyenv version)"
 }
 
 use_ruby() {
