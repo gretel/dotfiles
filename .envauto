@@ -1,0 +1,24 @@
+#
+set_log_format "$1"
+
+rv="$curdir/.ruby-version"
+if [ -f "$rv" ]; then
+  echo " {$(user_rel_path "$rv")}"
+  use ruby "$(cat "$rv")"
+else
+  rb="$(which ruby)"
+  if [ ! "$rb" ] || [ "$rb" == "/usr/bin/ruby" ]; then
+    use ruby "${DEFAULT_RUBY_VERSION-2.3.1}"    
+  fi
+fi
+
+pv="$curdir/.python-version"
+if [ -f "$pv" ]; then
+  echo " {$(user_rel_path "$pv")}"
+  use python "$(cat "$pv")"
+else
+  py="$(which python)"
+  if [ ! "$py" ] || [ "$py" == "/usr/bin/python" ]; then
+    use python "${DEFAULT_PYTHON_VERSION-2.7.11}"
+  fi  
+fi
