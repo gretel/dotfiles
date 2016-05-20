@@ -4,8 +4,8 @@
 
 function doIt() {
 	rsync --exclude ".git/" --exclude ".DS_Store" --exclude "bootstrap.sh" \
-		--exclude "README.md" --exclude "LICENSE-MIT.txt" --exclude ".direnvrc" \
-    --exclude ".ssh" --exclude ".aws" --exclude ".ssh" \
+		--exclude "README.md" --exclude "LICENSE-MIT.txt" --exclude "local.fish" \
+    --exclude ".ssh" --exclude ".aws" \
         -avh --no-perms . ~;
 }
 
