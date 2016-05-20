@@ -3,34 +3,7 @@
 
 set -e
 
-log_prefix() {
-  local cwd
-  cwd=$(user_rel_path "$(expand_path "$1")")
-  export DIRENV_LOG_FORMAT
-  DIRENV_LOG_FORMAT=" $(tput setaf 7)[$cwd]$(tput sgr0) $(tput setaf 7)$(tput bold)%s$(tput sgr0)"
-}
-log_prefix "$1"
-
-expect_usage() {
-  local bin="$1"
-  local should="$2"
-  local result 
-  result=$($bin 2>&1)
-  case "$result" in
-    *"$should"*)
-      echo "$result"
-      return 0
-      ;;
-    '')
-      log_error "could not find executable in PATH!"
-      return 1
-      ;;
-    *)
-      log_error "expected output to match '$should'!"
-      return 1
-      ;;
-  esac
-}
+### layout
 
 layout_virtualenv() {
   local venv_path="$1"
@@ -57,28 +30,12 @@ layout_virtualenv() {
   if ! test -f "$PYTHON_HISTORY_FILE"; then
     touch "$PYTHON_HISTORY_FILE"
   fi
-  
-  # export PIP_DOWNLOAD_CACHE
-  # PIP_DOWNLOAD_CACHE="$HOME/.cache/pip"
-  # if ! test -d "$PIP_DOWNLOAD_CACHE"; then
-  #   mkdir -p "$PIP_DOWNLOAD_CACHE"
-  # fi
-  # export PYENV_VIRTUALENV_CACHE_PATH
-  # PYENV_VIRTUALENV_CACHE_PATH="$HOME/.cache/pyenv"
-  # if ! test -d "$PYENV_VIRTUALENV_CACHE_PATH"; then
-  #   mkdir -p "$PYENV_VIRTUALENV_CACHE_PATH"
-  # fi
 
   # export PIP_REQUIRE_VIRTUALENV
   # PIP_REQUIRE_VIRTUALENV="True"
   export VIRTUALENV_DISTRIBUTE
   VIRTUALENV_DISTRIBUTE="True"
 }
-
-# layout_python() {
-#   local py_ver="$1"
-#   check_string "$py_ver" || return 1
-# }
 
 layout_rubies() {
   local ruby_ver="$1"
@@ -105,11 +62,14 @@ layout_rubies() {
   path_add MANPATH "$ruby_dir/share/man"
 }
 
+### use
+
 use_bundler() {
   local bundler_dir="$1"
   check_string "$bundler_dir" && check_path "$bundler_dir" || return 1
   local bundler_bin_dir="$bundler_dir/bin"
   check_exec "$bundler_bin_dir/bundler" || return 1
+
   export BUNDLE_BIN
   BUNDLE_BIN="$bundler_bin_dir"
   PATH_add "$bundler_bin_dir"
@@ -164,40 +124,45 @@ use_ansible() {
   # shellcheck source=/dev/null
   source "$ansible_path/hacking/env-setup" > /dev/null
 }
- 
- use_auto_setup() {
-  if test -z "$1"; then
-    log_error "expected path to work on."; return 1
-  fi
+
+use_auto_ruby () {
   local rb_string
   local rb_ver
   local rb_which
   local rbver_file
   rbver_file="$PWD/.ruby-version"
+
   if test -f "$rbver_file"; then
-    log_status "reading {$(user_rel_path "$rbver_file")}"
     # TODO: support more schemes
     rb_ver="$(cat "$rbver_file")"
+    log_status "version ${rb_ver} required in {$(user_rel_path "$rbver_file")}"
     layout rubies "$rb_ver"
     rb_which="$(which ruby)"
     rb_string=$(expect_usage "$rb_which -v" "ruby")
-    # TODO: .. message accordingly
-    log_status "found in rubies {$(user_rel_path "$rb_which")}; using $rb_string"
+    if test -n "$rb_string"; then
+      # TODO: .. message accordingly
+      log_status "found in rubies {$(user_rel_path "$rb_which")}; using $rb_string"
+    else
+      log_error "no ruby matching required version!"; return 2
+    fi
   else
     rb_which="$(which ruby)"
     if test -n "$rb_which"; then
       rb_string=$(expect_usage "$rb_which -v" "ruby")
-      log_status "ruby in PATH {$(user_rel_path "$rb_which")}; using $rb_string"
+      log_status "found in PATH {$(user_rel_path "$rb_which")}; using $rb_string"
     else
-      log_error "no ruby found in PATH!"
+      log_error "no ruby in PATH!"
     fi
   fi
+}
 
-  local py_string  
+use_auto_python () {
+  local py_string
   local py_ver
   local py_which
   local pyver_file
-  pyver_file="$PWD/.python-version"  
+  pyver_file="$PWD/.python-version"
+
   if test -n "$VIRTUAL_ENV"; then
     if test "$VIRTUAL_ENV" = "$PWD"; then
       log_status "virtualenv {$(user_rel_path "$VIRTUAL_ENV")} is active"
@@ -211,26 +176,37 @@ use_ansible() {
     venv_path="$PWD"
     layout virtualenv "$venv_path"
     py_which="$(which python)"
+    # TODO: compare with version number in VIRTUAL_ENV
     py_string=$(expect_usage "$py_which -V" "Python")
     log_status "activated virtualenv {$(user_rel_path "$venv_path")}; using $py_string"
   elif test -f "$pyver_file"; then
     # TODO: support more schemes
     py_ver="$(cat "$pyver_file")"
-    log_status "reading {$(user_rel_path "$pyver_file")}"
-    layout python "$py_ver"
+    log_status "version ${py_ver} required in {$(user_rel_path "$pyver_file")}"
     py_which="$(which python)"
     py_string=$(expect_usage "$py_which -V" "$py_ver")
-    log_status "python in PATH {$(user_rel_path "$py_which")}; using $py_string"
-  else
+    if test -n "$py_string"; then
+      log_status "found in PATH {$(user_rel_path "$py_which")}; using $py_string"
+    else
+      log_error "no python matching required version!"; return 2
+    fi
+      else
     py_which="$(which python)"
     if test -n "$py_which"; then
       py_string=$(expect_usage "$py_which -V" "Python")
-      log_status "python in PATH {$(user_rel_path "$py_which")}; using $py_string"
+      log_status "found in PATH {$(user_rel_path "$py_which")}; using $py_string"
     else
-      log_error "no python found in PATH!"
+      log_error "no python in PATH!"
     fi
   fi
 }
+
+use_auto_setup() {
+  use_auto_ruby
+  use_auto_python
+}
+
+### helper
 
 check_string() {
   if test -z "$1"; then
@@ -258,4 +234,33 @@ get_cwd() {
   echo "${t%/}"
 }
 
-hash -r
+expect_usage() {
+  local bin="$1"
+  local should="$2"
+  local result
+  result=$($bin 2>&1)
+  case "$result" in
+    *"$should"*)
+      echo "$result"
+      return 0
+      ;;
+    '')
+      log_error "could not find executable in PATH!"
+      return 1
+      ;;
+    *)
+      log_error "expected output to match '$should'!"
+      return 1
+      ;;
+  esac
+}
+
+log_prefix() {
+  local cwd
+  cwd=$(user_rel_path "$(expand_path "$1")")
+  export DIRENV_LOG_FORMAT
+  DIRENV_LOG_FORMAT=" $(tput setaf 7)[$cwd]$(tput sgr0) $(tput setaf 7)$(tput bold)%s$(tput sgr0)"
+}
+log_prefix "$1"
+
+### end
