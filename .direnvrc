@@ -1,10 +1,10 @@
 # tom hensel <github@jitter.eu> 2016
 # powered by https://github.com/zimbatm/direnv
+# -*- mode: bash; coding:utf-8; tab-width: 2; indent-tabs-mode: nil; -*-
 
 set -e
 
 ### layout
-
 layout_virtualenv() {
   local venv_path="$1"
   check_string "$venv_path" || return 1
