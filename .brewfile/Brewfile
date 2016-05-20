@@ -50,12 +50,13 @@ tap homebrew/core
 brew autoconf
 brew bash
 brew cmake
+brew ccache
 brew curl
 brew gnupg2
 brew direnv
 brew fasd
 brew fish --HEAD
-brew fzf
+brew fzf --HEAD
 brew gettext
 brew gist
 brew git
@@ -63,6 +64,7 @@ brew go
 brew hub
 brew joe
 brew keybase
+brew gnupg2 --without-libusb-compat --without-dirmngr
 brew keychain
 brew ldns
 brew libffi
@@ -74,12 +76,11 @@ brew libyaml
 brew mas
 brew nmap
 brew node
-brew openssh --with-ldns --with-libressl --without-openssl
-brew pcre
+# brew openssh --with-ldns --with-libressl
 brew pcre2
 brew pinentry
-brew pyenv-virtualenv
-brew pyenv
+# brew pyenv-virtualenv-ext
+# brew pyenv
 brew readline
 brew ruby-install --HEAD
 brew shellcheck
