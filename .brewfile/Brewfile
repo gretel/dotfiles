@@ -20,11 +20,11 @@ cask qsyncthingtray
 cask slack
 cask telegram
 cask timemachinescheduler
+cask trash-it
 cask vagrant-manager
 cask vagrant
 cask virtualbox
 cask xld
-cask trashit
 
 tap caskroom/fonts
 cask font-liberation-mono-for-powerline
@@ -39,6 +39,8 @@ cask vlc-nightly
 
 tap domt4/chromium
 
+tap homebrew/binary
+
 tap homebrew/bundle
 
 tap homebrew/command-not-found
@@ -49,42 +51,42 @@ brew brew-cask-completion
 tap homebrew/core
 brew autoconf
 brew bash
-brew cmake
 brew ccache
+brew cmake
 brew curl
-brew gnupg2
-brew direnv
+brew direnv --HEAD
 brew fasd
 brew fish --HEAD
 brew fzf --HEAD
 brew gettext
 brew gist
 brew git
+brew gnupg2 --without-libusb-compat --without-dirmngr
 brew go
 brew hub
 brew joe
 brew keybase
-brew gnupg2 --without-libusb-compat --without-dirmngr
 brew keychain
 brew ldns
+brew libassuan
 brew libffi
 brew libgcrypt
+brew libksba
 brew libpng
 brew libressl
 brew libsodium
+brew libxml2
 brew libyaml
 brew mas
 brew nmap
 brew node
-# brew openssh --with-ldns --with-libressl
 brew pcre2
 brew pinentry
-# brew pyenv-virtualenv-ext
-# brew pyenv
+brew pth
 brew readline
 brew ruby-install --HEAD
-brew shellcheck
-brew syncthing-inotify
+brew shellcheck --HEAD
+brew syncthing-inotify --HEAD
 brew syncthing
 brew tarsnap --with-xz
 brew terminal-notifier
@@ -92,6 +94,7 @@ brew the_platinum_searcher
 brew thefuck
 brew trash
 brew unrar
+brew python
 brew xz
 
 tap homebrew/dupes
