@@ -5,7 +5,7 @@ if not set -q update_funcs
     set -x update_funcs \
         gpg_keys \
         fisher \
-        mass \
+        mas \
         xcode_select \
         homebrew \
         npm \
