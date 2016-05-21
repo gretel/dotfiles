@@ -1,0 +1,254 @@
+# tom hensel <github@jitter.eu> 2016
+# powered by https://github.com/zimbatm/direnv
+# -*- mode: bash; coding:utf-8; tab-width: 2; indent-tabs-mode: nil; -*-
+
+### layout
+layout_pyenv() {
+  local py_ver="$1"
+  check_string "$py_ver" || return 1
+  eval "$(pyenv init -)" || return 2
+  if ! pyenv local "$py_ver"; then
+    log_error "pyenv failed."
+  fi
+}
+
+layout_pyenv_venv() {
+  local venv_id="$1"
+  check_string "$venv_id" || return 1
+  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+  export VIRTUALENV_DISTRIBUTE=1
+  eval "$(pyenv init -)" || return 2
+  eval "$(pyenv virtualenv-init -)" || return 2
+  if ! pyenv activate "$venv_id" 2>/dev/null; then
+    log_error "pyenv activate failed."
+  fi
+}
+
+# TODO: testing
+layout_pyenv_less() {
+  local python_ver="$1"
+  check_string "$python_ver" || return 1
+  export PYENV_VERSION="$python_ver"
+  local pyenv_root="$HOME/.pyenv"
+  check_path "$pyenv_root" || return 1
+  export PYENV_ROOT="$pyenv_root"
+  local python_shims="$HOME/.pyenv/shims"
+  PATH_add "$python_shims"
+  local python_venv_shims="$HOME/.pyenv/plugins/pyenv-virtualenv/shims"
+  PATH_add "$python_venv_shims"
+  local python_dir="$HOME/.pyenv/versions/$python_ver"
+  check_path "$python_dir" || return 1
+  local python_bin_dir="$python_dir/bin"
+  check_exec "$python_bin_dir/python" || return 1
+  PATH_add "$python_bin_dir"
+  path_add MANPATH "$python_dir/share/man"
+  export PIP_REQUIRE_VIRTUALENV=1
+}
+
+layout_virtualenv() {
+  local venv_path="$1"
+  check_string "$venv_path" || return 1
+  unalias pydoc 2>/dev/null
+  pydoc () {
+    python -m pydoc "$@"
+  }
+  if test -z "${PYTHONHOME+_}"; then
+    unset PYTHONHOME
+  fi
+  export VIRTUAL_ENV="$venv_path"
+  export VIRTUALENV_DISTRIBUTE=1
+  PATH_add "$VIRTUAL_ENV/bin"
+  local python_rc_file
+  if python_rc_file="$HOME/.python/pythonrc.py"; then
+    export PYTHONSTARTUP="$python_rc_file"
+  fi
+  export PYTHON_HISTORY_FILE
+  if ! PYTHON_HISTORY_FILE="$HOME/.python_history"; then
+    touch "$PYTHON_HISTORY_FILE"
+  fi
+}
+
+layout_rubies() {
+  local ruby_ver="$1"
+  check_string "$ruby_ver" || return 1
+  local ruby_dir="$HOME/.rubies/ruby-$ruby_ver"
+  check_string "$ruby_ver" && check_path "$ruby_dir" || return 1
+  export RUBY_HOME="$ruby_dir"
+  local ruby_dir_bin="$HOME/.rubies/ruby-$ruby_ver/bin"
+  check_exec "$ruby_dir_bin/ruby" || return 1
+  PATH_add "$ruby_dir_bin"
+  local gem_dir="$HOME/.gem/ruby/$ruby_ver"
+  check_path "$gem_dir" || return 1
+  export GEM_HOME="$gem_dir" GEM_PATH="$gem_dir"
+  local gem_dir_bin="$HOME/.rubies/ruby-$ruby_ver/bin"
+  PATH_add "$gem_dir_bin"
+  path_add MANPATH "$ruby_dir/share/man"
+}
+
+### use
+
+# TODO: testing
+use_bundler() {
+  local bundler_dir="$1"
+  check_string "$bundler_dir" && check_path "$bundler_dir" || return 1
+  local bundler_bin_dir="$bundler_dir/bin"
+  check_exec "$bundler_bin_dir/bundler" || return 1
+  export BUNDLE_BIN="$bundler_bin_dir"
+  PATH_add "$bundler_bin_dir"
+}
+
+# TODO: testing, sync with stdlib
+use_go() {
+  local go_dir="$1"
+  check_string "$go_dir" || return 1
+  local go_path="$go_dir/.go"
+  check_path "$go_path" || return 1
+  export GOPATH="$go_path"
+  local go_path_bin="$go_dir/.go/bin"
+  PATH_add "$go_path_bin"
+  local go_bin_dir="/usr/local/opt/go/libexec/bin"
+  check_path "$go_bin_dir" && check_exec "$go_bin_dir/go" || return 1
+  PATH_add "$go_bin_dir"
+}
+
+use_homebrew() {
+  local hb_path="$1"
+  check_string "$hb_path"; check_path "$hb_path" || return 1
+  PATH_add "$hb_path/bin"
+  export HOMEBREW_PATH="$hb_path"
+  local hb_sbin="$hb_path/sbin"
+  if test -d "$hb_sbin"; then
+    PATH_add "$hb_sbin"
+  fi
+}
+
+# TODO: testing, sync with stdlib
+use_nodejs() {
+  local node_path="$1"
+  check_string "$node_path" && check_path "$node_path" || return 1
+  export NODE_HOME="$node_path"
+  export NODE_PATH="$node_path/lib/node_modules"
+}
+
+# TODO: testing
+use_ansible() {
+  local ansible_path="$1"
+  check_path "$ansible_path" || return 1
+  export ANSIBLE_HOME="$ansible_path"
+  # shellcheck source=/dev/null
+  source "$ansible_path/hacking/env-setup" > /dev/null
+}
+
+use_auto_ruby () {
+  local rbver_file="$PWD/.ruby-version"
+  local rb_ver
+  if rb_ver=$(gather_file "$rbver_file"); then
+    # TODO: support more schemes
+    log_status "version ${rb_ver} required in {$(user_rel_path "$rbver_file")}"
+    layout rubies "$rb_ver"
+  fi
+  local rb_which
+  if rb_which="$(which ruby)"; then
+  local rb_string
+    # TODO: use version for comparison
+    rb_string=$(expect_usage "$rb_which -v" "ruby")
+    log_status "using $rb_string at {$(user_rel_path "$rb_which")}"
+  else
+    log_error "no ruby in PATH!"
+  fi
+}
+
+use_auto_python () {
+  local py_ver
+  local pyver_file
+  pyver_file="$PWD/.python-version"
+  local venv_file
+  venv_file="$PWD/.python-venv"
+  local venv_id
+  if venv_id=$(gather_file "$venv_file"); then
+    log_status "virtualenv ${venv_id} required in {$(user_rel_path "$venv_file")}"
+    layout pyenv_venv "$venv_id"
+  elif test -f "$PWD/bin/activate"; then
+    local venv_path="$PWD"
+    layout virtualenv "$venv_path"
+    log_status "local virtual activated {$(user_rel_path "$venv_path")}"
+  elif py_ver=$(gather_file "$pyver_file"); then
+    log_status "version ${py_ver} required in {$(user_rel_path "$pyver_file")}"
+    layout pyenv "$py_ver"
+  fi
+  local py_which
+  if py_which="$(which python)"; then
+    local py_string
+    # TODO: use version for comparison
+    py_string=$(expect_usage "$py_which -V" "Python")
+    log_status "using $py_string at {$(user_rel_path "$py_which")}"
+  else
+    log_error "no python in PATH!"
+  fi
+}
+
+### helper
+
+check_string() {
+  if test -z "$1"; then
+    log_error "argument is expected to be passed."; return 1
+  fi
+}
+
+check_path() {
+  if ! test -d "$1"; then
+    log_error "path '$1' is expected to exist."; return 1
+  fi
+}
+
+check_exec() {
+  if ! test -x "$1"; then
+    log_error "file '$1' is expected to be executable."; return 1
+  fi
+}
+
+gather_file() {
+  test -f "$1" || return 1;
+  OLDIFS="$IFS"
+  IFS="${IFS}"$'\r'
+  wrds=( $(cut -b 1-1024 "$1") )
+  IFS="$OLDIFS"
+  echo "${wrds[0]}"
+}
+
+expect_usage() {
+  local bin="$1"
+  local should="$2"
+  local result
+  result=$($bin 2>&1)
+  case "$result" in
+    *"$should"*)
+      echo "$result"
+      return 0
+      ;;
+    '')
+      log_error "could not find executable in PATH!"
+      return 1
+      ;;
+    *)
+      log_error "expected output to match '$should'!"
+      return 1
+      ;;
+  esac
+}
+
+get_cwd() {
+  p="$(expand_path "$1")" || return 1
+  # http://stackoverflow.com/questions/965053/extract-filename-and-extension-in-bash#comment14090830_1403489
+  local t="${p%${p##*/}}"
+  echo "${t%/}"
+}
+
+log_prefix() {
+  local cwd
+  cwd=$(user_rel_path "$(expand_path "$1")")
+  export DIRENV_LOG_FORMAT
+  DIRENV_LOG_FORMAT=" $(tput setaf 7)[$cwd]$(tput sgr0) $(tput setaf 7)$(tput bold)%s$(tput sgr0)"
+}
+
+### end
