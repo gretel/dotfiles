@@ -129,7 +129,7 @@ function -d "keep your development tools up to date" update
     test -n (id -u); or return 1
     cd "$HOME"; or return 1
 
-    block -g
+    #block -g
     if test -n "$argv"
         set list $argv
     else
@@ -144,8 +144,8 @@ function -d "keep your development tools up to date" update
             set_color --bold red; printf "function %s is not declared!\n" "$func"; or return 2
         end
     end
-    block -e
+    #block -e
 
     ### notification
-    emit send_notification "Fish" "Update" "$list"
+    emit send_notification "Fish" "Update" "$list" Bing
 end
