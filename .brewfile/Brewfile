@@ -56,9 +56,11 @@ brew ccache
 brew cmake
 brew curl
 brew direnv --HEAD
+brew doxygen
 brew fasd
 brew fish --HEAD
 brew fzf --HEAD
+brew gdbm
 brew gettext
 brew ghc
 brew gist
@@ -83,17 +85,23 @@ brew libsodium
 brew libxml2
 brew libyaml
 brew mas
+brew mercurial
 brew nmap
 brew node
+brew openssl
 brew pandoc
 brew pcre2
 brew pinentry
+brew pkg-config
 brew pth
+brew pyenv-virtualenv
+brew pyenv
+brew python --without-sqlite
 brew readline
 brew ruby-install --HEAD
 brew shellcheck --HEAD
 brew syncthing-inotify --HEAD
-brew syncthing
+brew syncthing --HEAD
 brew tarsnap --with-xz
 brew terminal-notifier
 brew the_platinum_searcher
