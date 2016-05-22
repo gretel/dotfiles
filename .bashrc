@@ -12,18 +12,21 @@ fi
 source "$fasd_cache"
 unset fasd_cache
 
-### aliases
-alias "j=z"
-alias "jj=zz"
-
-alias "ls=exa"
-alias "l=exa -a -lgmH"
-alias "la=l -@"
-alias "ll=l -h"
-
 ### prompt
 # shellcheck source=/dev/null
 source "$HOME/.bash_prompt"
 
+### pyenv
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
 ### direnv
 eval "$(direnv hook bash)"
+
+### aliases
+alias "j=z"
+alias "jj=zz"
+alias "ls=exa"
+alias "l=exa -a -lgmH"
+alias "la=l -@"
+alias "ll=l -h"
