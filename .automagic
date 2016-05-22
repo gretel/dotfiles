@@ -1,6 +1,5 @@
-# tom hensel <github@jitter.eu> 2016
-# powered by https://github.com/zimbatm/direnv
 # -*- mode: bash; coding:utf-8; tab-width: 2; indent-tabs-mode: nil; -*-
+# tom hensel <github@jitter.eu> 2016
 
 ### layout
 layout_pyenv() {
@@ -237,16 +236,16 @@ expect_usage() {
   esac
 }
 
-get_cwd() {
-  p="$(expand_path "$1")" || return 1
-  # http://stackoverflow.com/questions/965053/extract-filename-and-extension-in-bash#comment14090830_1403489
-  local t="${p%${p##*/}}"
-  echo "${t%/}"
+get_abbrv_pwd() {
+  cwd="$(user_rel_path "$1")"
+  base="${cwd##*/}"
+  dir="${cwd%/*}"
+  echo "${dir##*/}/$base"
 }
 
 log_prefix() {
   local cwd
-  cwd=$(user_rel_path "$(expand_path "$1")")
+  cwd=$(get_abbrv_pwd "$1")
   export DIRENV_LOG_FORMAT
   DIRENV_LOG_FORMAT=" $(tput setaf 7)[$cwd]$(tput sgr0) $(tput setaf 7)$(tput bold)%s$(tput sgr0)"
 }

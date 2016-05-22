@@ -1,11 +1,12 @@
-# tom hensel <github@jitter.eu> 2016
-# powered by https://github.com/zimbatm/direnv
 # -*- mode: bash; coding:utf-8; tab-width: 2; indent-tabs-mode: nil; -*-
 
 set -e
+
+# custom stuff like yours
+
 
 # prevent one line of superflous logging output
 export DIRENV_LOG_FORMAT=""
 
 # include logic
-source_env ".automagirc"
+source_env ".automagic"
