@@ -1,6 +1,6 @@
 # https://gist.github.com/gretel/e4ccef1e415a356461c24591af314ebb/
 
-### when 'update' is called without arguments these are the defaults
+### when 'update' is called without arguments these are the defaults:
 if not set -q update_funcs
     set -x update_funcs \
         gpg_keys \
@@ -43,14 +43,15 @@ end
 function __update_homebrew
     begin command --search brew >/dev/null
         command brew analytics off # https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Analytics.md
-        command brew update; brew upgrade
+        command brew>update >/dev/null; brew upgrade
         # # brew-bundle
         # brew tap Homebrew/bundle; brew bundle; brew bundle --cleanup
         # brew-file
         command brew install -q rcmdnk/file/brew-file mas 2>/dev/null
         command brew file --verbose 0 --preupdate --no_appstore update cask_upgrade
-        command brew cleanup; command brew prune; command brew cask cleanup; command brew linkapps
-        command brew services clean; command brew services list
+        command brew cleanup >/dev/null; command brew prune>/dev/null; command brew linkapps >/dev/null
+        command brew cask cleanup >/dev/null;
+        command brew services clean >/dev/null; command brew services list
     end
 end
 
@@ -74,7 +75,7 @@ function __update_gem
         if set -l rb_which (which ruby)
             # FIXME: improve check for portability
             if test "$rb_which" = "/usr/bin/ruby"
-                set_color --bold yellow; printf "not updating rubygems for $rb_which.\n"; set_color normal
+                set_color --bold yellow; printf "not calling gem for system ruby $rb_which.\n"; set_color normal
                 return 3
             else
                 command gem update --system --no-document --env-shebang --prerelease --quiet
@@ -84,7 +85,6 @@ function __update_gem
         end
     end
 end
-# alias "__update_gem" "__update_gems"
 
 ### ruby bundler
 function __update_bundler
@@ -116,20 +116,19 @@ function __update_pip
     end
 end
 
+### peru
 function __update_peru
     if command --search peru >/dev/null
         command peru -v sync -f
     end
 end
 
-###
-
+### main
 function -d "keep your development tools up to date" update
     ### sanity: non-superuser with homedir only
     test -n (id -u); or return 1
     cd "$HOME"; or return 1
 
-    #block -g
     if test -n "$argv"
         set list $argv
     else
@@ -138,14 +137,14 @@ function -d "keep your development tools up to date" update
     for f in $list
         set -l func "__update_$f"
         if functions -q "$func"
-            set_color --bold white; printf "=== %s\n" "$f"; set_color normal
+            set_color --bold white; printf "==== %s\n" "$f"; set_color normal
             eval "$func"
         else
-            set_color --bold red; printf "function %s is not declared!\n" "$func"; or return 2
+            set_color --bold red; printf "function %s is not declared!\n" "$func"; set_color normal
+            return 2
         end
     end
-    #block -e
 
     ### notification
-    emit send_notification "Fish" "Update" "$list" Bing
+    emit send_notification Fish Update "$list" Bing
 end
