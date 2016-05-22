@@ -2,11 +2,30 @@
 
 set -e
 
-# custom stuff like yours
+### ...
 
 
-# prevent one line of superflous logging output
-export DIRENV_LOG_FORMAT=""
+### automagic
+use_auto() {
+  # prevent one line of verbose logging
+  export DIRENV_LOG_FORMAT=""
 
-# include logic
-source_env ".automagic"
+  ### include logic
+  source_env "$HOME/.automagic"
+
+  ### decorate log output
+  auto_log_prefix "$(expand_path "$1")"
+}
+
+### set default prefix path
+export LOCAL_PATH="/usr/local"
+
+### call wrapper to include .automagic and setup
+use_auto "$1"
+
+### argument: prefix of homebrew installation
+use homebrew "${LOCAL_PATH-/usr/local}"
+### argument: prefix of golang installation
+use go "$HOME"
+### argument: prefix of node.js installation
+use nodejs "${LOCAL_PATH-/usr/local}"

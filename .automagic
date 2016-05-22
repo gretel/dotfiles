@@ -1,13 +1,16 @@
+#!/usr/bin/env bash
 # -*- mode: bash; coding:utf-8; tab-width: 2; indent-tabs-mode: nil; -*-
+# https://github.com/gretel/automagic
 # tom hensel <github@jitter.eu> 2016
 
 ### layout
 layout_pyenv() {
   local py_ver="$1"
   check_string "$py_ver" || return 1
+  # TODO: init pyenv _if_ required
   eval "$(pyenv init -)" || return 2
   if ! pyenv local "$py_ver"; then
-    log_error "pyenv failed."
+    log_error "pyenv local failed!"
   fi
 }
 
@@ -15,15 +18,15 @@ layout_pyenv_venv() {
   local venv_id="$1"
   check_string "$venv_id" || return 1
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
-  export VIRTUALENV_DISTRIBUTE=1
+  # TODO: init pyenv _if_ required
   eval "$(pyenv init -)" || return 2
   eval "$(pyenv virtualenv-init -)" || return 2
   if ! pyenv activate "$venv_id" 2>/dev/null; then
-    log_error "pyenv activate failed."
+    log_error "pyenv activate failed!"
   fi
 }
 
-# TODO: testing
+### FIXME: experimental work in progress!
 layout_pyenv_less() {
   local python_ver="$1"
   check_string "$python_ver" || return 1
@@ -55,7 +58,6 @@ layout_virtualenv() {
     unset PYTHONHOME
   fi
   export VIRTUAL_ENV="$venv_path"
-  export VIRTUALENV_DISTRIBUTE=1
   PATH_add "$VIRTUAL_ENV/bin"
   local python_rc_file
   if python_rc_file="$HOME/.python/pythonrc.py"; then
@@ -86,7 +88,7 @@ layout_rubies() {
 
 ### use
 
-# TODO: testing
+### FIXME: experimental work in progress!
 use_bundler() {
   local bundler_dir="$1"
   check_string "$bundler_dir" && check_path "$bundler_dir" || return 1
@@ -96,7 +98,8 @@ use_bundler() {
   PATH_add "$bundler_bin_dir"
 }
 
-# TODO: testing, sync with stdlib
+### FIXME: experimental work in progress!
+### TODO: sync with direnv.stdlib
 use_go() {
   local go_dir="$1"
   check_string "$go_dir" || return 1
@@ -121,7 +124,8 @@ use_homebrew() {
   fi
 }
 
-# TODO: testing, sync with stdlib
+### FIXME: experimental work in progress!
+### TODO: sync with direnv.stdlib
 use_nodejs() {
   local node_path="$1"
   check_string "$node_path" && check_path "$node_path" || return 1
@@ -129,7 +133,7 @@ use_nodejs() {
   export NODE_PATH="$node_path/lib/node_modules"
 }
 
-# TODO: testing
+### FIXME: experimental work in progress!
 use_ansible() {
   local ansible_path="$1"
   check_path "$ansible_path" || return 1
@@ -143,12 +147,12 @@ use_auto_ruby () {
   local rb_ver
   if rb_ver=$(gather_file "$rbver_file"); then
     # TODO: support more schemes
-    log_status "version ${rb_ver} required in {$(user_rel_path "$rbver_file")}"
+    log_status "ruby ${rb_ver} required in {$(user_rel_path "$rbver_file")}"
     layout rubies "$rb_ver"
   fi
   local rb_which
   if rb_which="$(which ruby)"; then
-  local rb_string
+    local rb_string
     # TODO: use version for comparison
     rb_string=$(expect_usage "$rb_which -v" "ruby")
     log_status "using $rb_string at {$(user_rel_path "$rb_which")}"
@@ -165,14 +169,14 @@ use_auto_python () {
   venv_file="$PWD/.python-venv"
   local venv_id
   if venv_id=$(gather_file "$venv_file"); then
-    log_status "virtualenv ${venv_id} required in {$(user_rel_path "$venv_file")}"
+    log_status "python venv ${venv_id} required in {$(user_rel_path "$venv_file")}"
     layout pyenv_venv "$venv_id"
   elif test -f "$PWD/bin/activate"; then
     local venv_path="$PWD"
     layout virtualenv "$venv_path"
     log_status "local virtual activated {$(user_rel_path "$venv_path")}"
   elif py_ver=$(gather_file "$pyver_file"); then
-    log_status "version ${py_ver} required in {$(user_rel_path "$pyver_file")}"
+    log_status "python ${py_ver} required in {$(user_rel_path "$pyver_file")}"
     layout pyenv "$py_ver"
   fi
   local py_which
@@ -233,8 +237,8 @@ expect_usage() {
       log_error "expected output to match '$should'!"
       return 1
       ;;
-  esac
-}
+    esac
+  }
 
 get_abbrv_pwd() {
   cwd="$(user_rel_path "$1")"
@@ -243,11 +247,11 @@ get_abbrv_pwd() {
   echo "${dir##*/}/$base"
 }
 
-log_prefix() {
+auto_log_prefix() {
   local cwd
-  cwd=$(get_abbrv_pwd "$1")
+  cwd="$(get_abbrv_pwd "$1")"
   export DIRENV_LOG_FORMAT
-  DIRENV_LOG_FORMAT=" $(tput setaf 7)[$cwd]$(tput sgr0) $(tput setaf 7)$(tput bold)%s$(tput sgr0)"
+  DIRENV_LOG_FORMAT=" $(tput setaf 6)[$cwd]$(tput sgr0) $(tput setaf 7)$(tput bold)%s$(tput sgr0)"
 }
 
 ### end
