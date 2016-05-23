@@ -1,62 +1,95 @@
-[user]
-  name = Tom Hensel
-  email = github@jitter.eu
-
-[credential]
-  helper = osxkeychain
-
-[help]
-  autocorrect = 1
-
-[core]
-  pager = cat
-  editor = joe
-
+[alias]
+  a  = add
+  aa = add -A
+  b  = branch
+  bl = blame --line-porcelain --
+  bv = branch -v
+  c = commit
+  ca = commit --amend
+  can = commit --amend --no-edit
+  cf =  diff --diff-filter=U
+  cl = clone
+  cm = commit -m
+  cn = commit --no-edit
+  co = checkout
+  d = diff
+  di = diff
+  ds = diff --staged
+  f = fetch
+  i = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
+  l = log
+  last = diff --cached HEAD^
+  lgr = log --graph -n 20 --format='format:%C(blue)%h%C(reset) %C(black)%an%C(reset) %s %C(black bold)%cr%C(reset)%C(auto)%d%C(reset)' --date-order --tags --all
+  lp = log --pretty=oneline --stat --decorate
+  m = merge
+  p = push
+  pl = pull
+  plr = pull --rebase
+  pls = "!f() { git stash; git pull $@; git stash apply; }; f"
+  plup = "!git fetch origin -v; git fetch upstream -v; git merge upstream/master"
+  pu = push
+  r = reset
+  rb = rebase
+  rbi = rebase -i
+  rh = reset HEAD
+  rt = remote
+  rtv = remote -v
+  s = status -s
+  sb = status -sb
+  sg = diff --staged
+  st = status
+  t = tag
+  tl = tag -l
+  unadd = reset HEAD
+  unalias = "!f() { git config --global --unset alias.$1; }; f"
+  ux = update-index --chmod=+x
+[branch]
+  autosetupmerge = true
 [color]
   branch = auto
   diff = auto
   interactive = auto
   status = auto
   ui = true
-
-[color "branch"]
-  current = bold
-  upstream = cyan
-
-[pager]
-  blame = less -S
-
+[commit]
+	gpgsign = true
+  short = true
+[core]
+  editor = subl -w -n
+  pager = cat
+[credential]
+  helper = cache --timeout 86400
+  helper = store --file ~/.git-crdntls
 [diff]
   algorithm = patience
-
-[grep]
-  extendRegexp = true
-
-[branch]
-  autosetupmerge = true
-
-[rerere]
-  enabled = true
-
-[tag]
-  sort = version:refname
-
 [fetch]
+  fsckobjects = true
   prune = true
-  fsckobjects = true
-
-[push]
-  default = upstream
-
-[transfer]
-  fsckobjects = true
-
-[receive]
-  fsckObjects = true
-
-[github]
-  user = gretel
-
 [git-up "bundler"]
   check = true
-
+[github]
+  user = gretel
+[grep]
+  extendRegexp = true
+[help]
+  autocorrect = 1
+[hub]
+  protocol = https
+[pager]
+  blame = less -S
+[push]
+  default = upstream
+[receive]
+  fsckObjects = true
+[rerere]
+  enabled = true
+[tag]
+  sort = version:refname
+[transfer]
+  fsckobjects = true
+[url "https://"]
+  insteadOf = git://
+[user]
+  email = github@jitter.eu
+  name = Tom Hensel
+	signingkey = 640F9BDD
