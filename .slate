@@ -8,21 +8,21 @@ config secondsBetweenRepeat 0.1
 config undoOps move,resize
 
 #config windowHintsOrder persist
-config windowHintsBackgroundColor 96;96;64;0.5
+config windowHintsBackgroundColor 72;72;72;0.5
 config windowHintsIgnoreHiddenWindows false
-config windowHintsShowIcons true
+config windowHintsShowIcons false
 config windowHintsSpread true
-config windowHintsSpreadPadding 40
+config windowHintsSpreadPadding 0
 config windowHintsSpreadSearchHeight 80
 config windowHintsSpreadSearchWidth 80
 
-config switchBackgroundColor 50;53;58;0.7
+config switchBackgroundColor 96;64;32;0.7
 config switchFontSize 14
 config switchIconPadding 2
 config switchIconSize 128
 config switchRoundedCornerSize 4
 config switchSelectedPadding 4
-config switchShowTitles true
+config switchShowTitles false
 
 # The "HYPER" key (bound using Seil and Karabiner)
 # https://pqrs.org/osx/karabiner/seil.html
@@ -42,17 +42,18 @@ alias righthalf    move   screenOriginX+screenSizeX/2;screenOriginY screenSizeX/
 alias tophalf      push   bottom bar-resize:screenSizeY/2
 alias topleft      corner top-left resize:screenSizeX/2;screenSizeY/2
 alias topright     corner top-right resize:screenSizeX/2;screenSizeY/2
+alias topright     corner top-right resize:screenSizeX/2;screenSizeY/2
 
 # Location Bindings
-bind ':${hyper} ${centersmall}
+bind s:${hyper} ${full}
+bind f:${hyper} ${centersmall}
+bind g:${hyper} ${centerpad}
 bind a:${hyper} ${lefthalf}
 bind c:${hyper} ${bottomright}
 bind d:${hyper} ${righthalf}
 bind e:${hyper} ${topright}
 bind q:${hyper} ${topleft}
-bind return:${hyper} ${centerpad}
-bind s:${hyper} ${full}
-bind w:${hyper} push top bar-resize:screenSizeY/2
+bind w:${hyper} ${bottomhalf}
 bind x:${hyper} ${tophalf}
 bind z:${hyper} ${bottomleft}
 
@@ -67,32 +68,37 @@ bind l:${hyper} throw 0     resize
 bind o:${hyper} throw right resize
 bind p:${hyper} throw left  resize
 
+bind return:${hyper} switch
+
 # Misc
-bind `:${hyper} undo
+bind u:${hyper} undo
 
 # Slate
-bind delete:${hyper} relaunch
+bind esc:${hyper} relaunch
 
 # Run Applications
 #bind esc:cmd shell /Applications/Utilities/Terminal.app/Contents/MacOS/Terminal
 
 # Layout
-layout 1monitor '1Password 5':REPEAT ${centersmall}
-layout 1monitor 'Adium':REPEAT ${centersmall}
-layout 1monitor 'Adobe Photoshop CC 2014':REPEAT ${full}
+layout 1monitor '1Password 6':REPEAT ${centersmall}
+layout 1monitor 'Adobe Photoshop CC 2015':REPEAT ${full}
 layout 1monitor 'Calendar':REPEAT ${centersmall}
+layout 1monitor 'Reminders':REPEAT ${centersmall}
 layout 1monitor 'Chromium':REPEAT ${centerpad}
+layout 1monitor 'Slack':REPEAT ${centerpad}
 layout 1monitor 'Nightly':REPEAT ${centerpad}
 layout 1monitor 'Safari':REPEAT ${centerpad}
 layout 1monitor 'App Store':REPEAT ${centersmall}
 layout 1monitor 'Contacts':REPEAT ${centersmall}
 layout 1monitor 'GitHub':REPEAT ${centersmall}
-layout 1monitor 'IntelliJ IDEA':REPEAT ${lefthalf}
-layout 1monitor 'iTerm2':REPEAT ${lefthalf}
+layout 1monitor 'iTerm':REPEAT ${lefthalf}
 layout 1monitor 'Mail':REPEAT ${centerpad}
+layout 1monitor 'Atom Beta':REPEAT ${righthalf}
+layout 1monitor 'Atom':REPEAT ${righthalf}
 layout 1monitor 'Sublime Text':REPEAT ${righthalf}
 layout 1monitor 'System Preferences':REPEAT ${centersmall}
 layout 1monitor 'Telegram':REPEAT ${centersmall}
+layout 1monitor 'Messages':REPEAT ${centersmall}
 
 # Layout Bindings
-bind =:${hyper} layout 1monitor
+bind delete:${hyper} layout 1monitor
