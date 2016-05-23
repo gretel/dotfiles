@@ -23,18 +23,19 @@
 # $_FASD_MAX
 # Max total score / weight, defaults to 2000.
 
-# $_FASD_SHELL=
+$_FASD_SHELL=/bin/ksh
 # Which shell to execute. Some shells will run faster than others. fasd
 # runs faster with dash and ksh variants.
 
-$_FASD_BACKENDS="current,spotlight"
+# $_FASD_BACKENDS="current,spotlight"
+$_FASD_BACKENDS="current"
 # Default backends.
 
 # $_FASD_RO
 # If set to any non-empty string, fasd will not add or delete entries from
 # database. You can set and export this variable from command line.
 
-# $_FASD_FUZZY
+$_FASD_FUZZY=3
 # Level of "fuzziness" when doing fuzzy matching. More precisely, the number of
 # characters that can be skipped to generate a match. Set to empty or 0 to
 # disable fuzzy matching. Default value is 2.
