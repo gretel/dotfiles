@@ -5,12 +5,19 @@
 [credential]
   helper = osxkeychain
 
+[help]
+  autocorrect = 1
+
 [core]
   pager = cat
   editor = joe
 
 [color]
-  ui = auto
+  branch = auto
+  diff = auto
+  interactive = auto
+  status = auto
+  ui = true
 
 [color "branch"]
   current = bold
