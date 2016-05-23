@@ -64,6 +64,7 @@ brew gdbm
 brew gettext
 brew ghc
 brew gist
+brew git-secrets
 brew git
 brew gmp
 brew gnupg2 --without-libusb-compat --without-dirmngr --with-readline
