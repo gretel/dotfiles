@@ -52,7 +52,6 @@
   status = auto
   ui = true
 [commit]
-	gpgsign = true
   short = true
 [core]
   editor = subl -w -n
@@ -93,3 +92,5 @@
   email = github@jitter.eu
   name = Tom Hensel
 	signingkey = 640F9BDD
+[gpg]
+	program = gpg2
