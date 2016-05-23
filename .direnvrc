@@ -17,15 +17,12 @@ use_auto() {
   auto_log_prefix "$(expand_path "$1")"
 }
 
-### set default prefix path
-export LOCAL_PATH="/usr/local"
-
 ### call wrapper to include .automagic and setup
 use_auto "$1"
 
 ### argument: prefix of homebrew installation
-use homebrew "${LOCAL_PATH-/usr/local}"
+use homebrew "${PREFIX-/usr/local}"
 ### argument: prefix of golang installation
 use go "$HOME"
 ### argument: prefix of node.js installation
-use nodejs "${LOCAL_PATH-/usr/local}"
+use nodejs "${PREFIX-/usr/local}"

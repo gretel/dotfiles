@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# -*- mode: bash; coding:utf-8; tab-width: 2; indent-tabs-mode: nil; -*-
+# -*- mode: bash; coding:utf-8; tab-width: 4; indent-tabs-mode: nil; -*-
 # https://github.com/gretel/automagic
 # tom hensel <github@jitter.eu> 2016
 
@@ -10,7 +10,7 @@ layout_pyenv() {
   # TODO: init pyenv _if_ required
   eval "$(pyenv init -)" || return 2
   if ! pyenv local "$py_ver"; then
-    log_error "pyenv local failed!"
+    log_error "'pyenv local' failed!"
   fi
 }
 
@@ -22,7 +22,7 @@ layout_pyenv_venv() {
   eval "$(pyenv init -)" || return 2
   eval "$(pyenv virtualenv-init -)" || return 2
   if ! pyenv activate "$venv_id" 2>/dev/null; then
-    log_error "pyenv activate failed!"
+    log_error "'pyenv activate' failed!"
   fi
 }
 
@@ -226,19 +226,19 @@ expect_usage() {
   result=$($bin 2>&1)
   case "$result" in
     *"$should"*)
-      echo "$result"
-      return 0
-      ;;
-    '')
-      log_error "could not find executable in PATH!"
-      return 1
-      ;;
-    *)
-      log_error "expected output to match '$should'!"
-      return 1
-      ;;
-    esac
-  }
+echo "$result"
+return 0
+;;
+'')
+log_error "could not find executable in PATH!"
+return 1
+;;
+*)
+log_error "expected output to match '$should'!"
+return 1
+;;
+esac
+}
 
 get_abbrv_pwd() {
   cwd="$(user_rel_path "$1")"
