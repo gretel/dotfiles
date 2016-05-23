@@ -7,6 +7,7 @@
 layout_pyenv() {
   local py_ver="$1"
   check_string "$py_ver" || return 1
+  export PYENV_VIRTUALENV_DISABLE_PROMPT=1
   # TODO: init pyenv _if_ required
   eval "$(pyenv init -)" || return 2
   if ! pyenv local "$py_ver"; then
