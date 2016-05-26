@@ -1,18 +1,18 @@
+#!/usr/bin/env bash
 #
 
-set -o posix
-set -b
+# reports the termination status of background jobs immediately
+set -o notify
 
+# interactive session?
 if [ -n "$PS1" ]; then
     # fix backspace
     stty erase ^?
-    # Disable stupid flow control. Ctrl+S can disable the terminal, requiring
-    # Ctrl+Q to restore. It can result in an apparent hung terminal, if
-    # accidentally pressed.
+    # disable flow control
     stty -ixon -ixoff
 
     if test "$(tput colors 2>/dev/null)" -ne 256; then
-        echo -e "\e[00;31m> TERM '$TERM' is not a 256 colour type! Overriding to xterm-256color. Please set. EG: Putty should have putty-256color.\e[00m"
+        echo -e "TERM '$TERM' is not a 256 colour type! Overriding to xterm-256color. Please set. EG: Putty should have putty-256color.\e[00m"
         export TERM
         TERM=xterm-256color
     fi
@@ -24,17 +24,13 @@ if [ -n "$PS1" ]; then
         export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
     fi
 
-    # don't put duplicate lines or lines starting with space in the history.
-    # See bash(1) for more options
-    HISTCONTROL=ignoreboth
-    export HISTIGNORE='git*--amend*:ls:cd'
-    # append to the history file, don't overwrite it
     shopt -s histappend
-    # stop -bash: !": event not found
-    set +o histexpand
-    # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-    HISTSIZE=1000
-    HISTFILESIZE=2000
+    PROMPT_COMMAND="$(history -a)"
+    export HISTCONTROL=ignoreboth
+    export HISTFILE="$HOME/.bash_history"
+    export HISTFILESIZE=100000
+    export HISTIGNORE='git*--amend*:ls:cd:*password*:*keygen*:gpg*'
+    export HISTSIZE=1000
 
     # check the window size after each command and, if necessary,
     # update the values of LINES and COLUMNS.
@@ -51,13 +47,8 @@ if [ -n "$PS1" ]; then
     source "$fasd_cache"
     unset fasd_cache
 
-    if [ "$(which pyenv)" ]; then
-        eval "$(pyenv init -)"
-        eval "$(pyenv virtualenv-init -)"
-    fi
-
-    if [ "$(which direnv)" ]; then
-        eval "$(direnv hook bash)"
+    if [ "$(which thefuck)" ]; then
+        eval "$(thefuck --alias)"
     fi
 
     if [ -f "$(brew --prefix)/etc/bash_completion" ]; then
@@ -77,4 +68,15 @@ if [ -n "$PS1" ]; then
     alias "la=l -@"
     alias "ll=l -h"
 
+fi # interactive session
+
+if [ "$(which pyenv)" ]; then
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
 fi
+
+if [ "$(which direnv)" ]; then
+    eval "$(direnv hook bash)"
+fi
+
+#

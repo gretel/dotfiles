@@ -1,74 +1,54 @@
 #!/bin/bash
-# -*- mode: bash; coding:utf-8; tab-width: 2; indent-tabs-mode: nil; -*-
+# -*- mode: bash; coding:utf-8; tab-width: 4; indent-tabs-mode: nil; -*-
 #
-# tom hensel <github@jitter.eu> 2016
-# https://gist.github.com/gretel/dc8c38fcf979f85c8d643aab045b8c46
-#
-# super leightweight bash prompt done by a fish user:
-#   * based on https://github.com/cesarkawakami/pandaprompt
-#   * disjointed the poor panda.
-#
-# requires:
-#   * bash (well, yes)
-#   * git
-#
-# supports prompting:
-#   * active python virtualenv
-#   * git state
-#   * timestamp
-#   * return value of last command
-#   * in adjustable colors (wow!) 
-#
-# include this file in `.bashrc`:
-#
-#   source "$HOME/.bash_prompt"
-#
-# and you should feel the ease..
+# Copyright (c) 2016 Tom Hensel
 #
 
-## RED="\[\033[0;31m\]"
-## DYELLOW="\[\033[0;33m\]"
-YELLOW="\[\033[1;33m\]"
-GREEN="\[\033[0;32m\]"
-BLUE="\[\033[1;34m\]"
-DBLUE="\[\033[0;34m\]"
-LIGHT_RED="\[\033[1;31m\]"
-## LIGHT_GREEN="\[\033[1;32m\]"
-WHITE="\[\033[1;37m\]"
-LIGHT_GRAY="\[\033[0;37m\]"
-PURPLE="\[\033[0;35m\]"
-## CYAN="\[\033[0;36m\]"
-COLOR_NONE="\[\e[0m\]"
-
+BLUE="\[$(tput setaf 4)\]"
+CYAN="\[$(tput setaf 6)\]"
+GREEN="\[$(tput setaf 2)\]"
+PURPLE="\[$(tput setaf 5)\]"
+RED="\[$(tput setaf 1)\]"
+WHITE="\[$(tput setaf 7)\]"
+RESET="\[$(tput sgr0)\]"
 DATE_FMT="+%H:%M.%S"
 
-function set_prompt () {
-  local ret="$?"
-  if test "$ret" -eq "0"; then
-    RET_VAL=" (${GREEN}$ret${COLOR_NONE})"
-  else
-    RET_VAL=" (${LIGHT_RED}$ret${COLOR_NONE})"
-  fi
-  if test -z "$VIRTUAL_ENV"; then
-    PY_VENV=""
-  else
-    PY_VENV=" ${PURPLE}{$(basename "$VIRTUAL_ENV")}${COLOR_NONE}"
-  fi
-  if git rev-parse --git-dir > /dev/null 2>&1; then
-    local rev_parse
-    rev_parse="$(git rev-parse --abbrev-ref HEAD 2> /dev/null)"
-    if test "$rev_parse" != "HEAD"; then
-      GIT_STATE=" [${BLUE}${rev_parse}${COLOR_NONE}${COLOR_NONE}]"
+function get_abbrv_pwd {
+    base="${1##*/}"
+    dir="${1%/*}"
+    echo "${dir##*/}/${base}"
+}
+
+function set_prompt {
+    local retval=$?
+    local PREFIX SUFFIX DATE PY_VENV
+    DATE="${BLUE}$(date "$DATE_FMT")|"
+    if test "$USER" = "root"; then
+        PREFIX="${RED}\u${WHITE}:\w"
     else
-      GIT_STATE=" [${YELLOW}<detached>${COLOR_NONE}${COLOR_NONE}]"
+        # abbreviate PWD for non-root users
+        PREFIX="${GREEN}\u${WHITE}:$(get_abbrv_pwd "$PWD")"
     fi
-  else
-    GIT_STATE=""
-  fi
-  PREFIX="${LIGHT_GRAY}\u@\h${WHITE}:\w${COLOR_NONE}"
-  DATE=" ${LIGHT_GRAY}$(date $DATE_FMT)${COLOR_NONE}"
-  export PS1="${PREFIX}${GIT_STATE}${PY_VENV}${DBLUE}${DATE}${RET_VAL}\$ "
+    if command -v vcprompt >/dev/null; then
+        local vcp
+        vcp="$(vcprompt -f '%n:%b %u%m')"
+        if test -n "$vcp"; then
+            local GIT_STATE="${CYAN}|${vcp}"
+        fi
+    fi
+    if test -n "$VIRTUAL_ENV"; then
+        PY_VENV="${PURPLE}|$(basename "$VIRTUAL_ENV")"
+    elif test -n "$PYENV_VERSION"; then
+        PY_VENV="${PURPLE}|${PYENV_VERSION})"
+    fi
+
+    if test $retval -eq 0; then
+        SUFFIX="${WHITE}|${retval}> ${RESET}"
+    else
+        SUFFIX="${WHITE}|${RED}${retval}${WHITE}> ${RESET}"
+    fi
+    # compose
+    export PS1="${DATE}${PREFIX}${GIT_STATE}${PY_VENV}${SUFFIX}"
 }
 
 PROMPT_COMMAND=set_prompt
-#
