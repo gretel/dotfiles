@@ -63,6 +63,9 @@ layout_virtualenv() {
     pydoc () {
         python -m pydoc "$@"
     }
+    # cleanup
+    unset PYTHONPATH
+    unset PYENV_VERSION
     if test -z "${PYTHONHOME+_}"; then
         unset PYTHONHOME
     fi
@@ -88,17 +91,20 @@ layout_virtualenv() {
 layout_rubies() {
     local ruby_ver="$1"
     check_string "$ruby_ver" || return 1
+
     local ruby_dir="$HOME/.rubies/ruby-$ruby_ver"
     check_string "$ruby_ver" && check_path "$ruby_dir" || return 1
     export RUBY_HOME="$ruby_dir"
     local ruby_dir_bin="$HOME/.rubies/ruby-$ruby_ver/bin"
     check_exec "$ruby_dir_bin/ruby" || return 1
     PATH_add "$ruby_dir_bin"
+
     local gem_dir="$HOME/.gem/ruby/$ruby_ver"
     check_path "$gem_dir"
     export GEM_HOME="$gem_dir" GEM_PATH="$gem_dir"
     local gem_dir_bin="$HOME/.rubies/ruby-$ruby_ver/bin"
     PATH_add "$gem_dir_bin"
+
     path_add MANPATH "$ruby_dir/share/man"
 }
 
@@ -128,15 +134,16 @@ use_auto_python () {
     local pyver_file="$PWD/.python-version"
     local py_ver
     py_ver=$(gather_file "$pyver_file")
+    local py_activate="$PWD/bin/activate"
 
-    if test -f "$PWD/bin/activate"; then
-        local venv_path="$PWD"
-        log_status "⚑ python virtualenv at {$(user_rel_path "$venv_path")}"
-        layout virtualenv "$venv_path"
-    elif py_ver=$(gather_file "$pyver_file"); then
+    if py_ver=$(gather_file "$pyver_file"); then
         log_status "⚑ python ${py_ver} required in {$(user_rel_path "$pyver_file")}"
         layout pyenv_less "$py_ver"
         # TODO: check if venv and bin path match
+    elif test -f "$py_activate"; then
+        local venv_path="$PWD"
+        log_status "⚑ python virtualenv at {$(user_rel_path "$venv_path")}"
+        layout virtualenv "$venv_path"
     fi
     py_which="$(which python)"
     if test -x "$py_which"; then
