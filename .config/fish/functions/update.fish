@@ -42,14 +42,9 @@ end
 ### homebrew osx
 function __update_homebrew
     begin command --search brew >/dev/null
-        command brew analytics off # https://github.com/Homebrew/brew/blob/master/share/doc/homebrew/Analytics.md
-        command brew>update >/dev/null; brew upgrade
-        # # brew-bundle
-        # brew tap Homebrew/bundle; brew bundle; brew bundle --cleanup
-        # brew-file
         command brew install -q rcmdnk/file/brew-file mas 2>/dev/null
         command brew file --verbose 0 --preupdate --no_appstore update cask_upgrade
-        command brew cleanup >/dev/null; command brew prune>/dev/null; command brew linkapps >/dev/null
+        command brew prune>/dev/null; command brew linkapps >/dev/null
         command brew cask cleanup >/dev/null;
         command brew services clean >/dev/null; command brew services list
     end
