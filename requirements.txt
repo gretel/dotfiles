@@ -1,2 +1,4 @@
 pip
 jedi
+bashate
+lolcat

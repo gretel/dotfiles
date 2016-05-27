@@ -16,7 +16,6 @@ cask insomniax
 cask keka
 cask noejectdelay
 cask prey
-cask qsyncthingtray
 cask slack
 cask telegram
 cask timemachinescheduler
@@ -50,6 +49,7 @@ brew brew-cask-completion
 
 tap homebrew/core
 brew autoconf
+brew bash-completion
 brew bash
 brew cabal-install
 brew ccache
@@ -67,7 +67,7 @@ brew gist
 brew git-secrets
 brew git
 brew gmp
-brew gnupg2 --without-libusb-compat --without-dirmngr --with-readline
+brew gnupg2
 brew go
 brew gpg-agent
 brew hub
@@ -95,20 +95,23 @@ brew pcre2
 brew pinentry
 brew pkg-config
 brew pth
-brew pyenv-virtualenv
-brew pyenv
+brew pyenv --HEAD
 brew python --without-sqlite
 brew readline
+brew ruby-build
 brew ruby-install --HEAD
+brew ry --HEAD
 brew shellcheck --HEAD
+brew sqlite
 brew syncthing-inotify --HEAD
-brew syncthing --HEAD
+brew syncthing
 brew tarsnap --with-xz
 brew terminal-notifier
 brew the_platinum_searcher
 brew thefuck
 brew trash
 brew unrar
+brew vcprompt --HEAD
 brew xz
 
 tap homebrew/dupes
