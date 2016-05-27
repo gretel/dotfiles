@@ -4,7 +4,7 @@
 # https://github.com/gretel/automagic
 # tom hensel <github@jitter.eu> 2016
 
-### layout
+# pyenv_virtualenv: call pyenv to change the python version (it's location)
 layout_pyenv() {
     local py_ver="$1"
     check_string "$py_ver" || return 1
@@ -14,6 +14,7 @@ layout_pyenv() {
     export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 }
 
+# pyenv_virtualenv: call pyenv to activate a virtualenv it manages
 layout_pyenv_virtualenv() {
     local venv_id="$1"
     check_string "$venv_id" || return 1
@@ -23,7 +24,8 @@ layout_pyenv_virtualenv() {
     export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 }
 
-### FIXME: experimental work in progress!
+# pyenv_less: the layout pyenv supposes (~/.pyenv)
+#   but don't actually require or call pyenv
 layout_pyenv_less() {
     local python_ver="$1"
     check_string "$python_ver" || return 1
@@ -42,7 +44,7 @@ layout_pyenv_less() {
     local python_dir="$HOME/.pyenv/versions/$python_ver"
     check_path "$python_dir" || return 1
 
-    export PYTHONPATH="$python_dir/lib/python3.5"
+    export PYTHONPATH="$python_dir/lib/python3.5/site-packages"
     local python_bin_dir="$python_dir/bin"
 
     check_exec "$python_bin_dir/python" || return 1
@@ -51,6 +53,9 @@ layout_pyenv_less() {
     path_add MANPATH "$python_dir/share/man"
 }
 
+# layout_virtualenv: name is bit ambigious - it's does not require virtualenv
+# nor in particular the 'activate' script it puts into the virtualenv
+# it is emulated here closely - should be very compatible
 layout_virtualenv() {
     local venv_path="$1"
     check_string "$venv_path" || return 1
@@ -67,16 +72,19 @@ layout_virtualenv() {
     # export PIP_REQUIRE_VIRTUALENV=1
     # TODO: pip caching dir?
 
+    # if there is a pythonrc file use it
     local python_rc_file
     if python_rc_file="$HOME/.python/pythonrc.py"; then
         export PYTHONSTARTUP="$python_rc_file"
     fi
+    # if there is no history file create it
     export PYTHON_HISTORY_FILE
     if ! PYTHON_HISTORY_FILE="$HOME/.python_history"; then
         touch "$PYTHON_HISTORY_FILE"
     fi
 }
 
+# layout_rubies: layout chruby supposes (~/.rubies, ~/.gem)
 layout_rubies() {
     local ruby_ver="$1"
     check_string "$ruby_ver" || return 1
@@ -94,63 +102,6 @@ layout_rubies() {
     path_add MANPATH "$ruby_dir/share/man"
 }
 
-### use
-
-### FIXME: experimental work in progress!
-use_bundler() {
-    local bundler_dir="$1"
-    check_string "$bundler_dir" && check_path "$bundler_dir" || return 1
-    local bundler_bin_dir="$bundler_dir/bin"
-    check_exec "$bundler_bin_dir/bundler" || return 1
-    export BUNDLE_BIN="$bundler_bin_dir"
-    PATH_add "$bundler_bin_dir"
-}
-
-### FIXME: experimental work in progress!
-### TODO: sync with direnv.stdlib
-use_go() {
-    local go_dir="$1"
-    check_string "$go_dir" || return 1
-    local go_path="$go_dir/.go"
-    check_path "$go_path" || return 1
-    export GOPATH="$go_path"
-    local go_path_bin="$go_dir/.go/bin"
-    PATH_add "$go_path_bin"
-    local go_bin_dir="/usr/local/opt/go/libexec/bin"
-    check_path "$go_bin_dir" && check_exec "$go_bin_dir/go" || return 1
-    PATH_add "$go_bin_dir"
-}
-
-use_homebrew() {
-    local hb_path="$1"
-    check_string "$hb_path"; check_path "$hb_path" || return 1
-    PATH_add "$hb_path/bin"
-    export HOMEBREW_PATH="$hb_path"
-    local hb_sbin="$hb_path/sbin"
-    if test -d "$hb_sbin"; then
-        PATH_add "$hb_sbin"
-    fi
-}
-
-### FIXME: experimental work in progress!
-### TODO: sync with direnv.stdlib
-use_node_mini() {
-    local node_path="$1"
-    check_string "$node_path" && check_path "$node_path" || return 1
-    export NODE_HOME="$node_path"
-    export NODE_PATH="$node_path/lib/node_modules"
-}
-
-### FIXME: experimental work in progress!
-use_ansible() {
-    local ansible_path="$1"
-    check_path "$ansible_path" || return 1
-    export ANSIBLE_HOME="$ansible_path"
-    # shellcheck source=/dev/null
-    source "$ansible_path/hacking/env-setup" > /dev/null
-}
-
-### automatic
 
 use_auto_ruby () {
     local rb_string
@@ -164,7 +115,7 @@ use_auto_ruby () {
     if rb_which="$(which ruby)"; then
         # TODO: use version for comparison
         rb_string=( $(expect_usage "$rb_which -v" "ruby") )
-        log_status "✓ ruby ${rb_string[1]} at {$(user_rel_path "$rb_which")}"
+        log_status "$(tput bold)✓$(tput sgr0) ruby ${rb_string[1]} at {$(user_rel_path "$rb_which")}"
     else
         log_error "⁈ expected ruby at '$rb_which' to be in PATH!"
     fi
@@ -184,7 +135,6 @@ use_auto_python () {
         layout virtualenv "$venv_path"
     elif py_ver=$(gather_file "$pyver_file"); then
         log_status "⚑ python ${py_ver} required in {$(user_rel_path "$pyver_file")}"
-        # layout pyenv "$py_ver"
         layout pyenv_less "$py_ver"
         # TODO: check if venv and bin path match
     fi
@@ -192,13 +142,12 @@ use_auto_python () {
     if test -x "$py_which"; then
         local py_string
         py_string=( $(expect_usage "$py_which -V" "Python $py_ver") ) || return 1
-        log_status "✓ python ${py_string[1]} at {$(user_rel_path "$py_which")}"
+        log_status "$(tput bold)✓$(tput sgr0) python ${py_string[1]} at {$(user_rel_path "$py_which")}"
     else
         log_error "⁈ expected python at '$py_which' to be in PATH!"
     fi
 }
 
-### helper
 
 check_string() {
     if test -z "$1"; then
