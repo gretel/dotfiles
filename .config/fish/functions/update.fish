@@ -17,14 +17,15 @@ end
 
 ### fisher
 function __update_fisher
-    begin source $HOME/.config/fish/functions/fisher.fish 2>/dev/null
+    if source $HOME/.config/fish/functions/fisher.fish 2>/dev/null
         fisher up
+        fish_update_completions
     end
 end
 
 ### apple store
 function __update_mas
-    begin command --search mas >/dev/null
+    if command --search mas >/dev/null
         # test if logged in
         if test -n (mas account)
             command mas upgrade
@@ -34,14 +35,14 @@ end
 
 ### xcode command line tools
 function __update_xcode_select
-    begin command --search xcode-select >/dev/null
+    if command --search xcode-select >/dev/null
         command xcode-select --install
     end
 end
 
 ### homebrew osx
 function __update_homebrew
-    begin command --search brew >/dev/null
+    if command --search brew >/dev/null
         command brew install -q rcmdnk/file/brew-file mas 2>/dev/null
         command brew file --verbose 0 --preupdate --no_appstore update cask_upgrade
         command brew prune>/dev/null; command brew linkapps >/dev/null
@@ -52,21 +53,21 @@ end
 
 ### gpg keys
 function __update_gpg_keys
-    begin command --search gpg2 >/dev/null
+    if command --search gpg2 >/dev/null
         command gpg2 --refresh-keys --keyserver hkps://pgp.mit.edu
     end
 end
 
 ### node npm
 function __update_npm
-    begin command --search npm >/dev/null
+    if command --search npm >/dev/null
         command npm update; or command npm install -g npm@latest
     end
 end
 
 ### ruby gems
 function __update_gem
-    begin command --search gem >/dev/null
+    if command --search gem >/dev/null
         if set -l rb_which (which ruby)
             # FIXME: improve check for portability
             if test "$rb_which" = "/usr/bin/ruby"
@@ -84,7 +85,7 @@ end
 ### ruby bundler
 function __update_bundler
     # TODO: show existing config and wait a few secs to confirm
-    begin command --search bundler >/dev/null
+    if command --search bundler >/dev/null
         set -l rb_which (which ruby 2>/dev/null)
         if test "$rb_which" = "/usr/bin/ruby"
             set_color --bold yellow; printf "not calling bundler for system ruby at $rb_which.\n"; set_color normal
@@ -101,11 +102,11 @@ end
 
 ### python pip
 function __update_pip
-    begin command --search pip >/dev/null
+    if command --search pip >/dev/null
         command pip install -q -U setuptools pip
         command pip list --outdated | sed 's/(.*//g' | xargs pip install -q -U
         set -l req "requirements.txt"
-        begin test -f "$reg"
+        if test -f "$reg"
             command pip install -q -U -r "$req"
         end
     end
