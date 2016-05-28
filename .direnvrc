@@ -58,6 +58,7 @@ use_ansible() {
     source "$ansible_path/hacking/env-setup" > /dev/null
 }
 
+
 ### automagic
 
 # prevent one line of verbose logging
