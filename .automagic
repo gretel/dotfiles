@@ -8,8 +8,8 @@
 layout_pyenv() {
     local py_ver="$1"
     check_string "$py_ver" || return 1
-    if ! pyenv local "$py_ver"; then
-        log_error "⚠ calling 'pyenv local $py_ver' failed!"; return 2
+    if ! pyenv shell "$py_ver"; then
+        log_error "⚠ calling 'pyenv shell $py_ver' failed!"; return 2
     fi
     export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 }
