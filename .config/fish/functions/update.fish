@@ -44,10 +44,10 @@ end
 function __update_homebrew
     if command --search brew >/dev/null
         command brew install -q rcmdnk/file/brew-file mas 2>/dev/null
-        command brew file --verbose 0 --preupdate --no_appstore update cask_upgrade
+        command brew file --preupdate --no_appstore update cask_upgrade
         command brew prune>/dev/null; command brew linkapps >/dev/null
         command brew cask cleanup >/dev/null;
-        command brew services clean >/dev/null; command brew services list
+        command brew services cleanup >/dev/null; command brew services list
     end
 end
 
@@ -74,9 +74,9 @@ function __update_gem
                 set_color --bold yellow; printf "not calling gem for system ruby $rb_which.\n"; set_color normal
                 return 3
             else
-                command gem update --system --no-document --env-shebang --prerelease --quiet
-                command gem update --no-document --env-shebang --prerelease --quiet
-                command gem install bundler --no-document --env-shebang --prerelease --quiet
+                command gem update --system --no-document --env-shebang --wrappers --quiet
+                command gem update --no-document --env-shebang --wrappers --quiet
+                command gem install bundler
             end
         end
     end
