@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+# https://raw.githubusercontent.com/0xf4/pythonrc/master/pythonrc.py
 r"""
 PYTHONRC
 ========
