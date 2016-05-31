@@ -3,15 +3,23 @@
 ### disable greeting
 set -e fish_greeting
 
+# store name of system/architecture
+set -x PLATFORM (command uname -s)
 
-### basic
-set -x PLATFORM (uname)
-set -x SHELL (which fish)
+# ensure set
+set -x SHELL (command -v fish)
+
+
+# prefix for user installations
 set -x PREFIX /usr/local
+
+# freedesktop style cache location
 set -x XDG_CACHE_HOME $HOME/.cache
 
 # python version manager
 set -x PYENV_ROOT $HOME/.pyenv
+# prevent pyenv from ever changing the prompt
+set -x PYENV_VIRTUALENV_DISABLE_PROMPT 1
 
 # ruby version manager
 set -x RY_RUBIES $HOME/.rubies
@@ -30,8 +38,11 @@ if status --is-interactive
     set -x LC_ALL en_US.UTF-8
 
     ### switch according to platform
-    if test "$PLATFORM" = Darwin
-        # osx
+    if test "$PLATFORM" = Darwin # osx
+        # number of physical cores (not hyperthreads)
+        set -l core_count (sysctl -n hw.physicalcpu)
+        set -x MAKEFLAGS "-j $core_count -O2"
+
         set -x BROWSER open
         set -x EDITOR  subl -n
         set -x PAGER   less
@@ -82,7 +93,7 @@ if status --is-interactive
     ### trash
     if command --search trash >/dev/null
         set -l trash_cnt (string trim (trash -l | wc -l))
-        test "$trash_cnt" -gt 25; and echo "please empty your trash of $trash_cnt items (type 'rme')."
+        test "$trash_cnt" -gt 25; and echo "please consider emptying your trash of $trash_cnt items (type 'rme')."
         alias 'rm'   'command trash -v'
         alias 'rml'  'command trash -l -v'
         alias 'rme'  'command trash -e -v'
