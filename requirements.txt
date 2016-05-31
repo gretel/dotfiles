@@ -1,4 +1,10 @@
 pip
+setuptools
+virtualenv
+pip-autoremove
 jedi
 bashate
 lolcat
+pyinstaller
+ptpython
+
