@@ -44,23 +44,28 @@
   unalias = "!f() { git config --global --unset alias.$1; }; f"
   ux = update-index --chmod=+x
 [branch]
-  autosetupmerge = true
+	autosetupmerge = true
 [color]
   branch = auto
   diff = auto
   interactive = auto
   status = auto
-  ui = true
+	ui = auto
 [commit]
   short = true
+	template = /Users/tom/.git_commit_msg.txt
 [core]
   editor = subl -w -n
   pager = cat
+	whitespace = trailing-space,space-before-tab
+	excludesfile = ~/.gitignore_global
 [credential]
   helper = cache --timeout 86400
   helper = store --file ~/.git-crdntls
 [diff]
   algorithm = patience
+	renames = copies
+	mnemonicprefix = true
 [fetch]
   fsckobjects = true
   prune = true
@@ -77,11 +82,11 @@
 [pager]
   blame = less -S
 [push]
-  default = upstream
+	default = tracking
 [receive]
   fsckObjects = true
 [rerere]
-  enabled = true
+	enabled = true
 [tag]
   sort = version:refname
 [transfer]
@@ -94,3 +99,10 @@
 	signingkey = 640F9BDD
 [gpg]
 	program = gpg2
+[init]
+	templatedir = ~/.git-templates
+[advice]
+	pushNonFastForward = false
+	statusHints = false
+[merge]
+	stat = true
