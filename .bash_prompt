@@ -15,7 +15,7 @@ GREY="\[$(tput setaf 8)\]"
 RESET="\[$(tput sgr0)\]"
 
 DATE_FMT='+%H:%M.%S'
-VCPROMPT_FMT='%n:%b %u%m'
+VCPROMPT_FMT='%n:%b.%u%m'
 
 function get_abbrv_pwd {
     base="${1##*/}"
@@ -43,7 +43,7 @@ function set_prompt {
     if test -n "$VIRTUAL_ENV"; then
         PY_VENV="${PURPLE}|venv"
     elif test -n "$PYENV_VERSION"; then
-        PY_VENV="${PURPLE}|${PYENV_VERSION}"
+        PY_VENV="${YELLOW}|${PYENV_VERSION}"
     fi
     if [ "$TERM" = 'screen' ] || [ -n "$TMUX" ]; then
         MUX="|${GREEN}mux"

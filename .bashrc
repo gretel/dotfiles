@@ -4,48 +4,76 @@
 # reports the termination status of background jobs immediately
 set -o notify
 
+# store name of system/architecture
+export PLATFORM
+PLATFORM="$(uname -s)"
 
-export PREFIX
-PREFIX="/usr/local"
+# ensure set
+export SHELL
+SHELL="$(command -v bash)"
+
+
+# prefix for user installations
+export PREFIX="/usr/local"
+
+# freedesktop style cache location
+export XDG_CACHE_HOME
+XDG_CACHE_HOME="$HOME/.cache"
+
 
 # homebrew prefix
 export BREW_PREFIX
 BREW_PREFIX="$(brew --prefix)"
 
-export XDG_CACHE_HOME
-XDG_CACHE_HOME="$HOME/.cache"
+# python version manager
+export PYENV_ROOT
+PYENV_ROOT="$HOME/.pyenv"
+# prevent pyenv from ever changing the prompt
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
-export PLATFORM
-PLATFORM="$(uname)"
-
-export SHELL
-SHELL="$(command -v bash)"
+# ruby version manager
+export RY_RUBIES
+RY_RUBIES="$HOME/.rubies"
 
 
-# interactive session?
-if [ -n "$PS1" ]; then
-    # fix backspace
+# check if this session is interactive
+# http://www.tldp.org/LDP/abs/html/intandnonint.html#II2TEST
+if [[ -t "0" || -p /dev/stdin ]]; then
+
+    # backspace, not delete
     stty erase ^?
-    # disable flow control
-    stty -ixon -ixoff
-    # update windows size after each command if necessary,
+    # disable flow control ('ctrl-s')
+    # http://unix.stackexchange.com/q/12107/115980 and
+    stty -ixon
+    # enable case-insensitive globbing
+    shopt -s nocaseglob
+    # update windows size after each command, if necessary
     shopt -s checkwinsize
-    # be forceful about colors
+    # always pretend to support 256 colors
     if test "$(tput colors 2>/dev/null)" -ne 256; then
         export TERM='xterm-256color'
     fi
 
     ### history
+    # do not override bash history file (append to it)
     shopt -s histappend
-    # PROMPT_COMMAND="$(history -a)"
+    # turn on confirmation for history expansion (histexpand)
+    shopt -s histverify
+    # put multi-line commands onto one line of history
+    shopt -s cmdhist
     export HISTCONTROL=ignoreboth
     export HISTFILE="${HOME}/.bash_history"
     export HISTFILESIZE=100000
-    export HISTIGNORE='git*--amend*:ls:cd:*password*:*keygen*:gpg*'
+    export HISTIGNORE='@(clear|exit|history|ls|pwd|bg|fg|g)?( )'
     export HISTSIZE=1000
+    export PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
     ### switch according to platform
     if [ "$PLATFORM" == 'Darwin' ]; then
+        # number of physical cores (not hyperthreads)
+        core_count=$(sysctl -n hw.physicalcpu)
+        export MAKEFLAGS="-j $core_count -O2"
+
         # export LSCOLORS='gxBxhxDxfxhxhxhxhxcxcx'
         export BROWSER='open'
         export CLICOLOR=1
@@ -54,13 +82,22 @@ if [ -n "$PS1" ]; then
         export PAGER='less'
     fi
 
+    # jump words with ctrl-arrow
+    bind '"\e[1;5D":backward-word'
+    bind '"\e[1;5C":forward-word'
+
     # replace current shell with a fresh one
     alias 'reload=exec /usr/bin/env bash'
+
+    ### editor - sublime text
+    if command -v subl >/dev/null; then
+        export EDITOR='subl -n'
+    fi
 
     ### fasd
     fasd_cache="$HOME/.fasd-init-bash"
     if [ "$(command -v fasd)" -nt "$fasd_cache" ] || [ ! -s "$fasd_cache" ]; then
-        fasd --init posix-alias bash-hook bash-ccomp bash-ccomp-install >| "$fasd_cache"
+        command fasd --init posix-alias bash-hook bash-ccomp bash-ccomp-install >| "$fasd_cache"
     fi
     # shellcheck source=/dev/null
     source "$fasd_cache"; unset fasd_cache
@@ -91,17 +128,12 @@ if [ -n "$PS1" ]; then
     ### pip
     if command -v pip >/dev/null; then
         # shellcheck source=/dev/null
-        eval "$(pip completion --bash)"
-    fi
-
-    ### sublime text
-    if command -v subl >/dev/null; then
-        export EDITOR='subl -n'
+        eval "$(command pip completion --bash)"
     fi
 
     ### thefuck
     if command -v thefuck >/dev/null; then
-        eval "$(thefuck --alias)"
+        eval "$(command thefuck --alias)"
     fi
 
     ### tmux wrapper
@@ -121,9 +153,10 @@ if [ -n "$PS1" ]; then
         alias 'rml=trash -l -v'
         alias 'rme=trash -e -v'
         alias 'rms=trash -s -v'
-        trash_cnt="$(trash -l | wc -l)"
+        # get
+        trash_cnt="$(command trash -l | wc -l | xargs)"
         if [ "$trash_cnt" -gt 25 ]; then
-            echo "please consider disposing your trash (type 'rme')."
+            echo "please consider emptying your trash of $trash_cnt items (type 'rme')."
         fi
     fi
 
@@ -144,23 +177,17 @@ fi # interactive session
 
 ### pyenv
 if command -v pyenv >/dev/null; then
-    eval "$(pyenv init -)"
+    eval "$(command pyenv init -)"
     alias 'pe=pyenv'
-else
-    echo 'pyenv not installed?'
 fi
 
 ### ry
 if command -v ry >/dev/null; then
-    eval "$(ry setup)"
-else
-    echo 'ry not installed?'
+    eval "$(command ry setup)"
 fi
 
 ### direnv
 if command -v direnv >/dev/null; then
-    eval "$(direnv hook bash)"
+    eval "$(command direnv hook bash)"
     alias 'de=direnv'
-else
-    echo 'direnv not installed?'
 fi
