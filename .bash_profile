@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
+alias 'de=direnv'
 alias 'g=git'
+alias 'pe=pyenv'
 
 # exa
 if command -v exa >/dev/null; then
