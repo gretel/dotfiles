@@ -4,60 +4,68 @@
 # https://github.com/gretel/automagic
 # tom hensel <github@jitter.eu> 2016
 
-### FIXME: experimental work in progress!
-use_bundler() {
-    local bundler_dir="$1"
-    # check_string "$bundler_dir" && # check_path "$bundler_dir" || return 1
-    local bundler_bin_dir="$bundler_dir/bin"
-    # check_exec "$bundler_bin_dir/bundler" || return 1
-    export BUNDLE_BIN="$bundler_bin_dir"
-    PATH_add "$bundler_bin_dir"
-}
-
-### FIXME: experimental work in progress!
-### TODO: sync with direnv.stdlib
-use_go() {
-    local go_dir="$1"
-    # check_string "$go_dir" || return 1
-    local go_path="$go_dir/.go"
-    # check_path "$go_path" || return 1
-    export GOPATH="$go_path"
-    local go_path_bin="$go_dir/.go/bin"
-    PATH_add "$go_path_bin"
-    local go_bin_dir="/usr/local/opt/go/libexec/bin"
-    # check_path "$go_bin_dir" && # check_exec "$go_bin_dir/go" || return 1
-    PATH_add "$go_bin_dir"
+_check_exec() {
+    if ! test -x "$1"; then
+        log_error "⧄ file '${1}' is expected to be executable."; return 1
+    fi
 }
 
 use_homebrew() {
     local hb_path="$1"
-    # check_string "$hb_path"; # check_path "$hb_path" || return 1
     PATH_add "$hb_path/bin"
     export HOMEBREW_PATH="$hb_path"
     local hb_sbin="$hb_path/sbin"
-    if test -d "$hb_sbin"; then
-        PATH_add "$hb_sbin"
-    fi
+    test -d "$hb_sbin" && PATH_add "$hb_sbin"
 }
 
-### FIXME: experimental work in progress!
-### TODO: sync with direnv.stdlib
+use_bundler() {
+    local bundler_dir="$1"
+    local bundler_bin_dir="$bundler_dir/bin"
+    _check_exec "$bundler_bin_dir/bundler" || return 1
+    export BUNDLE_BIN="$bundler_bin_dir"
+    PATH_add "$bundler_bin_dir"
+}
+
+# TODO: sync with direnv.stdlib
 use_node_mini() {
     local node_path="$1"
-    # check_string "$node_path" && # check_path "$node_path" || return 1
     export NODE_HOME="$node_path"
     export NODE_PATH="$node_path/lib/node_modules"
 }
 
-### FIXME: experimental work in progress!
-use_ansible() {
-    local ansible_path="$1"
-    # check_path "$ansible_path" || return 1
-    export ANSIBLE_HOME="$ansible_path"
-    # shellcheck source=/dev/null
-    source "$ansible_path/hacking/env-setup" > /dev/null
+# TODO: sync with direnv.stdlib
+use_go() {
+    local go_dir="$1"
+    local go_path="$go_dir/.go"
+    export GOPATH="$go_path"
+    local go_path_bin="$go_dir/.go/bin"
+    PATH_add "$go_path_bin"
+    local go_bin_dir="$PREFIX/opt/go/libexec/bin"
+    _check_exec "$go_bin_dir/go" || return 1
+    PATH_add "$go_bin_dir"
 }
 
+use_ansible() {
+    local ansible_path="$1"
+    export ANSIBLE_HOME="$ansible_path"
+    local script="$ansible_path/hacking/env-setup"
+    _check_exec "$script" || return 1
+    # shellcheck source=/dev/null
+    source "$script" > /dev/null
+}
+
+### direnv
+
+# python version manager
+export PYENV_ROOT="$HOME/.pyenv"
+
+# ruby version manager
+export RY_RUBIES="$HOME/.rubies"
+
+# argument: prefix of installtion
+use homebrew "${PREFIX-/usr/local}"
+use node_mini "${PREFIX-/usr/local}"
+use go "$HOME"
 
 ### automagic
 
