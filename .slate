@@ -36,6 +36,7 @@ alias bottomleft   corner bottom-left resize:screenSizeX/2;screenSizeY/2
 alias bottomright  corner bottom-right resize:screenSizeX/2;screenSizeY/2
 alias centerpad    move   screenOriginX+screenSizeX/8;screenOriginY+screenSizeY/8 screenSizeX/1.3;screenSizeY/1.3
 alias centersmall  move   screenOriginX+screenSizeX/4;screenOriginY+screenSizeY/4 screenSizeX/2;screenSizeY/2
+alias topleft8th   corner   top-left resize:screenSizeX/8;screenSizeY/8
 alias full         move   screenOriginX;screenOriginY screenSizeX;screenSizeY
 alias lefthalf     move   screenOriginX;screenOriginY screenSizeX/2;screenSizeY
 alias righthalf    move   screenOriginX+screenSizeX/2;screenOriginY screenSizeX/2;screenSizeY
@@ -82,23 +83,23 @@ bind esc:${hyper} relaunch
 # Layout
 layout 1monitor '1Password 6':REPEAT ${centersmall}
 layout 1monitor 'Adobe Photoshop CC 2015':REPEAT ${full}
-layout 1monitor 'Calendar':REPEAT ${centersmall}
-layout 1monitor 'Reminders':REPEAT ${centersmall}
-layout 1monitor 'Chromium':REPEAT ${centerpad}
-layout 1monitor 'Slack':REPEAT ${centerpad}
-layout 1monitor 'Nightly':REPEAT ${centerpad}
-layout 1monitor 'Safari':REPEAT ${centerpad}
 layout 1monitor 'App Store':REPEAT ${centersmall}
+layout 1monitor 'Atom Beta':REPEAT ${lefthalf}
+layout 1monitor 'Atom':REPEAT ${lefthalf}
+layout 1monitor 'Calendar':REPEAT ${centersmall}
+layout 1monitor 'Chromium':REPEAT ${centerpad}
 layout 1monitor 'Contacts':REPEAT ${centersmall}
 layout 1monitor 'GitHub':REPEAT ${centersmall}
-layout 1monitor 'iTerm':REPEAT ${lefthalf}
 layout 1monitor 'Mail':REPEAT ${centerpad}
-layout 1monitor 'Atom Beta':REPEAT ${righthalf}
-layout 1monitor 'Atom':REPEAT ${righthalf}
+layout 1monitor 'Messages':REPEAT ${centersmall}
+layout 1monitor 'Nightly':REPEAT ${centerpad}
+layout 1monitor 'Reminders':REPEAT ${centersmall}
+layout 1monitor 'Safari':REPEAT ${centerpad}
+layout 1monitor 'iTerm':REPEAT ${lefthalf}
+layout 1monitor 'Slack':REPEAT ${centerpad}
 layout 1monitor 'Sublime Text':REPEAT ${righthalf}
 layout 1monitor 'System Preferences':REPEAT ${centersmall}
-layout 1monitor 'Telegram':REPEAT ${centersmall}
-layout 1monitor 'Messages':REPEAT ${centersmall}
+layout 1monitor 'Telegram':REPEAT ${topleft8th}
 
 # Layout Bindings
 bind delete:${hyper} layout 1monitor
