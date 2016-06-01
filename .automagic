@@ -34,6 +34,11 @@ layout_pyenv() {
         log_error "⧄ calling 'pyenv shell ${py_ver}' failed!"; return 5;
     fi
 
+    # add the pages MANPATH
+    local py_dir=
+    py_dir="${HOME}/.pyenv/versions/${py_ver}"
+    path_add MANPATH "${py_dir}/share/man"
+
     # common
     _ready_python
 }
@@ -47,31 +52,31 @@ layout_pyenv_less() {
     fi
 
     # version string
-    local python_ver="${1}"
-    check_string "${python_ver}" || return 2;
+    local py_ver="${1}"
+    check_string "${py_ver}" || return 2;
 
     # pyenv uses wrapper to support switching versions
-    local python_shims="${HOME}/.pyenv/shims"
-    check_dir "${python_shims}" || return 3;
+    local py_shims="${HOME}/.pyenv/shims"
+    check_dir "${py_shims}" || return 3;
 
     # base path of python installation
-    local python_dir="${HOME}/.pyenv/versions/${python_ver}"
-    check_dir "${python_dir}" || return 4;
+    local py_dir="${HOME}/.pyenv/versions/${py_ver}"
+    check_dir "${py_dir}" || return 4;
 
     # python interpreter
-    local python_bin_dir="${python_dir}/bin"
-    check_exec "${python_bin_dir}/python" || return 5;
+    local py_bin_dir="${py_dir}/bin"
+    check_exec "${py_bin_dir}/python" || return 5;
 
     # cleanup
     unset VIRTUAL_ENV PYTHONHOME PYTHONPATH
     # emulate pyenv
-    export PYENV_VERSION="${python_ver}"
+    export PYENV_VERSION="${py_ver}"
 
     # add to PATH
-    PATH_add "${python_shims}"
-    PATH_add "${python_bin_dir}"
+    PATH_add "${py_shims}"
+    PATH_add "${py_bin_dir}"
     # and it's manpages
-    path_add MANPATH "${python_dir}/share/man"
+    path_add MANPATH "${py_dir}/share/man"
 
     # common
     _ready_python
@@ -90,6 +95,10 @@ layout_virtualenv() {
     # path of virtualenv
     local venv_path="${1}"
     check_dir "${venv_path}" || return 1;
+
+    # watch script for changes
+    local venv_activate="${venv_path}/bin/activate"
+    watch "${venv_activate}"
 
     # it's all about VIRTUAL_ENV, literally
     export VIRTUAL_ENV="${venv_path}"
@@ -136,10 +145,14 @@ layout_ry() {
         log_error "⧄ expected RY_RUBIES to be set!"; return 2;
     fi
 
+    # cleanup
+    unset RUBYPATH GEM_HOME GEM_PATH
+
     # ry sets symlinks to the selected ruby version
     # therfore, it will only work if these are in PATH
-    local ruby_ver="${1}"
-    check_string "${ruby_ver}" || return 3;
+    local rb_ver="${1}"
+    check_string "${rb_ver}" || return 3;
+    export RUBY_VERSION="${rb_ver}"
 
     # ry puts symlinks to the actual ruby version at this location
     local ry_shims="${PREFIX}/lib/ry/current/bin"
@@ -148,38 +161,46 @@ layout_ry() {
 
     # if a ruby is found in the local bin - try to use it
     # - in ry terms this is called 'shell-local ruby'
-    local ruby_bin="${PWD}/bin/ruby"
-    if test -x "${ruby_bin}"; then
+    local rb_bin="${PWD}/bin/ruby"
+    if test -x "${rb_bin}"; then
         # add this location to PATH (with a higher precedence than the shims)
-        PATH_add "${ruby_bin}"
+        PATH_add "${rb_bin}"
     else
         # use ry to resolve the path to the selected version
-        ruby_bin="$(ry binpath "${ruby_ver}")"
-        PATH_add "${ruby_bin}"
+        rb_bin="$(ry binpath "${rb_ver}")"
+        PATH_add "${rb_bin}"
     fi
 }
 
 # layout_rubies: emulate common layout used by chruby (~/.rubies, ~/.gem)
 layout_rubies() {
-    # TODO: abstraction, non-standard
-    check_dir "${HOME}/.rubies" || return 1;
-    local ruby_ver="${1}"
-    check_string "${ruby_ver}" || return 1;
+    # check if RY_RUBIES is set
+    if ! check_dir "${RY_RUBIES}"; then
+        log_error "⧄ expected RY_RUBIES to be set!"; return 2;
+    fi
+
+    # cleanup
+    unset RUBYPATH GEM_HOME GEM_PATH
+
+    # version string
+    local rb_ver="${1}"
+    check_string "${rb_ver}" || return 1;
+    export RUBY_VERSION="${rb_ver}"
 
     # home of the ruby installation
-    local ruby_dir="${HOME}/.rubies/ruby-${ruby_ver}"
-    check_string "${ruby_ver}" && check_dir "${ruby_dir}" || return 1;
-    export RUBY_HOME="${ruby_dir}"
+    local rb_dir="${HOME}/.rubies/ruby-${rb_ver}"
+    check_string "${rb_ver}" && check_dir "${rb_dir}" || return 1;
+    export RUBY_HOME="${rb_dir}"
 
     # and it's binaries
-    local ruby_dir_bin="${ruby_dir}/bin"
-    check_exec "${ruby_dir_bin}/ruby" && check_exec "${ruby_dir_bin}/gem" || return 1;
-    PATH_add "${ruby_dir_bin}"
+    local rb_dir_bin="${rb_dir}/bin"
+    check_exec "${rb_dir_bin}/ruby" && check_exec "${rb_dir_bin}/gem" || return 1;
+    PATH_add "${rb_dir_bin}"
 
     # as well as the manpages it brings
-    local ruby_man_dir="${ruby_dir}/share/man"
-    check_dir "${ruby_man_dir}" || return 1;
-    path_add MANPATH "${ruby_man_dir}"
+    local rb_man_dir="${rb_dir}/share/man"
+    check_dir "${rb_man_dir}" || return 1;
+    path_add MANPATH "${rb_man_dir}"
 }
 
 use_auto_ruby () {
@@ -187,13 +208,15 @@ use_auto_ruby () {
     local rb_ver
     local rb_which
     # TODO: abstraction
-    local rbver_file="${PWD}/.ruby-version"
-    if rb_ver=$(gather_file "${rbver_file}"); then
-        log_status "⚑ ruby ${rb_ver} required in {$(user_rel_path "${rbver_file}")}"
+    local rb_ver_file="${PWD}/.ruby-version"
+
+    if rb_ver=$(gather_file "${rb_ver_file}"); then
+        log_status "⚑ ruby ${rb_ver} required in {$(user_rel_path "${rb_ver_file}")}"
         # TODO: abstraction, switching
         # layout rubies "${rb_ver}"
         layout ry "${rb_ver}"
     fi
+
     if rb_which="$(which ruby)"; then
         # TODO: use version for comparison
         rb_string=( $(expect_usage "${rb_which} -v" "ruby") )
@@ -202,25 +225,31 @@ use_auto_ruby () {
         # fail
         log_error "⁈ expected ruby at '${rb_which}' to be in PATH!"
     fi
+
+    # watch file
+    watch_file "${rb_ver_file}"
 }
 
 use_auto_python () {
     local py_string
+    local py_ver
     local py_which
     # TODO: abstraction
     local py_ver_file="${PWD}/.python-version"
-    local py_ver
-    if py_ver=$(gather_file "${py_ver_file}"); then
+    local venv_activate="${PWD}/bin/activate"
+
+    # check for local virtualenv
+    if test -f "${venv_activate}"; then
+        local venv_path="${PWD}"
+        log_status "⚑ python virtualenv at {$(user_rel_path "${venv_path}")}"
+        layout virtualenv "${venv_path}"
+    elif py_ver=$(gather_file "${py_ver_file}"); then
         log_status "⚑ python ${py_ver} required in {$(user_rel_path "${py_ver_file}")}"
         # layout pyenv_less "${py_ver}"
         layout pyenv "${py_ver}"
         # TODO: check if venv and bin path match
-    # check for local virtualenv
-    elif test -f "${PWD}/bin/activate"; then
-        local venv_path="${PWD}"
-        log_status "⚑ python virtualenv at {$(user_rel_path "${venv_path}")}"
-        layout virtualenv "${venv_path}"
     fi
+
     # in PATH?
     py_which="$(which python)"
     if test -x "${py_which}"; then
@@ -231,6 +260,10 @@ use_auto_python () {
         # fail
         log_error "⁈ expected python at '${py_which}' to be in PATH!"
     fi
+
+    # watch files
+    watch_file "${py_ver_file}"
+    watch_file "${venv_activate}"
 }
 
 

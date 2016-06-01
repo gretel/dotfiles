@@ -54,24 +54,27 @@ use_ansible() {
     source "$script" > /dev/null
 }
 
-### direnv
+###
+### # direnv
+###
 
-# argument: installation prefix
+# prevent logging for now, will be enabled again later  by automagic
+export DIRENV_LOG_FORMAT=
+
+### these will be in global use
+### - argument: installation prefix
 use homebrew "${PREFIX-/usr/local}"
 use node_mini "${PREFIX-/usr/local}"
 use go "$HOME"
 
-
-### automagic
-
-# prevent one line of verbose logging
-export DIRENV_LOG_FORMAT=""
+###
+### # automagic
+###
 
 use_auto() {
     ### include logic
     source_env "$HOME/.automagic"
 
     ### decorate log output
-    ### comment out to skip logging for '.direnvrc'
     auto_log_prefix "$(expand_path "$1")"
 }
