@@ -7,7 +7,7 @@ set -e fish_greeting
 set -x PLATFORM (command uname -s)
 
 # ensure set
-set -x SHELL (command -v fish)
+set -x SHELL (command which fish)
 
 
 # prefix for user installations
@@ -41,7 +41,7 @@ if status --is-interactive
     if test "$PLATFORM" = Darwin # osx
         # number of physical cores (not hyperthreads)
         set -l core_count (sysctl -n hw.physicalcpu)
-        set -x MAKEFLAGS "-j $core_count -O2"
+        set -x MAKEFLAGS "-j$core_count -O2"
 
         set -x BROWSER open
         set -x EDITOR  subl -n
@@ -74,22 +74,6 @@ if status --is-interactive
         command keychain --quiet --nogui --eval --inherit any --confhost --agents ssh $SSH_KEYS | source
     end
 
-    ### pyenv
-    if command --search pyenv >/dev/null
-        function pyenv
-            set command $argv[1]
-            set -e argv[1]
-            switch "$command"
-                case rehash shell
-                    source (pyenv "sh-$command" $argv | psub)
-                case \*
-                    command pyenv "$command" $argv
-            end
-        end
-    else
-        echo 'pyenv not installed?'
-    end
-
     ### trash
     if command --search trash >/dev/null
         set -l trash_cnt (string trim (trash -l | wc -l))
@@ -102,16 +86,35 @@ if status --is-interactive
         echo 'trash not installed?'
     end
 
-    ### direnv
-    if command --search direnv >/dev/null
-        command direnv hook fish | source
-    else
-        echo 'direnv not installed?'
-    end
-
     ### update auto completions if not exist
     if not test -d $HOME/.local/share/fish/generated_completions
         fish_update_completions
     end
 
+end
+
+### pyenv
+if command --search pyenv >/dev/null
+    function pyenv
+        set cmd $argv[1]
+        set -e argv[1]
+        switch "$cmd"
+            case rehash shell
+                source (command pyenv "sh-$cmd" $argv | psub)
+            case \*
+                command pyenv "$command" $argv
+        end
+    end
+    setenv PYENV_SHELL fish
+    command pyenv rehash 2>/dev/null
+end
+
+### ry
+if command --search ry >/dev/null
+    set -x PATH $PREFIX/lib/ry/current/bin $PATH
+end
+
+### direnv
+if command --search direnv >/dev/null
+    command direnv hook fish | source
 end
