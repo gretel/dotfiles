@@ -125,11 +125,11 @@ if [[ -t "0" || -p /dev/stdin ]]; then
         fi
     fi
 
-    ### pip
-    if command -v pip >/dev/null; then
-        # shellcheck source=/dev/null
-        eval "$(command pip completion --bash)"
-    fi
+    # ### pip
+    # if command -v pip >/dev/null; then
+    #     # shellcheck source=/dev/null
+    #     eval "$(command pip completion --bash)"
+    # fi
 
     ### thefuck
     if command -v thefuck >/dev/null; then
