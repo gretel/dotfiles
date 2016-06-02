@@ -105,7 +105,7 @@ if command --search pyenv >/dev/null
                 command pyenv "$cmd" $argv
         end
     end
-    set -x PATH $PREFIX/lib/ry/current/bin $PATH
+    set -x PATH $PYENV_ROOT/shims $PATH
     setenv PYENV_SHELL fish
     command pyenv rehash 2>/dev/null
 end
