@@ -16,6 +16,7 @@ set -x PREFIX /usr/local
 # freedesktop style cache location
 set -x XDG_CACHE_HOME $HOME/.cache
 
+
 # python version manager
 set -x PYENV_ROOT $HOME/.pyenv
 # prevent pyenv from ever changing the prompt
@@ -82,8 +83,6 @@ if status --is-interactive
         alias 'rml'  'command trash -l -v'
         alias 'rme'  'command trash -e -v'
         alias 'rms'  'command trash -s -v'
-    else
-        echo 'trash not installed?'
     end
 
     ### update auto completions if not exist
@@ -106,7 +105,7 @@ if command --search pyenv >/dev/null
         end
     end
     set -x PATH $PYENV_ROOT/shims $PATH
-    setenv PYENV_SHELL fish
+    set -x PYENV_SHELL fish
     command pyenv rehash 2>/dev/null
 end
 
