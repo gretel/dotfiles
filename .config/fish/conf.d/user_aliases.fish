@@ -15,6 +15,11 @@ function tm
     command tmux attach -d or command tmux new fish
 end
 
+### misc
+alias 'top'  'command top -o cpu -s 1'
+alias 'ip'   'command curl -4 https://icanhazip.com'
+alias 'ip6'  'command curl -6 https://icanhazip.com'
+
 ### short to project directory
 alias 'prj'  'z prjcts'
 
