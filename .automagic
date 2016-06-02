@@ -98,7 +98,7 @@ layout_virtualenv() {
 
     # watch script for changes
     local venv_activate="${venv_path}/bin/activate"
-    watch_file "${venv_activate}"
+    #watch_file "${venv_activate}"
 
     # it's all about VIRTUAL_ENV, literally
     export VIRTUAL_ENV="${venv_path}"

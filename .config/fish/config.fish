@@ -100,11 +100,12 @@ if command --search pyenv >/dev/null
         set -e argv[1]
         switch "$cmd"
             case rehash shell
-                source (command pyenv "sh-$cmd" $argv | psub)
+                source (pyenv "sh-$cmd" $argv | psub)
             case \*
-                command pyenv "$command" $argv
+                command pyenv "$cmd" $argv
         end
     end
+    set -x PATH $PREFIX/lib/ry/current/bin $PATH
     setenv PYENV_SHELL fish
     command pyenv rehash 2>/dev/null
 end
