@@ -27,10 +27,14 @@ use_bundler() {
 }
 
 # TODO: sync with direnv.stdlib
-use_node_mini() {
+use_node() {
     local node_path="$1"
+    local modules_path="$node_path/.node_modules"
+    local bin_path="$modules_path/.bin"
+
     export NODE_HOME="$node_path"
-    export NODE_PATH="$node_path/lib/node_modules"
+    export NODE_PATH="$modules_path"
+    PATH_add "$bin_path"
 }
 
 # TODO: sync with direnv.stdlib
@@ -64,8 +68,8 @@ export DIRENV_LOG_FORMAT=
 ### these will be in global use
 ### - argument: installation prefix
 use homebrew "${PREFIX-/usr/local}"
-use node_mini "${PREFIX-/usr/local}"
-use go "$HOME"
+use go "${HOME}"
+#use node "${HOME}"
 
 ###
 ### # automagic

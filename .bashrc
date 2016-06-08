@@ -191,3 +191,5 @@ if command -v direnv >/dev/null; then
     eval "$(command direnv hook bash)"
     alias 'de=direnv'
 fi
+
+#
