@@ -42,10 +42,10 @@ if status --is-interactive
     if test "$PLATFORM" = Darwin # osx
         # number of physical cores (not hyperthreads)
         set -l core_count (sysctl -n hw.physicalcpu)
-        set -x MAKEFLAGS "-j$core_count -O2"
+        set -x MAKEFLAGS "-j$core_count"
 
         set -x BROWSER open
-        set -x EDITOR  subl -n
+        set -x EDITOR  'subl -n'
         set -x PAGER   less
         set -x VISUAL  joe
     else
@@ -106,7 +106,7 @@ if command --search pyenv >/dev/null
     end
     set -x PATH $PYENV_ROOT/shims $PATH
     set -x PYENV_SHELL fish
-    command pyenv rehash 2>/dev/null
+    # command pyenv rehash 2>/dev/null
 end
 
 ### ry
