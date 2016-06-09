@@ -7,4 +7,3 @@ bashate
 lolcat
 pyinstaller
 ptpython
-

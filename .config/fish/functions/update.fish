@@ -12,15 +12,20 @@ if not set -q update_funcs
         gem \
         bundler \
         pip \
-        peru
+        peru \
+        completions
 end
 
 ### fisher
 function __update_fisher
     if source $HOME/.config/fish/functions/fisher.fish 2>/dev/null
         fisher up
-        fish_update_completions
     end
+end
+
+### fish
+function __update_completions
+    fish_update_completions
 end
 
 ### apple store
@@ -43,11 +48,15 @@ end
 ### homebrew osx
 function __update_homebrew
     if command --search brew >/dev/null
-        command brew install -q rcmdnk/file/brew-file mas 2>/dev/null
-        command brew file --preupdate --no_appstore update cask_upgrade
-        command brew prune>/dev/null; command brew linkapps >/dev/null
+    		command brew update
+        command brew tap Homebrew/bundle >/dev/null
+        command brew bundle
+        command brew upgrade >/dev/null
+        command brew prune >/dev/null
+        command brew linkapps >/dev/null
         command brew cask cleanup >/dev/null;
-        command brew services cleanup >/dev/null; command brew services list
+        command brew services cleanup >/dev/null
+        command brew services list
     end
 end
 
@@ -94,7 +103,7 @@ function __update_bundler
             if test -f ".bundle/config"
                 command bundler
             else
-                command bundler update --jobs 4 --retry 1 --clean --path vendor/cache
+                command bundler update --jobs 4 --retry 1 --binstubs --clean --path vendor/cache
             end
         end
     end
@@ -103,11 +112,16 @@ end
 ### python pip
 function __update_pip
     if command --search pip >/dev/null
-        command pip install -q -U setuptools pip
-        command pip list --outdated | sed 's/(.*//g' | xargs pip install -q -U
-        set -l req "requirements.txt"
-        if test -f "$reg"
-            command pip install -q -U -r "$req"
+        set -l versions (pyenv versions --bare)
+        for v in $versions
+            echo "python $v"
+            pyenv shell $v
+            pyenv exec pip install -q -U setuptools pip
+            pyenv exec pip list --outdated | sed 's/(.*//g' | xargs pip install -U --pre
+            set -l req "requirements.txt"
+            if test -f "$reg"
+                pyenv exec pip install -q -U --pre -r "$req"
+            end
         end
     end
 end
