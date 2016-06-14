@@ -69,7 +69,7 @@ layout_pyenv_less() {
 
     # cleanup
     unset VIRTUAL_ENV PYTHONHOME PYTHONPATH
-    # emulate pyenv
+    # emulate pyenv (be compatible)
     export PYENV_VERSION="${py_ver}"
 
     # add to PATH
@@ -245,8 +245,8 @@ use_auto_python () {
         layout virtualenv "${venv_path}"
     elif py_ver=$(gather_file "${py_ver_file}"); then
         log_status "⚑ python ${py_ver} required in {$(user_rel_path "${py_ver_file}")}"
-        # layout pyenv_less "${py_ver}"
-        layout pyenv "${py_ver}"
+        layout pyenv_less "${py_ver}"
+        # layout pyenv "${py_ver}"
         # TODO: check if venv and bin path match
     fi
 

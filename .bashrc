@@ -166,11 +166,9 @@ if [[ -t "0" || -p /dev/stdin ]]; then
         source "$HOME/.bash_profile"
     fi
 
-    ### bash prompt
-    # shameless promotion: https://github.com/gretel/pragmaprompt
-    if [ -f "$HOME/.bash_prompt" ]; then
+    if [ -f "$(brew --prefix pragmaprompt)/share/pragmaprompt.sh" ]; then
         # shellcheck source=/dev/null
-        source "$HOME/.bash_prompt"
+        source "$(brew --prefix pragmaprompt)/share/pragmaprompt.sh"
     fi
 
 fi # interactive session
@@ -193,3 +191,5 @@ if command -v direnv >/dev/null; then
 fi
 
 #
+# added by travis gem
+[ -f /Users/tom/.travis/travis.sh ] && source /Users/tom/.travis/travis.sh

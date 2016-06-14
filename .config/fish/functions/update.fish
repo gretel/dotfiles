@@ -1,4 +1,4 @@
-# https://gist.github.com/gretel/e4ccef1e415a356461c24591af314ebb/
+# https://gist.github.com/gretel/e6cd59fba3d31fe5a4e9a1feea985375
 
 ### when 'update' is called without arguments these are the defaults:
 if not set -q update_funcs
@@ -9,10 +9,9 @@ if not set -q update_funcs
         xcode_select \
         homebrew \
         npm \
-        gem \
-        bundler \
         pip \
         peru \
+        gem \
         completions
 end
 
@@ -76,34 +75,17 @@ end
 
 ### ruby gems
 function __update_gem
-    if command --search gem >/dev/null
-        if set -l rb_which (which ruby)
-            # FIXME: improve check for portability
-            if test "$rb_which" = "/usr/bin/ruby"
-                set_color --bold yellow; printf "not calling gem for system ruby $rb_which.\n"; set_color normal
-                return 3
+    if command --search ry >/dev/null
+        set -l versions (ry ls)
+        for v in $versions
+            echo "ruby $v"
+           	command ry exec $v gem update --system --no-document --env-shebang --wrappers --silent
+            command ry exec $v gem update --no-document --env-shebang --wrappers --silent
+        		command ry exec $v gem install --silent bundler
+            if test -f '.bundle/config'
+                command ry exec $v bundler
             else
-                command gem update --system --no-document --env-shebang --wrappers --quiet
-                command gem update --no-document --env-shebang --wrappers --quiet
-                command gem install bundler
-            end
-        end
-    end
-end
-
-### ruby bundler
-function __update_bundler
-    # TODO: show existing config and wait a few secs to confirm
-    if command --search bundler >/dev/null
-        set -l rb_which (which ruby 2>/dev/null)
-        if test "$rb_which" = "/usr/bin/ruby"
-            set_color --bold yellow; printf "not calling bundler for system ruby at $rb_which.\n"; set_color normal
-            return 3
-        else
-            if test -f ".bundle/config"
-                command bundler
-            else
-                command bundler update --jobs 4 --retry 1 --binstubs --clean --path vendor/cache
+                command ry exec $v bundler update --jobs 4 --retry 1 --binstubs --clean --path vendor/cache
             end
         end
     end
@@ -111,17 +93,18 @@ end
 
 ### python pip
 function __update_pip
-    if command --search pip >/dev/null
+    if command --search pyenv >/dev/null
         set -l versions (pyenv versions --bare)
         for v in $versions
             echo "python $v"
             pyenv shell $v
             pyenv exec pip install -q -U setuptools pip
             pyenv exec pip list --outdated | sed 's/(.*//g' | xargs pip install -U --pre
-            set -l req "requirements.txt"
+            set -l req 'requirements.txt'
             if test -f "$reg"
                 pyenv exec pip install -q -U --pre -r "$req"
             end
+            pyenv shell --unset
         end
     end
 end

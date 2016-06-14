@@ -76,9 +76,9 @@ use go "${HOME}"
 ###
 
 use_auto() {
-    ### include logic
-    source_env "$HOME/.automagic"
-
-    ### decorate log output
-    auto_log_prefix "$(expand_path "$1")"
+    local autofile="$(brew --prefix autobitch)/share/autobitch.sh"
+    if test -f "$autofile"; then
+        source_env "$autofile"
+        auto_log_prefix "$(expand_path "$1")"
+    fi
 }
