@@ -12,7 +12,6 @@ PLATFORM="$(uname -s)"
 export SHELL
 SHELL="$(command -v bash)"
 
-
 # prefix for user installations
 export PREFIX="/usr/local"
 
@@ -20,21 +19,39 @@ export PREFIX="/usr/local"
 export XDG_CACHE_HOME
 XDG_CACHE_HOME="$HOME/.cache"
 
+### homebrew
+if command -v brew >/dev/null; then
+    export PATH
+    PATH="/usr/local/sbin:/usr/local/bin:${PATH}"
+    export BREW_PREFIX
+    BREW_PREFIX="$(brew --prefix)"
+fi
 
-# homebrew prefix
-export BREW_PREFIX
-BREW_PREFIX="$(brew --prefix)"
+### python version manager
+if command -v pyenv >/dev/null; then
+    export PYENV_ROOT
+    PYENV_ROOT="$HOME/.pyenv"
+    # prevent pyenv from ever changing the prompt
+    export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
-# python version manager
-export PYENV_ROOT
-PYENV_ROOT="$HOME/.pyenv"
-# prevent pyenv from ever changing the prompt
-export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+    eval "$(command pyenv init -)"
+    alias 'pe=pyenv'
+fi
 
-# ruby version manager
-export RY_RUBIES
-RY_RUBIES="$HOME/.rubies"
+### ruby version manager
+if command -v ry >/dev/null; then
+    # ruby version manager
+    export RY_RUBIES
+    RY_RUBIES="$HOME/.rubies"
 
+    eval "$(command ry setup)"
+fi
+
+### direnv
+if command -v direnv >/dev/null; then
+    eval "$(command direnv hook bash)"
+    alias 'de=direnv'
+fi
 
 # check if this session is interactive
 # http://www.tldp.org/LDP/abs/html/intandnonint.html#II2TEST
@@ -83,25 +100,28 @@ if [[ -t "0" || -p /dev/stdin ]]; then
     fi
 
     # jump words with ctrl-arrow
+    # TODO: doesnt work on osx?
     bind '"\e[1;5D":backward-word'
     bind '"\e[1;5C":forward-word'
 
     # replace current shell with a fresh one
     alias 'reload=exec /usr/bin/env bash'
 
-    ### editor - sublime text
+    ### sublime text
     if command -v subl >/dev/null; then
         export EDITOR='subl -n'
     fi
 
     ### fasd
-    fasd_cache="$HOME/.fasd-init-bash"
-    if [ "$(command -v fasd)" -nt "$fasd_cache" ] || [ ! -s "$fasd_cache" ]; then
-        command fasd --init posix-alias bash-hook bash-ccomp bash-ccomp-install >| "$fasd_cache"
+    if command -v fasd >/dev/null; then
+        fasd_cache="$HOME/.fasd-init-bash"
+        if [ "$(command -v fasd)" -nt "$fasd_cache" ] || [ ! -s "$fasd_cache" ]; then
+            command fasd --init posix-alias bash-hook bash-ccomp bash-ccomp-install >| "$fasd_cache"
+        fi
+        # shellcheck source=/dev/null
+        source "$fasd_cache"; unset fasd_cache
+        alias 'j=z'; alias 'jj=zz'; _fasd_bash_hook_cmd_complete j jj
     fi
-    # shellcheck source=/dev/null
-    source "$fasd_cache"; unset fasd_cache
-    alias 'j=z'; alias 'jj=zz'; _fasd_bash_hook_cmd_complete j jj
 
     ### gnupg2
     if command -v gpg2 >/dev/null; then
@@ -110,30 +130,25 @@ if [[ -t "0" || -p /dev/stdin ]]; then
         GPG_TTY="$(which tty)"
     fi
 
-    ### grc
-    if command -v grc >/dev/null; then
-        # shellcheck source=/dev/null
-        source "${BREW_PREFIX}/etc/grc.bashrc"
-    fi
-
     ### homebrew
     if command -v brew >/dev/null; then
-        ### homebrew completions
+        # homebrew completions
         if [ -f "${BREW_PREFIX}/etc/bash_completion" ]; then
             # shellcheck source=/dev/null
             source "${BREW_PREFIX}/etc/bash_completion"
         fi
+
+        #a pragmaprompt
+        if [ -f "$(brew --prefix pragmaprompt)/share/pragmaprompt.sh" ]; then
+            # shellcheck source=/dev/null
+            source "$(brew --prefix pragmaprompt)/share/pragmaprompt.sh"
+        fi
     fi
 
-    # ### pip
-    # if command -v pip >/dev/null; then
-    #     # shellcheck source=/dev/null
-    #     eval "$(command pip completion --bash)"
-    # fi
-
-    ### thefuck
-    if command -v thefuck >/dev/null; then
-        eval "$(command thefuck --alias)"
+    ### pip
+    if command -v pip >/dev/null; then
+        # shellcheck source=/dev/null
+        eval "$(command pip completion --bash)"
     fi
 
     ### tmux wrapper
@@ -155,9 +170,20 @@ if [[ -t "0" || -p /dev/stdin ]]; then
         alias 'rms=trash -s -v'
         # get
         trash_cnt="$(command trash -l | wc -l | xargs)"
-        if [ "$trash_cnt" -gt 25 ]; then
+        if [ "$trash_cnt" -gt 25 ] || [ -z "$ASCIINEMA_REC" ]; then
             echo "please consider emptying your trash of $trash_cnt items (type 'rme')."
         fi
+    fi
+
+    ### grc
+    if command -v grc >/dev/null; then
+        # shellcheck source=/dev/null
+        source "${BREW_PREFIX}/etc/grc.bashrc"
+    fi
+
+    ### thefuck
+    if command -v thefuck >/dev/null; then
+        eval "$(command thefuck --alias)"
     fi
 
     ### bash profile
@@ -166,26 +192,4 @@ if [[ -t "0" || -p /dev/stdin ]]; then
         source "$HOME/.bash_profile"
     fi
 
-    if [ -f "$(brew --prefix pragmaprompt)/share/pragmaprompt.sh" ]; then
-        # shellcheck source=/dev/null
-        source "$(brew --prefix pragmaprompt)/share/pragmaprompt.sh"
-    fi
-
 fi # interactive session
-
-### pyenv
-if command -v pyenv >/dev/null; then
-    eval "$(command pyenv init -)"
-    alias 'pe=pyenv'
-fi
-
-### ry
-if command -v ry >/dev/null; then
-    eval "$(command ry setup)"
-fi
-
-### direnv
-if command -v direnv >/dev/null; then
-    eval "$(command direnv hook bash)"
-    alias 'de=direnv'
-fi
