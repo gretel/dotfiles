@@ -11,6 +11,7 @@ if not set -q update_funcs
         npm \
         pip \
         peru \
+        apm \
         gem \
         completions
 end
@@ -42,6 +43,17 @@ function __update_xcode_select
     if command --search xcode-select >/dev/null
         command xcode-select --install
     end
+end
+
+### github atom
+function __update_apm
+    if command --search apm >/dev/null
+        command apm upgrade -c false; command apm update -c false
+    end
+    if command --search apm-beta >/dev/null
+        command apm-beta upgrade -c false; command apm-beta update -c false
+    end
+
 end
 
 ### homebrew osx
