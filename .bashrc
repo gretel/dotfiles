@@ -189,7 +189,3 @@ if command -v direnv >/dev/null; then
     eval "$(command direnv hook bash)"
     alias 'de=direnv'
 fi
-
-#
-# added by travis gem
-[ -f /Users/tom/.travis/travis.sh ] && source /Users/tom/.travis/travis.sh
