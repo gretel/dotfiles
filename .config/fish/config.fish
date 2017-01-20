@@ -53,9 +53,11 @@ if status --is-interactive
         set -x EDITOR  joe
     end
 
-    ### always pretend to support 256 colors
+    ### support colors
     if test (tput colors) -le 255
         set -x TERM xterm-256color
+    else
+    	set -x TERM xterm-color
     end
 
     ### gnupg2
@@ -77,8 +79,8 @@ if status --is-interactive
 
     ### trash
     if command --search trash >/dev/null
-        set -l trash_cnt (string trim (trash -l | wc -l))
-        test "$trash_cnt" -gt 25; and echo "please consider emptying your trash of $trash_cnt items (type 'rme')."
+        #set -l trash_cnt (string trim (trash -l | wc -l))
+        #test "$trash_cnt" -gt 25; and echo "please consider emptying your trash of $trash_cnt items (type 'rme')."
         alias 'rm'   'command trash -v'
         alias 'rml'  'command trash -l -v'
         alias 'rme'  'command trash -e -v'
