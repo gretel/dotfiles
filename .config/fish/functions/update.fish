@@ -60,8 +60,8 @@ end
 function __update_homebrew
     if command --search brew >/dev/null
     		command brew update
-        command brew tap Homebrew/bundle >/dev/null
-        command brew bundle
+        #command brew tap Homebrew/bundle >/dev/null
+        #command brew bundle
         command brew upgrade >/dev/null
         command brew prune >/dev/null
         command brew linkapps >/dev/null
@@ -129,7 +129,7 @@ function __update_peru
 end
 
 ### main
-function -d "keep your development tools up to date" update
+function update
     ### sanity: non-superuser with homedir only
     test -n (id -u); or return 1
     cd "$HOME"; or return 1
