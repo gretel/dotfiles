@@ -1,7 +1,5 @@
 # https://gist.github.com/gretel/0bb5f77cdc54182c15dd
 
-set -x HOMEBREW_GITHUB_API_TOKEN "090ccbff9bd0f0275deb95f4ad472f23dacee05c"
-
 ### disable greeting
 set -e fish_greeting
 

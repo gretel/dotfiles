@@ -2,7 +2,6 @@
 
 export PATH="/usr/local/sbin:/usr/local/bin:$PATH"
 
-export HOMEBREW_GITHUB_API_TOKEN="090ccbff9bd0f0275deb95f4ad472f23dacee05c"
 export PREFIX="/usr/local"
 export RY_RUBIES="$HOME/.rubies"
 export XDG_CACHE_HOME="$HOME/.cache"
