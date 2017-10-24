@@ -9,15 +9,16 @@ if not set -q update_funcs
         xcode_select \
         homebrew \
         npm \
+        gem \
         pip \
         peru \
         apm \
-        gem \
         completions
 end
 
 ### fisher
 function __update_fisher
+    # TODO: abstraction
     if source $HOME/.config/fish/functions/fisher.fish 2>/dev/null
         fisher up
     end
@@ -59,12 +60,9 @@ end
 ### homebrew osx
 function __update_homebrew
     if command --search brew >/dev/null
-    		command brew update
-        #command brew tap Homebrew/bundle >/dev/null
-        #command brew bundle
-        command brew upgrade >/dev/null
-        command brew prune >/dev/null
-        command brew linkapps >/dev/null
+    	command brew update
+        command brew upgrade
+        command brew prune
         command brew cask cleanup >/dev/null;
         command brew services cleanup >/dev/null
         command brew services list
@@ -81,7 +79,8 @@ end
 ### node npm
 function __update_npm
     if command --search npm >/dev/null
-        command npm update; or command npm install -g npm@latest
+        command npm install -g npm
+        command npm update
     end
 end
 
@@ -89,15 +88,19 @@ end
 function __update_gem
     if command --search ry >/dev/null
         set -l versions (ry ls)
+        if test $versions = '*'
+            echo 'no ruby'
+            return 1
+        end
         for v in $versions
             echo "ruby $v"
-           	command ry exec $v gem update --system --no-document --env-shebang --wrappers --silent
-            command ry exec $v gem update --no-document --env-shebang --wrappers --silent
-        		command ry exec $v gem install --silent bundler
+           	#command ry exec $v gem update --system --no-document --env-shebang --wrappers
+            command ry exec $v gem update --no-document --env-shebang --wrappers
+        		command ry exec $v gem install bundler
             if test -f '.bundle/config'
                 command ry exec $v bundler
             else
-                command ry exec $v bundler update --jobs 4 --retry 1 --binstubs --clean --path vendor/cache
+                command ry exec $v bundler update --jobs 4 --retry 1
             end
         end
     end
@@ -130,7 +133,7 @@ end
 
 ### main
 function update
-    ### sanity: non-superuser with homedir only
+    # sanity: non-superuser with homedir only
     test -n (id -u); or return 1
     cd "$HOME"; or return 1
 
@@ -151,5 +154,5 @@ function update
     end
 
     ### notification
-    emit send_notification Fish Update "$list" Bing
+    emit send_notification Fish Update "$list"
 end
