@@ -11,6 +11,7 @@ _check_exec() {
 }
 
 use_homebrew() {
+    _check_exec 'brew' || return 0;
     local hb_path="$1"
     PATH_add "$hb_path/bin"
     export HOMEBREW_PATH="$hb_path"
@@ -28,10 +29,10 @@ use_bundler() {
 
 # TODO: sync with direnv.stdlib
 use_node() {
+    _check_exec 'node' || return 0;
     local node_path="$1"
     local modules_path="$node_path/.node_modules"
     local bin_path="$modules_path/.bin"
-
     export NODE_HOME="$node_path"
     export NODE_PATH="$modules_path"
     PATH_add "$bin_path"
@@ -62,14 +63,14 @@ use_ansible() {
 ### # direnv
 ###
 
-# prevent logging for now, will be enabled again later  by automagic
+# prevent logging for now, will be enabled again later by automagic
 export DIRENV_LOG_FORMAT=
 
 ### these will be in global use
 ### - argument: installation prefix
 use homebrew "${PREFIX-/usr/local}"
 use go "${HOME}"
-#use node "${HOME}"
+use node "${HOME}"
 
 ###
 ### # automagic
