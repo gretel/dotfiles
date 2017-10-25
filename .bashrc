@@ -20,6 +20,11 @@ if [ -f "$(brew --prefix pragmaprompt)/share/pragmaprompt.sh" ]; then
 	source "$(brew --prefix pragmaprompt)/share/pragmaprompt.sh"
 fi
 
+# postgres 9.6
+if [ -d "$(brew --prefix postgresql@9.6)/bin" ]; then
+	export PATH="$(brew --prefix postgresql@9.6)/bin:$PATH"
+fi
+
 # autojump
 [ -f /usr/local/etc/profile.d/autojump.sh ] && source /usr/local/etc/profile.d/autojump.sh
 
@@ -28,6 +33,9 @@ fi
 
 # thefuck
 eval "$(thefuck --alias)"
+
+# hub
+eval "$(hub alias -s)"
 
 # direnv
 eval "$(direnv hook bash)"
