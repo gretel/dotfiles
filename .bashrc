@@ -39,3 +39,6 @@ eval "$(hub alias -s)"
 
 # direnv
 eval "$(direnv hook bash)"
+
+# keychain
+eval "$(keychain --quiet --eval --agents ssh --inherit any-once --nogui --quick .ssh/id_rsa .ssh/github .ssh/audibene)"
