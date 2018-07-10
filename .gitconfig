@@ -59,7 +59,6 @@
   pager = cat
 	whitespace = trailing-space,space-before-tab
 	excludesfile = ~/.gitignore_global
-	hooksPath = /Users/tom/Sync/prjcts/hooks
 [credential]
   helper = cache --timeout 86400
   helper = store --file ~/.git-crdntls
@@ -90,11 +89,9 @@
   sort = version:refname
 [transfer]
   fsckobjects = true
-#[url "https://"]
-#  insteadOf = git://
 [user]
-  email = github@jitter.eu
-  name = Tom Hensel
+	email = github@jitter.eu
+	name = Tom Hensel
 	signingkey = 640F9BDD
 [gpg]
 	program = gpg2
@@ -105,3 +102,8 @@
 	statusHints = false
 [merge]
 	stat = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

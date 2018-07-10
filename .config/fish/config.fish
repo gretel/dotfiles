@@ -9,18 +9,16 @@ set -x PLATFORM (command uname -s)
 # ensure set
 set -x SHELL (command which fish)
 
-
 # prefix for user installations
 set -x PREFIX /usr/local
 
 # freedesktop style cache location
 set -x XDG_CACHE_HOME $HOME/.cache
 
-
-# python version manager
-set -x PYENV_ROOT $HOME/.pyenv
-# prevent pyenv from ever changing the prompt
-set -x PYENV_VIRTUALENV_DISABLE_PROMPT 1
+# # python version manager
+# set -x PYENV_ROOT $HOME/.pyenv
+# # prevent pyenv from ever changing the prompt
+# set -x PYENV_VIRTUALENV_DISABLE_PROMPT 1
 
 # ruby version manager
 set -x RY_RUBIES $HOME/.rubies
@@ -32,7 +30,7 @@ set -U __done_exclude 'git (?!push|pull)'
 if status --is-interactive
 
     ### auth
-    set -x SSH_KEYS $HOME/.ssh/id_rsa $HOME/.ssh/github
+    set -x SSH_KEYS $HOME/.ssh/id_rsa $HOME/.ssh/github $HOME/.ssh/bahn
     #set -x GPG_KEYS '640F9BDD'
 
     ### cosmetical
@@ -47,21 +45,14 @@ if status --is-interactive
         set -l core_count (sysctl -n hw.physicalcpu)
         set -x MAKEFLAGS "-j$core_count"
 
-        set -x BROWSER open
+        set -x BROWSER 'open'
         set -x EDITOR  'nano'
-        set -x PAGER   less
-        set -x VISUAL  vi
+        set -x PAGER   'less'
+        set -x VISUAL  'less'
     else
         # all other
-        set -x EDITOR  vi
+        set -x EDITOR  'vi'
     end
-
-    # ### support colors
-    # if test (tput colors) -le 255
-    #     set -x TERM xterm-256color
-    # else
-    # 	set -x TERM xterm-color
-    # end
 
     ### gnupg2
     if command --search gpg2 >/dev/null
@@ -76,12 +67,21 @@ if status --is-interactive
 
     ### keychain
     if command --search keychain >/dev/null
-        # command keychain --quiet --nogui --eval --inherit any --confhost --agents ssh,gpg $SSH_KEYS $GPG_KEYS | source
-        command keychain --quiet --nogui --eval --inherit any --confhost --agents ssh $SSH_KEYS | source
+        #command keychain --quiet --nogui --eval --inherit any-once --confhost --agents ssh,gpg $SSH_KEYS $GPG_KEYS | source
+        command keychain --quiet --nogui --eval --agents ssh --inherit any-once --quick $SSH_KEYS | source
     end
 
     ### autojump
     [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
+
+    ### exa
+    if command --search exa >/dev/null
+        alias 'l'  'command exa -g -1 -a -s extension -F -U'
+        alias 't'  'command exa -g -G -a -s extension -F -U -T -L 2'
+        alias 'lw' 'command exa -g -G -a -s extension -F -U'
+        alias 'll' 'command exa -g -l -a -s extension -F -U'
+        alias 'lt' 'command exa -g -l -a -s extension -F -U -T -L 2'
+    end
 
     ### trash
     if command --search trash >/dev/null
@@ -101,27 +101,45 @@ if status --is-interactive
 
     ### shared Makefile
     alias 'mmake' 'make -f ~/Makefile'
+
+    ### tail file
+    alias 'ff' 'less +F'
+
+    ### git
+    alias 'gcs' 'git clone --depth 1'
+    alias 'gp' 'git st and git pull'
+    alias 'gcp' 'git commit -a and git push -u origin master'
 end
 
 # ### curl
 # set -x PATH $PREFIX/opt/curl/bin $PATH
 
-### pyenv
-if command --search pyenv >/dev/null
-    function pyenv
-        set cmd $argv[1]
-        set -e argv[1]
-        switch "$cmd"
-            case rehash shell
-                source (pyenv "sh-$cmd" $argv | psub)
-            case \*
-                command pyenv "$cmd" $argv
-        end
-    end
-    set -x PATH $PYENV_ROOT/shims $PATH
-    set -x PYENV_SHELL fish
-    # command pyenv rehash 2>/dev/null
+# ### postgres
+# if test -d (brew --prefix postgresql)/bin
+#     set -x PATH (brew --prefix postgresql)/bin $PATH
+# end
+
+### cargo
+if command --search cargo >/dev/null
+    set -x PATH $HOME/.cargo/bin $PATH
 end
+
+# ### pyenv
+# if command --search pyenv >/dev/null
+#     function pyenv
+#         set cmd $argv[1]
+#         set -e argv[1]
+#         switch "$cmd"
+#             case rehash shell
+#                 source (pyenv "sh-$cmd" $argv | psub)
+#             case \*
+#                 command pyenv "$cmd" $argv
+#         end
+#     end
+#     set -x PATH $PYENV_ROOT/shims $PATH
+#     set -x PYENV_SHELL fish
+#     # command pyenv rehash 2>/dev/null
+# end
 
 # ### ry
 # if command --search ry >/dev/null
