@@ -20,14 +20,16 @@ set -x XDG_CACHE_HOME $HOME/.cache
 # # prevent pyenv from ever changing the prompt
 # set -x PYENV_VIRTUALENV_DISABLE_PROMPT 1
 
-# ruby version manager
-set -x RY_RUBIES $HOME/.rubies
+# # ruby version manager
+# set -x RY_RUBIES $HOME/.rubies
 
 # long process done
 set -U __done_min_cmd_duration 10000
 set -U __done_exclude 'git (?!push|pull)'
 
 if status --is-interactive
+    ### workaround "for fish_update_completions"
+    set -x MANPATH /usr/share/man /usr/local/share/man $MANPATH
 
     ### auth
     set -x SSH_KEYS $HOME/.ssh/id_rsa $HOME/.ssh/github $HOME/.ssh/bahn
@@ -54,8 +56,8 @@ if status --is-interactive
         set -x EDITOR  'vi'
     end
 
-    ### gnupg2
-    if command --search gpg2 >/dev/null
+    ### gnupg
+    if command --search gpg >/dev/null
         # ensure gpg will have tty
         set -x GPG_TTY (which tty)
     end
