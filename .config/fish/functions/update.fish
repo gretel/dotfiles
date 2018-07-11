@@ -3,16 +3,18 @@
 ### when 'update' is called without arguments these are the defaults:
 if not set -q update_funcs
     set -x update_funcs \
-        gpg_keys \
-        fisher \
-        mas \
         xcode_select \
-        homebrew \
-        npm \
-        gem \
-        pip \
         peru \
+        homebrew \
+        homebrew_cask \
         apm \
+        fisher \
+        gem \
+        gpg_keys \
+        # homebrew_head \
+        mas \
+        npm \
+        pip \
         completions
 end
 
@@ -66,13 +68,28 @@ function __update_homebrew
         command brew cask cleanup >/dev/null;
         command brew services cleanup >/dev/null
         command brew services list
+        command brew list --versions | grep -i head | awk '{print $1}' | xargs brew list
+    end
+end
+
+### homebrew osx
+function __update_homebrew_head
+    if command --search brew >/dev/null
+        command brew list --versions | grep -i head | awk '{print $1}' | xargs brew reinstall --HEAD
+    end
+end
+
+### homebrew cash
+function __update_homebrew_cask
+    if command --search brew >/dev/null
+        command brew cu -y -q --cleanup
     end
 end
 
 ### gpg keys
 function __update_gpg_keys
-    if command --search gpg2 >/dev/null
-        command gpg2 --refresh-keys --keyserver hkps://pgp.mit.edu
+    if command --search gpg >/dev/null
+        command gpg --refresh-keys --keyserver hkps://pgp.mit.edu
     end
 end
 
