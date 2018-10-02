@@ -13,8 +13,10 @@ if not set -q update_funcs
         gpg_keys \
         # homebrew_head \
         mas \
-        npm \
-        pip \
+        # npm \
+        yarn \
+        # pyenv_pip2 \
+        pip3 \
         completions
 end
 
@@ -56,17 +58,16 @@ function __update_apm
     if command --search apm-beta >/dev/null
         command apm-beta upgrade -c false; command apm-beta update -c false
     end
-
 end
 
 ### homebrew osx
 function __update_homebrew
     if command --search brew >/dev/null
     	command brew update
-        command brew upgrade
-        command brew prune
-        command brew cask cleanup >/dev/null;
-        command brew services cleanup >/dev/null
+        command brew upgrade --cleanup
+        command brew cleanup
+        #command brew prune
+        command brew services cleanup
         command brew services list
         command brew list --versions | grep -i head | awk '{print $1}' | xargs brew list
     end
@@ -79,10 +80,11 @@ function __update_homebrew_head
     end
 end
 
-### homebrew cash
+### homebrew cask
 function __update_homebrew_cask
     if command --search brew >/dev/null
-        command brew cu -y -q --cleanup
+        command brew cu -y -q
+        command brew cask cleanup
     end
 end
 
@@ -100,6 +102,14 @@ function __update_npm
         command npm update
     end
 end
+
+### node yarn
+function __update_yarn
+    if command --search yarn >/dev/null
+        command yarn upgrade --non-interactive
+    end
+end
+
 
 ### ruby gems
 function __update_gem
@@ -123,21 +133,37 @@ function __update_gem
     end
 end
 
-### python pip
-function __update_pip
+### pyenv pip
+function __update_pyenv_pip2
     if command --search pyenv >/dev/null
         set -l versions (pyenv versions --bare)
         for v in $versions
             echo "python $v"
-            pyenv shell $v
-            pyenv exec pip install -q -U setuptools pip
-            pyenv exec pip list --outdated | sed 's/(.*//g' | xargs pip install -U --pre
+            command pyenv shell $v
+            command pyenv exec pip install -q -U setuptools pip
+            command pyenv exec pip list --outdated | sed 's/(.*//g' | xargs pip install -U --pre
             set -l req 'requirements.txt'
             if test -f "$reg"
-                pyenv exec pip install -q -U --pre -r "$req"
+                command pyenv exec pip install -q -U --pre -r "$req"
             end
-            pyenv shell --unset
+            command pyenv shell --unset
         end
+    end
+end
+
+function __update_pip2
+### python pip
+    if command --search pip2 >/dev/null
+    	command pip2 install --upgrade pip setuptools wheel
+    	command pip2 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip2 install -U
+    end
+end
+
+function __update_pip3
+### python pip
+    if command --search pip3 >/dev/null
+    	command pip3 install --upgrade pip setuptools wheel
+    	command pip3 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip3 install -U
     end
 end
 
