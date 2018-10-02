@@ -1,0 +1,5 @@
+awscli
+codevalidator
+peru
+pre-commit
+virtualenv
