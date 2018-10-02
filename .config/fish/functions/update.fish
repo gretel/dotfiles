@@ -15,7 +15,7 @@ if not set -q update_funcs
         mas \
         # npm \
         yarn \
-        # pyenv_pip2 \
+        pip2 \
         pip3 \
         completions
 end
@@ -63,7 +63,7 @@ end
 ### homebrew osx
 function __update_homebrew
     if command --search brew >/dev/null
-    	command brew update
+        command brew update
         command brew upgrade --cleanup
         command brew cleanup
         #command brew prune
@@ -121,9 +121,9 @@ function __update_gem
         end
         for v in $versions
             echo "ruby $v"
-           	#command ry exec $v gem update --system --no-document --env-shebang --wrappers
+            #command ry exec $v gem update --system --no-document --env-shebang --wrappers
             command ry exec $v gem update --no-document --env-shebang --wrappers
-        		command ry exec $v gem install bundler
+                command ry exec $v gem install bundler
             if test -f '.bundle/config'
                 command ry exec $v bundler
             else
@@ -154,16 +154,16 @@ end
 function __update_pip2
 ### python pip
     if command --search pip2 >/dev/null
-    	command pip2 install --upgrade pip setuptools wheel
-    	command pip2 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip2 install -U
+        command pip2 install --upgrade pip setuptools wheel
+        command pip2 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip2 install -U
     end
 end
 
 function __update_pip3
 ### python pip
     if command --search pip3 >/dev/null
-    	command pip3 install --upgrade pip setuptools wheel
-    	command pip3 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip3 install -U
+        command pip3 install --upgrade pip setuptools wheel
+        command pip3 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip3 install -U
     end
 end
 
