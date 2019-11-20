@@ -1,4 +1,4 @@
-# https://gist.github.com/gretel/0bb5f77cdc54182c15dd
+# https://gist.github.com/gretel/facabae8f9c02d569155158f5016d5ae
 
 ### disable greeting
 set -e fish_greeting
@@ -15,25 +15,17 @@ set -x PREFIX /usr/local
 # freedesktop style cache location
 set -x XDG_CACHE_HOME $HOME/.cache
 
-# # python version manager
-# set -x PYENV_ROOT $HOME/.pyenv
-# # prevent pyenv from ever changing the prompt
-# set -x PYENV_VIRTUALENV_DISABLE_PROMPT 1
-
-# # ruby version manager
-# set -x RY_RUBIES $HOME/.rubies
+# ruby version manager
+set -x RY_RUBIES $HOME/.rubies
 
 # long process done
 set -U __done_min_cmd_duration 10000
 set -U __done_exclude 'git (?!push|pull)'
 
 if status --is-interactive
-    ### workaround "for fish_update_completions"
-    set -x MANPATH /usr/share/man /usr/local/share/man $MANPATH
-
     ### auth
-    set -x SSH_KEYS $HOME/.ssh/id_rsa $HOME/.ssh/github $HOME/.ssh/bahn
-    #set -x GPG_KEYS '640F9BDD'
+    set -x SSH_KEYS $HOME/.ssh/id_rsa $HOME/.ssh/github $HOME/.ssh/id_ed25519
+    #set -x GPG_KEYS '64236423'
 
     ### cosmetical
     # set -x LSCOLORS gxBxhxDxfxhxhxhxhxcxcx
@@ -62,15 +54,14 @@ if status --is-interactive
         set -x GPG_TTY (which tty)
     end
 
-    ### thefuck
-    if command --search thefuck >/dev/null
-        command thefuck --alias | tr '\n' ';' | source
-    end
+    # ### thefuck
+    # if command --search thefuck >/dev/null
+    #     command thefuck --alias | tr '\n' ';' | source
+    # end
 
     ### keychain
     if command --search keychain >/dev/null
-        #command keychain --quiet --nogui --eval --inherit any-once --confhost --agents ssh,gpg $SSH_KEYS $GPG_KEYS | source
-        command keychain --quiet --nogui --eval --agents ssh --inherit any-once --quick $SSH_KEYS | source
+        command keychain --quiet --nogui --eval --inherit any-once --agents ssh --quick $SSH_KEYS | source
     end
 
     ### autojump
@@ -96,59 +87,50 @@ if status --is-interactive
         alias 'rms'  'command trash -s -v'
     end
 
-    ### update auto completions if not exist
-    if not test -d $HOME/.local/share/fish/generated_completions
-        fish_update_completions
-    end
-
     ### shared Makefile
+    # TODO: revamp
     alias 'mmake' 'make -f ~/Makefile'
 
     ### tail file
     alias 'ff' 'less +F'
 
-    ### git
-    alias 'gcs' 'git clone --depth 1'
-    alias 'gp' 'git st and git pull'
-    alias 'gcp' 'git commit -a and git push -u origin master'
+    ### workaround "for fish_update_completions"
+    set -x MANPATH /usr/share/man /usr/local/share/man $MANPATH
+
+    ### update auto completions if not exist
+    if not test -d $HOME/.local/share/fish/generated_completions
+        fish_update_completions
+    end
 end
 
-# ### curl
-# set -x PATH $PREFIX/opt/curl/bin $PATH
+## curl
+if test -d $PREFIX/opt/curl/bin
+    set -x PATH $PREFIX/opt/curl/bin $PATH
+end
 
-# ### postgres
-# if test -d (brew --prefix postgresql)/bin
-#     set -x PATH (brew --prefix postgresql)/bin $PATH
+### postgres
+if test -d $PREFIX/opt/postgresql/bin
+    set -x PATH $PREFIX/opt/postgresql/bin $PATH
+end
+
+# ### rubygems
+# if command --search ruby >/dev/null
+#     set -x PATH $HOME/.gem/ruby/2.3.0/bin $PATH
 # end
+
+### node (10)
+set -x PATH "/usr/local/opt/node@10/bin" $PATH
 
 ### cargo
 if command --search cargo >/dev/null
     set -x PATH $HOME/.cargo/bin $PATH
 end
 
-# ### pyenv
-# if command --search pyenv >/dev/null
-#     function pyenv
-#         set cmd $argv[1]
-#         set -e argv[1]
-#         switch "$cmd"
-#             case rehash shell
-#                 source (pyenv "sh-$cmd" $argv | psub)
-#             case \*
-#                 command pyenv "$cmd" $argv
-#         end
-#     end
-#     set -x PATH $PYENV_ROOT/shims $PATH
-#     set -x PYENV_SHELL fish
-#     # command pyenv rehash 2>/dev/null
-# end
-
-# ### ry
-# if command --search ry >/dev/null
-#     set -x PATH $PREFIX/lib/ry/current/bin $PATH
-# end
-
 ### lastly, direnv
 if command --search direnv >/dev/null
     command direnv hook fish | source
+end
+
+function fish_prompt
+    eval "$HOME/.go/bin/powerline-go -error $status -shell bare -cwd-max-depth 3 -max-width 50 -modules aws,docker,venv,ssh,cwd,gitlite,jobs,exit,root -path-aliases \~/.go/src/github.com=@gopath_gh,\~/Sync/prjcts=@src,\~/Sync/code=@code"
 end
