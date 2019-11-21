@@ -24,7 +24,7 @@ end
 function __update_fisher
     # TODO: abstraction
     if source $HOME/.config/fish/functions/fisher.fish 2>/dev/null
-        fisher up
+        fisher self-update
     end
 end
 
@@ -64,7 +64,7 @@ end
 function __update_homebrew
     if command --search brew >/dev/null
         command brew update
-        command brew upgrade --cleanup
+        command brew upgrade
         command brew cleanup
         #command brew prune
         command brew services cleanup
@@ -84,7 +84,6 @@ end
 function __update_homebrew_cask
     if command --search brew >/dev/null
         command brew cu -y -q
-        command brew cask cleanup
     end
 end
 
@@ -154,16 +153,16 @@ end
 function __update_pip2
 ### python pip
     if command --search pip2 >/dev/null
-        command pip2 install --upgrade pip setuptools wheel
-        command pip2 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip2 install -U
+        command env VIRTUAL_ENV='' pip2 install --upgrade pip setuptools wheel
+        command env VIRTUAL_ENV='' pip2 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip2 install -U
     end
 end
 
 function __update_pip3
 ### python pip
     if command --search pip3 >/dev/null
-        command pip3 install --upgrade pip setuptools wheel
-        command pip3 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip3 install -U
+        command env VIRTUAL_ENV='' pip3 install --upgrade pip setuptools wheel
+        command env VIRTUAL_ENV='' pip3 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip3 install -U
     end
 end
 
