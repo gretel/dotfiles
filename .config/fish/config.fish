@@ -15,9 +15,6 @@ set -x PREFIX /usr/local
 # freedesktop style cache location
 set -x XDG_CACHE_HOME $HOME/.cache
 
-# ruby version manager
-set -x RY_RUBIES $HOME/.rubies
-
 # long process done
 set -U __done_min_cmd_duration 10000
 set -U __done_exclude 'git (?!push|pull)'
@@ -65,7 +62,7 @@ if status --is-interactive
     end
 
     ### autojump
-    [ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
+    #[ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
 
     ### exa
     if command --search exa >/dev/null
@@ -108,10 +105,10 @@ if test -d $PREFIX/opt/curl/bin
     set -x PATH $PREFIX/opt/curl/bin $PATH
 end
 
-### postgres
-if test -d $PREFIX/opt/postgresql/bin
-    set -x PATH $PREFIX/opt/postgresql/bin $PATH
-end
+# ### postgres
+# if test -d $PREFIX/opt/postgresql/bin
+#     set -x PATH $PREFIX/opt/postgresql/bin $PATH
+# end
 
 # ### rubygems
 # if command --search ruby >/dev/null
@@ -132,5 +129,6 @@ if command --search direnv >/dev/null
 end
 
 function fish_prompt
-    eval "$HOME/.go/bin/powerline-go -error $status -shell bare -cwd-max-depth 3 -max-width 50 -modules aws,docker,venv,ssh,cwd,gitlite,jobs,exit,root -path-aliases \~/.go/src/github.com=@gopath_gh,\~/Sync/prjcts=@src,\~/Sync/code=@code"
+    set duration (math -s6 "$CMD_DURATION / 1000")
+    eval "$HOME/.go/bin/powerline-go -shell bare -duration $duration -error $status -cwd-max-depth 3 -max-width 50 -modules duration,docker,venv,ssh,cwd,git,jobs,exit,root"
 end

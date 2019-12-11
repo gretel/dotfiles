@@ -15,7 +15,6 @@ if not set -q update_funcs
         mas \
         # npm \
         yarn \
-        pip2 \
         pip3 \
         completions
 end
@@ -132,37 +131,11 @@ function __update_gem
     end
 end
 
-### pyenv pip
-function __update_pyenv_pip2
-    if command --search pyenv >/dev/null
-        set -l versions (pyenv versions --bare)
-        for v in $versions
-            echo "python $v"
-            command pyenv shell $v
-            command pyenv exec pip install -q -U setuptools pip
-            command pyenv exec pip list --outdated | sed 's/(.*//g' | xargs pip install -U --pre
-            set -l req 'requirements.txt'
-            if test -f "$reg"
-                command pyenv exec pip install -q -U --pre -r "$req"
-            end
-            command pyenv shell --unset
-        end
-    end
-end
-
-function __update_pip2
-### python pip
-    if command --search pip2 >/dev/null
-        command env VIRTUAL_ENV='' pip2 install --upgrade pip setuptools wheel
-        command env VIRTUAL_ENV='' pip2 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip2 install -U
-    end
-end
-
 function __update_pip3
 ### python pip
     if command --search pip3 >/dev/null
-        command env VIRTUAL_ENV='' pip3 install --upgrade pip setuptools wheel
-        command env VIRTUAL_ENV='' pip3 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip3 install -U
+        command env VIRTUAL_ENV='' pip3 install -q --upgrade pip setuptools wheel
+        command env VIRTUAL_ENV='' pip3 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip3 -q install -U
     end
 end
 
