@@ -38,8 +38,6 @@ if status --is-interactive
 
         set -x BROWSER 'open'
         set -x EDITOR  'nano'
-        set -x PAGER   'less'
-        set -x VISUAL  'less'
     else
         # all other
         set -x EDITOR  'vi'
