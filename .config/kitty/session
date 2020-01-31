@@ -1,0 +1,7 @@
+## https://sw.kovidgoyal.net/kitty/#startup-sessions
+
+focus
+
+#launch /bin/zsh
+#launch /usr/local/bin/bash
+launch /usr/local/bin/fish
