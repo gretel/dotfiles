@@ -55,8 +55,9 @@
   ui = auto
 [commit]
   short = true
-  template = ~/.git_commit_msg.txt
+#  template = ~/.git_commit_msg.txt
 [core]
+  #editor = atom-beta -w
   editor = subl -w -n
   pager = highlight --force -O truecolor
   whitespace = trailing-space,space-before-tab
@@ -91,12 +92,12 @@
 [transfer]
   fsckobjects = true
 [user]
-  email = github@jitter.eu
-  name = Tom Hensel
+	email = code@jitter.eu
+	name = gretel
 [gpg]
   program = gpg
-[init]
-  templatedir = ~/.git-templates
+#[init]
+#  templatedir = ~/.git-templates
 [advice]
   pushNonFastForward = false
   statusHints = false
@@ -114,3 +115,5 @@
   trustExitCode = false
 [mergetool]
   keepBackup = false
+[credential]
+	helper = osxkeychain
