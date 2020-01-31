@@ -15,6 +15,9 @@ hs.window.animationDuration = 0
 hyper = { 'alt', 'ctrl', 'cmd' }
 shift_hyper = { 'shift', 'ctrl', 'cmd', 'alt'}
 
+-- window hinting
+hs.hotkey.bind(hyper, 'return', hs.hints.windowHints)
+
 hs.loadSpoon("MiroWindowsManager")
 spoon.MiroWindowsManager:bindHotkeys({
   up = {hyper, "up"},
