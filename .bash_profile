@@ -1,3 +1,3 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-[[ -s ~/.bashrc ]] && source ~/.bashrc
+[[ -s $HOME/.bashrc ]] && source $HOME/.bashrc

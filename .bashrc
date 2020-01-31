@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 export PATH="/usr/local/sbin:/usr/local/bin:$PATH"
 export PREFIX="/usr/local"
@@ -14,11 +14,11 @@ export PAGER="less"
 export VISUAL="nano"
 
 function _update_ps1() {
-	PS1="$($GOPATH/bin/powerline-go -duration $PS0 -error $? -shell bash -cwd-max-depth 3 -max-width 50 -modules docker,duration,venv,ssh,cwd,git,jobs,exit,root)"
+    PS1="$($HOME/.go/bin/powerline-go -duration $PS0 -error $? -shell bash -cwd-max-depth 3 -max-width 50 -modules duration,ssh,cwd,git,jobs,exit,root)"
 }
 
-if [ "$TERM" != "linux" ] && [ -f "$GOPATH/bin/powerline-go" ]; then
-    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+if [ "$TERM" != "linux" ] && [ -x "$HOME/.go/bin/powerline-go" ]; then
+    PROMPT_COMMAND="_update_ps1; ${PROMPT_COMMAND}"
 fi
 
 # direnv
