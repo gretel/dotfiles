@@ -1,8 +1,9 @@
+chardet
 codevalidator
-colorama
 esphome
 esptool
 Jinja2
 platformio
 pre-commit
+ranger-fm
 virtualenv
