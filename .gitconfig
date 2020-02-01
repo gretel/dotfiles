@@ -59,7 +59,7 @@
 [core]
   #editor = atom-beta -w
   editor = subl -w -n
-  pager = highlight --force -O truecolor
+	pager = delta --dark
   whitespace = trailing-space,space-before-tab
   excludesfile = /Users/tom/.gitignore_global
   autocrlf = input
