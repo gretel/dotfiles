@@ -43,16 +43,36 @@ if status --is-interactive
         set -x EDITOR  'vi'
     end
 
+    ### shared Makefile
+    # TODO: revamp
+    alias 'mmake' 'make -f ~/Makefile'
+
+    ### tail file
+    alias 'ff' 'less +F'
+
     ### gnupg
     if command --search gpg >/dev/null
         # ensure gpg will have tty
         set -x GPG_TTY (which tty)
     end
 
-    # ### thefuck
-    # if command --search thefuck >/dev/null
-    #     command thefuck --alias | tr '\n' ';' | source
-    # end
+    ### kitty
+    if command --search kitty >/dev/null
+        command kitty + complete setup fish | source
+        alias 'd' 'kitty +kitten diff'
+    end
+    
+    ### bat
+    if command --search bat >/dev/null
+        alias 'cat' 'bat'
+        set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+        set -x BAT_CONFIG_PATH "$HOME/.batcfg"
+    end
+
+    ### thefuck
+    if command --search thefuck >/dev/null
+        command thefuck --alias | tr '\n' ';' | source
+    end
 
     ### keychain
     if command --search keychain >/dev/null
@@ -81,13 +101,6 @@ if status --is-interactive
         alias 'rme'  'command trash -e -v'
         alias 'rms'  'command trash -s -v'
     end
-
-    ### shared Makefile
-    # TODO: revamp
-    alias 'mmake' 'make -f ~/Makefile'
-
-    ### tail file
-    alias 'ff' 'less +F'
 
     ### workaround "for fish_update_completions"
     set -x MANPATH /usr/share/man /usr/local/share/man $MANPATH
