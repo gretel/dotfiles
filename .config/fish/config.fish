@@ -7,12 +7,10 @@ set -e fish_greeting
 set -x PLATFORM (command uname -s)
 
 # ensure set
-set -x SHELL (command which fish)
+set -x SHELL (command -v fish)
 
 # prefix for user installations
 set -x PREFIX /usr/local
-set -x PATH $PREFIX/bin $PATH
-set -x PATH $PREFIX/sbin $PATH
 
 # freedesktop style cache location
 set -x XDG_CACHE_HOME $HOME/.cache
@@ -49,7 +47,7 @@ if status --is-interactive
     end
 
     ### workaround "for fish_update_completions"
-    set -x MANPATH /usr/share/man /usr/local/share/man $MANPATH
+    set -x MANPATH /usr/share/man $PREFIX/share/man $MANPATH
 
     ### python virtualenv 'activate.fish' shall not oerride the prompt
     set -x VIRTUAL_ENV_DISABLE_PROMPT yes
@@ -67,16 +65,13 @@ if status --is-interactive
 
     ### curl
     if test -d $PREFIX/opt/curl/bin
-        set -x PATH $PREFIX/opt/curl/bin $PATH
+        set -x fish_user_paths $PREFIX/opt/curl/bin $fish_user_paths
     end
 
     ### thefuck
     if command --search thefuck >/dev/null
         command thefuck --alias | tr '\n' ';' | source
     end
-
-    ### autojump
-    #[ -f /usr/local/share/autojump/autojump.fish ]; and source /usr/local/share/autojump/autojump.fish
 
     ### exa
     if command --search exa >/dev/null
@@ -101,27 +96,27 @@ if status --is-interactive
 
     # ### postgres
     # if test -d $PREFIX/opt/postgresql/bin
-    #     set -x PATH $PREFIX/opt/postgresql/bin $PATH
+    #     set -x fish_user_paths $PREFIX/opt/postgresql/bin $fish_user_paths
     # end
 
     # ### rubygems
     # if command --search ruby >/dev/null
-    #     set -x PATH $HOME/.gem/ruby/2.3.0/bin $PATH
+    #     set -x fish_user_paths $HOME/.gem/ruby/2.3.0/bin $fish_user_paths
     # end
 
     ### cargo
     if command --search cargo >/dev/null
-        set -x PATH $HOME/.cargo/bin $PATH
+        set -x fish_user_paths $HOME/.cargo/bin $fish_user_paths
     end
 
     ### node (10)
-    set -x _NODE_BIN "/usr/local/opt/node@10/bin"
+    set -x _NODE_BIN "$PREFIX/opt/node@10/bin"
     if test -d $_NODE_BIN
         set -g fish_user_paths $_NODE_BIN $fish_user_paths
     end
 
     ### python 3.8 first
-    set -x _PTYHON_BIN "/usr/local/opt/python@3.8/bin"
+    set -x _PTYHON_BIN "$PREFIX/opt/python@3.8/bin"
     if test -d $_PTYHON_BIN
         set -g fish_user_paths $_PTYHON_BIN $fish_user_paths
     end
