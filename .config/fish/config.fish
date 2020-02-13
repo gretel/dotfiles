@@ -11,6 +11,8 @@ set -x SHELL (command which fish)
 
 # prefix for user installations
 set -x PREFIX /usr/local
+set -x PATH $PREFIX/bin $PATH
+set -x PATH $PREFIX/sbin $PATH
 
 # freedesktop style cache location
 set -x XDG_CACHE_HOME $HOME/.cache
@@ -23,7 +25,6 @@ set -U __done_min_cmd_duration 10000
 set -U __done_exclude 'git (?!push|pull)'
 
 if status --is-interactive
-
     ### update auto completions if not exist
     if not test -d $HOME/.local/share/fish/generated_completions
         fish_update_completions
@@ -113,13 +114,13 @@ if status --is-interactive
         set -x PATH $HOME/.cargo/bin $PATH
     end
 
-    ### python 3.8 first
     ### node (10)
     set -x _NODE_BIN "/usr/local/opt/node@10/bin"
     if test -d $_NODE_BIN
         set -g fish_user_paths $_NODE_BIN $fish_user_paths
     end
 
+    ### python 3.8 first
     set -x _PTYHON_BIN "/usr/local/opt/python@3.8/bin"
     if test -d $_PTYHON_BIN
         set -g fish_user_paths $_PTYHON_BIN $fish_user_paths
@@ -143,7 +144,15 @@ if status --is-interactive
 
     ### keychain
     if command --search keychain >/dev/null
-        command keychain --quiet --nogui --eval --inherit any-once --agents ssh --quick $SSH_KEYS | source
+        command keychain --quiet --nogui --inherit any-once --agents ssh --quick $SSH_KEYS
+
+        if test -f ~/.keychain/(hostname)-gpg-fish
+            source ~/.keychain/(hostname)-gpg-fish
+        end
+
+        if test -f ~/.keychain/(hostname)-fish
+            source ~/.keychain/(hostname)-fish
+        end
     end
 
     ### lastly, direnv
@@ -155,5 +164,4 @@ if status --is-interactive
         set duration (math -s6 "$CMD_DURATION / 1000")
         eval "powerline-go -shell bare -duration $duration -error $status -cwd-max-depth 3 -max-width 50 -modules duration,venv,ssh,cwd,git,jobs,exit,root"
     end
-
 end
