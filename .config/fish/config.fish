@@ -12,6 +12,9 @@ set -x SHELL (command -v fish)
 # freedesktop style cache location
 set -x XDG_CACHE_HOME $HOME/.cache
 
+set -x LC_ALL en_US.UTF-8
+set -x PREFIX /usr/local
+
 # long process done
 set -U __done_min_cmd_duration 10000
 set -U __done_exclude 'git (?!push|pull)'

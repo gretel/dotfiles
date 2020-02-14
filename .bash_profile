@@ -1,4 +1,3 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-echo 'hello'
 [[ -s $HOME/.bashrc ]] && source $HOME/.bashrc
