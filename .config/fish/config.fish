@@ -9,14 +9,8 @@ set -x PLATFORM (command uname -s)
 # ensure set
 set -x SHELL (command -v fish)
 
-# prefix for user installations
-set -x PREFIX /usr/local
-
 # freedesktop style cache location
 set -x XDG_CACHE_HOME $HOME/.cache
-
-# hail international
-set -x LC_ALL en_US.UTF-8
 
 # long process done
 set -U __done_min_cmd_duration 10000
@@ -47,7 +41,7 @@ if status --is-interactive
     end
 
     ### workaround "for fish_update_completions"
-    set -x MANPATH /usr/share/man $PREFIX/share/man $MANPATH
+    set -x MANPATH /usr/share/man /usr/local/share/man $MANPATH
 
     ### python virtualenv 'activate.fish' shall not oerride the prompt
     set -x VIRTUAL_ENV_DISABLE_PROMPT yes
@@ -64,8 +58,8 @@ if status --is-interactive
     end
 
     ### curl
-    if test -d $PREFIX/opt/curl/bin
-        set -x fish_user_paths $PREFIX/opt/curl/bin $fish_user_paths
+    if test -d /usr/local/opt/curl/bin
+        set -g fish_user_paths /usr/local/opt/curl/bin $fish_user_paths
     end
 
     ### thefuck
@@ -95,28 +89,28 @@ if status --is-interactive
     end
 
     # ### postgres
-    # if test -d $PREFIX/opt/postgresql/bin
-    #     set -x fish_user_paths $PREFIX/opt/postgresql/bin $fish_user_paths
+    # if test -d /usr/local/opt/postgresql/bin
+    #     set -g fish_user_paths /usr/local/opt/postgresql/bin $fish_user_paths
     # end
 
     # ### rubygems
     # if command --search ruby >/dev/null
-    #     set -x fish_user_paths $HOME/.gem/ruby/2.3.0/bin $fish_user_paths
+    #     set -g fish_user_paths $HOME/.gem/ruby/2.3.0/bin $fish_user_paths
     # end
 
     ### cargo
     if command --search cargo >/dev/null
-        set -x fish_user_paths $HOME/.cargo/bin $fish_user_paths
+        set -g fish_user_paths $HOME/.cargo/bin $fish_user_paths
     end
 
     ### node (10)
-    set -x _NODE_BIN "$PREFIX/opt/node@10/bin"
+    set -x _NODE_BIN "/usr/local/opt/node@10/bin"
     if test -d $_NODE_BIN
         set -g fish_user_paths $_NODE_BIN $fish_user_paths
     end
 
     ### python 3.8 first
-    set -x _PTYHON_BIN "$PREFIX/opt/python@3.8/bin"
+    set -x _PTYHON_BIN "/usr/local/opt/python@3.8/bin"
     if test -d $_PTYHON_BIN
         set -g fish_user_paths $_PTYHON_BIN $fish_user_paths
     end
@@ -128,13 +122,13 @@ if status --is-interactive
     end
     
     ### auth
-    set -x SSH_KEYS $HOME/.ssh/id_rsa $HOME/.ssh/github $HOME/.ssh/id_ed25519
+    set -x SSH_KEYS $HOME/.ssh/id_rsa $HOME/.ssh/id_ed25519 $HOME/.ssh/github 
     #set -x GPG_KEYS '64236423'
 
     ### gnupg
     if command --search gpg >/dev/null
         # ensure gpg will have tty
-        set -x GPG_TTY (which tty)
+        set -x GPG_TTY (command -v tty)
     end
 
     ### keychain
