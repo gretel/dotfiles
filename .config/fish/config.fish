@@ -70,14 +70,24 @@ if status --is-interactive
         command thefuck --alias | tr '\n' ';' | source
     end
 
-    ### exa
-    if command --search exa >/dev/null
-        alias 'l'  'command exa -g -1 -a -s extension -F -U'
-        alias 't'  'command exa -g -G -a -s extension -F -U -T -L 2'
-        alias 'lw' 'command exa -g -G -a -s extension -F -U'
-        alias 'll' 'command exa -g -l -a -s extension -F -U'
-        alias 'lt' 'command exa -g -l -a -s extension -F -U -T -L 2'
-        alias 'ltd' 'command exa -g -l -a -s extension -F -U -T'
+    # ### exa
+    # if command --search exa >/dev/null
+    #     alias 'l'  'command exa -g -1 -a -s extension -F -U'
+    #     alias 't'  'command exa -g -G -a -s extension -F -U -T -L 2'
+    #     alias 'lw' 'command exa -g -G -a -s extension -F -U'
+    #     alias 'll' 'command exa -g -l -a -s extension -F -U'
+    #     alias 'lt' 'command exa -g -l -a -s extension -F -U -T -L 2'
+    #     alias 'ltd' 'command exa -g -l -a -s extension -F -U -T'
+    # end
+
+    ### lsd
+    if command --search lsd >/dev/null
+        alias ls  'lsd'
+        alias l   'ls -l'
+        alias la  'ls -a'
+        alias lla 'ls -la'
+        alias lt  'ls --tree --depth 3'
+        alias ltd 'ls --tree'
     end
 
     ### trash
