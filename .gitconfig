@@ -8,7 +8,7 @@
   ca = commit --amend
   can = commit --amend --no-edit
   cf = diff --diff-filter=U
-  cl = clone --recurse-submodules
+  cl = clone --recurse-submodules --depth 10
   cs = clone --recurse-submodules --depth 1
   cm = commit -m
   cn = commit --no-edit
@@ -21,6 +21,7 @@
   i = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
   l = log
   last = diff --cached HEAD^
+  lg = log --graph --decorate --pretty=oneline --abbrev-commit
   lgr = log --graph -n 20 --format='format:%C(blue)%h%C(reset) %C(black)%an%C(reset) %s %C(black bold)%cr%C(reset)%C(auto)%d%C(reset)' --date-order --tags --all
   lp = log --pretty=oneline --stat --decorate
   m = merge
@@ -55,11 +56,9 @@
   ui = auto
 [commit]
   short = true
-#  template = ~/.git_commit_msg.txt
 [core]
-  #editor = atom-beta -w
   editor = subl -w -n
-	pager = delta --dark
+  pager = delta --dark
   whitespace = trailing-space,space-before-tab
   excludesfile = /Users/tom/.gitignore_global
   autocrlf = input
@@ -92,12 +91,12 @@
 [transfer]
   fsckobjects = true
 [user]
-	email = code@jitter.eu
-	name = gretel
+  email = code@jitter.eu
+  name = gretel
 [gpg]
   program = gpg
-#[init]
-#  templatedir = ~/.git-templates
+[init]
+  templatedir = ~/.git-templates
 [advice]
   pushNonFastForward = false
   statusHints = false
@@ -109,11 +108,9 @@
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
-[g2 "panic"]
-  excludes = -e .classpath -e .settings -e *.iml
 [mergetool "difftools"]
   trustExitCode = false
 [mergetool]
   keepBackup = false
 [credential]
-	helper = osxkeychain
+  helper = osxkeychain
