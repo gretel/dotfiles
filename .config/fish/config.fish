@@ -84,10 +84,10 @@ if status --is-interactive
     if command --search lsd >/dev/null
         alias ls  'lsd'
         alias l   'ls -l'
-        alias la  'ls -a'
-        alias lla 'ls -la'
-        alias lt  'ls --tree --depth 3'
-        alias ltd 'ls --tree'
+        alias ll  'ls -al'
+        alias lsa 'll'
+        alias lt  'ls -a --tree --depth 3'
+        alias ltd 'ls -a --tree'
     end
 
     ### trash
