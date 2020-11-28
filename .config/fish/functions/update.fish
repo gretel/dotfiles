@@ -15,7 +15,7 @@ if not set -q update_funcs
         mas \
         # npm \
         yarn \
-        pip3 \
+        pip \
         completions
 end
 
@@ -23,7 +23,7 @@ end
 function __update_fisher
     # TODO: abstraction
     if source $HOME/.config/fish/functions/fisher.fish 2>/dev/null
-        fisher self-update
+        fisher update
     end
 end
 
@@ -101,6 +101,14 @@ function __update_npm
     end
 end
 
+function __update_pip
+### python pip
+    if command --search pip >/dev/null
+        command env VIRTUAL_ENV='' pip install -q --upgrade pip setuptools wheel
+        command env VIRTUAL_ENV='' pip freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip -q install -U
+    end
+end
+
 ### node yarn
 function __update_yarn
     if command --search yarn >/dev/null
@@ -128,14 +136,6 @@ function __update_gem
                 command ry exec $v bundler update --jobs 4 --retry 1
             end
         end
-    end
-end
-
-function __update_pip3
-### python pip
-    if command --search pip3 >/dev/null
-        command env VIRTUAL_ENV='' pip3 install -q --upgrade pip setuptools wheel
-        command env VIRTUAL_ENV='' pip3 freeze — local | grep -v ‘^\-e’ | cut -d = -f 1 | xargs -n1 pip3 -q install -U
     end
 end
 

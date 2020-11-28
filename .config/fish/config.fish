@@ -13,6 +13,7 @@ set -x SHELL (command -v fish)
 set -x XDG_CACHE_HOME $HOME/.cache
 
 set -x LC_ALL en_US.UTF-8
+set -x LANG en_US.UTF-8
 set -x PREFIX /usr/local
 
 # long process done
@@ -48,6 +49,8 @@ if status --is-interactive
 
     ### python virtualenv 'activate.fish' shall not oerride the prompt
     set -x VIRTUAL_ENV_DISABLE_PROMPT yes
+    ### https://github.com/sentriz/fish-pipenv#configuration-options
+    set -x pipenv_fish_fancy yes 
 
     ### tail file
     alias 'ff' 'less +F'
