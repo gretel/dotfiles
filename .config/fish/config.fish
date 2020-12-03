@@ -49,8 +49,6 @@ if status --is-interactive
 
     ### python virtualenv 'activate.fish' shall not oerride the prompt
     set -x VIRTUAL_ENV_DISABLE_PROMPT yes
-    ### https://github.com/sentriz/fish-pipenv#configuration-options
-    set -x pipenv_fish_fancy yes 
 
     ### tail file
     alias 'ff' 'less +F'
