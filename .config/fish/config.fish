@@ -163,8 +163,8 @@ if status --is-interactive
         command direnv hook fish | source
     end
 
-    function fish_prompt
-        set duration (math -s6 "$CMD_DURATION / 1000")
-        eval "powerline-go -shell bare -duration $duration -error $status -cwd-max-depth 3 -max-width 50 -modules duration,venv,ssh,cwd,git,jobs,exit,root"
-    end
+    # function fish_prompt
+    #     set duration (math -s6 "$CMD_DURATION / 1000")
+    #     eval "powerline-go -shell bare -duration $duration -error $status -cwd-max-depth 3 -max-width 50 -modules duration,venv,ssh,cwd,git,jobs,exit,root"
+    # end
 end

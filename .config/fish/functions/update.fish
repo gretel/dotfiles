@@ -63,7 +63,7 @@ end
 function __update_homebrew
     if command --search brew >/dev/null
         command brew update
-        command brew upgrade
+        command brew upgrade --greedy
         command brew cleanup
         #command brew prune
         command brew services cleanup
