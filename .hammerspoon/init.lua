@@ -16,7 +16,7 @@ hyper = { 'alt', 'ctrl', 'cmd' }
 shift_hyper = { 'shift', 'ctrl', 'cmd', 'alt'}
 
 -- window hinting
-hs.hotkey.bind(hyper, 'return', hs.hints.windowHints)
+hs.hotkey.bind({}, 'F19', hs.hints.windowHints)
 
 hs.loadSpoon("MiroWindowsManager")
 spoon.MiroWindowsManager:bindHotkeys({
