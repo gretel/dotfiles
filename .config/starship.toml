@@ -3,16 +3,20 @@ add_newline = false
 [character]
 format = "$symbol "
 
+[crystal]
+disabled = true
+
 [directory]
 truncation_length = 8
 truncation_symbol = "…/"
+read_only = " "
 
 [cmd_duration]
 min_time = "10s"
 format = "took [$duration](white)"
 
 [git_branch]
-symbol = ""
+symbol = " "
 truncation_length = 6
 truncation_symbol = "…"
 
@@ -29,6 +33,7 @@ truncation_symbol = "…"
 style = "green"
 staged = '[++\($count\)](green)'
 format = '([$all_status$ahead_behind]($style) )'
+disabled = true
 
 [git_state]
 format = '[\($state( $progress_current of $progress_total)\)]($style) '
@@ -37,8 +42,11 @@ cherry_pick = "[🍒](bold red)"
 [line_break]
 disabled = true
 
+[package]
+symbol = " "
+
 [python]
-symbol = ""
+symbol = " "
 pyenv_version_name = true
 python_binary = "python3"
 format = '[${symbol}(${version} )($virtualenv)]($style) '
