@@ -48,7 +48,7 @@ edit:insert:binding[Ctrl-r] = {
 edit:insert:binding[Alt-Backspace] = $edit:kill-small-word-left~
 edit:insert:binding[Ctrl-Backspace] = $edit:kill-small-word-right~
 
-# use direnv
+use direnv
 
 use github.com/zzamboni/elvish-modules/alias
 
