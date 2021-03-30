@@ -32,12 +32,15 @@ truncation_symbol = "…"
 # untracked = "🤷‍"
 style = "green"
 staged = '[++\($count\)](green)'
-format = '([$all_status$ahead_behind]($style) )'
+format = '([$all_status$ahead_behind]($style) ) '
 disabled = true
 
 [git_state]
 format = '[\($state( $progress_current of $progress_total)\)]($style) '
 cherry_pick = "[🍒](bold red)"
+
+[java]
+disabled = true
 
 [line_break]
 disabled = true
