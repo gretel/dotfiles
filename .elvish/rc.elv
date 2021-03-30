@@ -10,7 +10,6 @@ use github.com/zzamboni/elvish-completions/ssh
 epm:install &silent-if-installed         ^
   github.com/zzamboni/elvish-modules     ^
   github.com/zzamboni/elvish-completions ^
-  github.com/zzamboni/elvish-themes      ^
   github.com/xiaq/edit.elv               ^
   github.com/iwoloschin/elvish-packages
 
@@ -27,28 +26,14 @@ use github.com/zzamboni/elvish-completions/git git-completions
 # git-completions:git-command = hub
 git-completions:init
 
+use direnv
+
+# python virtualenv
 use github.com/iwoloschin/elvish-packages/python
-
 python:virtualenv-directory = $E:HOME/.virtualenvs
-
 edit:add-var activate~ $python:activate~
 edit:add-var deactivate~ $python:deactivate~
-
 edit:completion:arg-completer[activate] = $edit:completion:arg-completer[python:activate]
-
-edit:insert:binding[Alt-b] = $dir:left-word-or-prev-dir~
-edit:insert:binding[Alt-f] = $dir:right-word-or-next-dir~
-edit:insert:binding[Alt-i] = $dir:history-chooser~
-
-edit:insert:binding[Ctrl-r] = {
-  edit:histlist:start
-  edit:histlist:toggle-case-sensitivity
-}
-
-edit:insert:binding[Alt-Backspace] = $edit:kill-small-word-left~
-edit:insert:binding[Ctrl-Backspace] = $edit:kill-small-word-right~
-
-use direnv
 
 use github.com/zzamboni/elvish-modules/alias
 
@@ -69,19 +54,70 @@ alias:new ll   'lsd -al'
 alias:new lt   'lsd -a --tree --depth 3'
 alias:new ltd  'lsd -a --tree'
 
-# use github.com/zzamboni/elvish-themes/chain
-# chain:bold-prompt = $false
-# chain:glyph[arrow]  = "|>"
-# chain:show-last-chain = $false
-# chain:segment-style = [
-#   &dir=          session
-#   &chain=        session
-#   &arrow=        session
-#   &git-combined= session
-#   &git-repo=     bright-blue
-# ]
-# edit:prompt-stale-transform = [x]{ styled $x "bright-black" }
-# edit:-prompt-eagerness = 10
+alias:new brew 'arch -arm64 brew'
+
+# delete words
+edit:insert:binding[Alt-Backspace] = { edit:kill-small-word-left }
+
+# move your cursor around
+edit:insert:binding[Alt-Left] = { edit:move-dot-left-word }
+edit:insert:binding[Alt-Right] = { edit:move-dot-right-word }
+
+# fuzzy-find
+fn get_history_elvish {
+  h = [&]
+  edit:command-history |
+  each [cmd]{
+    if (not (has-key $h $cmd[cmd])) {
+      print $cmd[cmd]"\000"
+      h[$cmd[cmd]] = $true
+    }
+  }
+}
+
+fn fzf-select {
+  fzf --no-sort --tac --read0 --info=hidden --query=$edit:current-command
+}
+
+fn history [&hist_fn=$get_history_elvish~]{
+  err = ?(edit:current-command = ($hist_fn | fzf-select))
+}
+
+# history
+edit:insert:binding[Ctrl-t] = { history &hist_fn=$get_history_elvish~ </dev/tty >/dev/tty 2>&1 }
+
+edit:insert:binding[Ctrl-r] = {
+  edit:histlist:start
+  edit:histlist:toggle-case-sensitivity
+}
+
+# zoxide
+after-chdir = [[dir]{ zoxide add (pwd -L) }]
+
+fn _z_cd [directory]{
+  cd $directory
+}
+
+fn zi [@a]{
+  _z_cd (zoxide query -i -- $@a)
+}
+
+fn za [@a]{ zoxide add $@a }
+fn zq [@a]{ zoxide query $@a }
+fn zqi [@a]{ zoxide query -i $@a }
+fn zr [@a]{ zoxide remove $@a }
+fn zri [@a]{
+  zoxide remove (zoxide query -i -- $@a)
+}
+
+fn z [@a]{
+  if (is [] $@a) {
+    _z_cd ~
+  } else {
+    # ok `z -` is not supported
+    _z_cd (zoxide query -- $@a)
+  }
+}
 
 E:BAT_CONFIG_PATH = ~/.batcfg
 E:EDITOR = "subl -w"
