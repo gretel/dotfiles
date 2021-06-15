@@ -37,24 +37,21 @@ edit:completion:arg-completer[activate] = $edit:completion:arg-completer[python:
 
 use github.com/zzamboni/elvish-modules/alias
 
-alias:new cd   'use github.com/zzamboni/elvish-modules/dir; dir:cd'
-alias:new cdb  'use github.com/zzamboni/elvish-modules/dir; dir:cdb'
+alias:new grep rg
 
-alias:new grep 'rg'
+alias:new cat  bat
+alias:new more bat --paging always
 
-alias:new cat  'bat'
-alias:new more 'bat --paging always'
+alias:new rm   trash
+alias:new rmm  rm
 
-alias:new rm   'trash -v'
-alias:new rmm  'rm'
+alias:new ls   lsd
+alias:new l    lsd -a
+alias:new ll   lsd -al
+alias:new lt   lsd -a --tree --depth 3
+alias:new ltd  lsd -a --tree
 
-alias:new ls   'lsd'
-alias:new l    'lsd -a'
-alias:new ll   'lsd -al'
-alias:new lt   'lsd -a --tree --depth 3'
-alias:new ltd  'lsd -a --tree'
-
-alias:new brew 'arch -arm64 brew'
+alias:new cd &use=[github.com/zzamboni/elvish-modules/dir] dir:cd
 
 # delete words
 edit:insert:binding[Alt-Backspace] = { edit:kill-small-word-left }
@@ -127,6 +124,8 @@ E:MANPAGER = "sh -c 'col -bx | bat -l man -p'"
 E:STARSHIP_CACHE = ~/.starship/cache
 E:VIRTUAL_ENV_DISABLE_PROMPT = "yes"
 E:XDG_CACHE_HOME = ~/.cache
+
+#set paths = [/opt/homebrew/bin $@paths]
 
 keychain --quiet --nogui --inherit any-once --agents ssh --quick ~/.ssh/id_ed25519
 
