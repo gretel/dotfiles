@@ -1,3 +1,11 @@
+## install:
+# epm:install github.com/zzamboni/elvish-completions
+# epm:install github.com/zzamboni/elvish-modules
+# epm:install github.com/xiaq/edit.elv/smart-matcher
+# epm:install github.com/xiaq/edit.elv
+# epm:install github.com/iwoloschin/elvish-packages/python
+# direnv hook elvish > ~/.elvish/lib/direnv.elv
+
 use epm
 use re
 use str
@@ -10,17 +18,13 @@ use github.com/zzamboni/elvish-completions/ssh
 epm:install &silent-if-installed         ^
   github.com/zzamboni/elvish-modules     ^
   github.com/zzamboni/elvish-completions ^
-  github.com/xiaq/edit.elv               ^
   github.com/iwoloschin/elvish-packages
 
 use github.com/zzamboni/elvish-modules/bang-bang
 use github.com/zzamboni/elvish-modules/dir
 use github.com/zzamboni/elvish-modules/long-running-notifications
 use github.com/zzamboni/elvish-modules/util
-util:electric-delimiters
-
-use github.com/xiaq/edit.elv/smart-matcher
-smart-matcher:apply
+use github.com/zzamboni/elvish-modules/util-edit
 
 use github.com/zzamboni/elvish-completions/git git-completions
 # git-completions:git-command = hub
@@ -57,7 +61,7 @@ alias:new cd &use=[github.com/zzamboni/elvish-modules/dir] dir:cd
 edit:insert:binding[Alt-Backspace] = { edit:kill-small-word-left }
 
 # move your cursor around
-edit:insert:binding[Alt-Left] = { edit:move-dot-left-word }
+edit:insert:binding[Alt-Left]  = { edit:move-dot-left-word }
 edit:insert:binding[Alt-Right] = { edit:move-dot-right-word }
 
 # fuzzy-find
@@ -125,8 +129,8 @@ E:STARSHIP_CACHE = ~/.starship/cache
 E:VIRTUAL_ENV_DISABLE_PROMPT = "yes"
 E:XDG_CACHE_HOME = ~/.cache
 
-#set paths = [/opt/homebrew/bin $@paths]
+set paths = [/usr/local/bin/elvish /opt/homebrew/bin $@paths]
 
-keychain --quiet --nogui --inherit any-once --agents ssh --quick ~/.ssh/id_ed25519
+keychain --quiet --nogui --inherit any-once --agents ssh --quick ~/.ssh/id_ed25519 ~/.ssh/id_const
 
 eval (starship init elvish)
