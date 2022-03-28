@@ -1,170 +1,174 @@
-tap "buo/cask-upgrade"
 tap "homebrew/bundle"
 tap "homebrew/cask"
-tap "homebrew/cask-drivers"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/core"
 tap "homebrew/services"
-# Portable Foreign Function Interface library
-brew "libffi"
+tap "minamijoyo/tfupdate"
 # Interpreted, interactive, object-oriented programming language
-brew "python"
-# Automatic configure script builder
-brew "autoconf"
-# Bourne-Again SHell, a UNIX command interpreter
-brew "bash"
+brew "python@3.10", link: true
+# Microsoft Azure CLI 2.0
+brew "azure-cli"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
-# Library for USB device access
-brew "libusb"
-# Swiss army knife for network attacks and monitoring
-brew "bettercap"
-# Object-file caching compiler wrapper
-brew "ccache"
+# Remove large files or passwords from Git history like git-filter-branch
+brew "bfg"
+# Fancy interface to the Python interpreter
+brew "bpython"
+# New way to see and navigate directory trees
+brew "broot"
+# Core application library for C
+brew "glib"
 # Cross-platform make
 brew "cmake"
-# Static analysis of C and C++ code
-brew "cppcheck"
+# Library for USB device access
+brew "libusb"
 # USB programmer
 brew "dfu-util"
 # Load/unload environment variables based on $PWD
 brew "direnv"
+# Friendly and expressive shell
+brew "elvish"
 # Modern replacement for 'ls'
 brew "exa"
-# Read-only implementation of ext4 for FUSE
-brew "ext4fuse"
-# CLI tool for quick access to files and directories
-brew "fasd"
-# User-friendly command-line shell for UNIX-like operating systems
-brew "fish"
+# Generate introspection data for GObject libraries
+brew "gobject-introspection"
+# Play, record, convert, and stream audio and video
+brew "ffmpeg"
 # Command-line fuzzy finder written in Go
 brew "fzf"
 # Distributed revision control system
 brew "git"
 # Syntax-highlighting pager for git and diff output
 brew "git-delta"
-# Render markdown on the CLI
-brew "glow"
-# GNU multiple precision arithmetic library
-brew "gmp"
-# Open source programming language to build simple/reliable/efficient software
-brew "go"
-# Convert source code to formatted text with syntax highlighting
-brew "highlight"
+# Git extension for versioning large files
+brew "git-lfs"
+# Kubernetes package manager
+brew "helm"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # User-friendly front-end to ssh-agent(1)
 brew "keychain"
-# Sophisticated file transfer program
-brew "lftp"
-# Library to talk to FTDI chips
-brew "libftdi"
-# Library for USB device access
-brew "libusb-compat"
-# Create icns files from the command-line
-brew "makeicns"
-# Command-line based markdown presentation tool
-brew "mdp"
-# Message broker implementing the MQTT protocol
-brew "mosquitto"
+# Kubernetes command-line interface
+brew "kubernetes-cli"
+# Clone of ls with colorful output, file type icons, and more
+brew "lsd"
+# Small build system for use with gyp or CMake
+brew "ninja"
 # Port scanning utility for large networks
 brew "nmap"
 # Platform built on V8 to build network applications
-brew "node@10"
-# Provides an easy way to use U2F-compliant authenticators with PAM
-brew "pam-u2f"
-# Manage compile and link flags for libraries
-brew "pkg-config"
-# Beautiful and useful low-latency prompt for your shell
-brew "powerline-go"
-# Powerful, clean, object-oriented scripting language
-brew "ruby"
-# Safe, concurrent, practical language
-brew "rust"
-# Static analysis and lint tool, for (ba)sh scripts
-brew "shellcheck"
-# Secure Programming Lint
-brew "splint"
-# Open source flash program for STM32 using the ST serial bootloader
-brew "stm32flash"
+brew "node"
+# Password generator
+brew "pwgen"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# Cross-shell prompt for astronauts
+brew "starship"
+# Implementation of the STUN protocol
+brew "stuntman"
 # Open source continuous file synchronization application
-brew "syncthing"
-# User interface to the TELNET protocol (built from macOS Sierra sources)
-brew "telnet"
+brew "syncthing", link: false
 # Send macOS User Notifications from the command-line
 brew "terminal-notifier"
-# Multi-platform code-search similar to ack and ag
-brew "the_platinum_searcher"
-# Programatically correct mistyped console commands
-brew "thefuck"
-# Terminal multiplexer
-brew "tmux"
+# Tool to build, change, and version infrastructure
+brew "terraform"
 # CLI tool that moves files or folder to the trash
 brew "trash"
-# Command-line client for Travis CI
-brew "travis"
-# Extract, view, and test RAR archives
-brew "unrar"
-# Run Windows applications without a copy of Microsoft Windows
-brew "wine"
+# JavaScript package manager
+brew "yarn"
 # Download YouTube videos from the command-line
 brew "youtube-dl"
-cask "0xed"
-cask "1password-beta"
+# Shell extension to navigate your filesystem faster
+brew "zoxide"
+# Update version constraints in your Terraform configurations
+brew "minamijoyo/tfupdate/tfupdate"
+# Password manager that keeps all passwords secure behind one password
+cask "1password"
+# Sends audio from computer to outputs
 cask "airfoil"
-cask "alacritty"
+# Application launcher and productivity software
 cask "alfred"
-cask "android-platform-tools"
-cask "arduino"
+# Tool to flash OS images to SD cards & USB drives
 cask "balenaetcher"
-cask "betaflight-configurator"
+# Monitors common persistence locations
 cask "blockblock"
-cask "burn"
-cask "carbon-copy-cloner"
+# Free and open-source web browser
 cask "chromium"
-cask "clamxav"
+# Server and cloud storage browser
 cask "cyberduck"
+# Voice and text chat software
 cask "discord"
-cask "duet"
-cask "font-fira-mono-for-powerline"
-cask "font-firacode-nerd-font"
-cask "font-hack-nerd-font"
-cask "font-hasklig-nerd-font"
-cask "font-liberation-mono-for-powerline"
-cask "font-roboto-mono-for-powerline"
-cask "ftdi-vcp-driver"
-cask "gzdoom"
+# Open-source physical access (aka 'evil maid') attack detector
+cask "do-not-disturb"
+# Web browser
+cask "firefox-beta"
+cask "font-meslo-lg-nerd-font"
+# Desktop automation application
 cask "hammerspoon"
+# Companion app for Home Assistant home automation software
+cask "home-assistant"
+# Free and open-source media player
+cask "iina"
+# Tool to optimize images to a smaller size
 cask "imageoptim"
-cask "istat-menus"
-cask "kap-beta"
+# Keyboard customizer
 cask "karabiner-elements"
+# File archiver
 cask "keka"
-cask "kicad"
+# Display all currently loaded kexts
+cask "kextviewr"
+# GPU-based terminal emulator
 cask "kitty"
-cask "little-snitch-nightly"
-cask "midi-monitor"
+# Host-based application firewall
+cask "little-snitch"
+# Trims video and audio files losslessly
+cask "losslesscut"
+# Meet, chat, call, and collaborate in just one place
+cask "microsoft-teams"
+# Media player based on MPlayer and mplayer2
 cask "mpv"
+# Open-source software for live streaming and screen recording
 cask "obs"
-cask "openemu"
+# Programmable solid 3D CAD modeller
 cask "openscad"
-cask "opera-developer"
+# Monitors computer mic and webcam
 cask "oversight"
-cask "reikey"
+# Desktop virtualization software
+cask "parallels"
+# Access and edit GoPro photos and videos
+cask "quik"
+# Tool to format memory cards complying with the SD File System spec
 cask "sdformatter"
-cask "shotcut"
-cask "silicon-labs-vcp-driver"
+# Instant messaging application focusing on security
+cask "signal"
+# Code-based music creation and performance tool
+cask "sonic-pi"
+# Video game digital distribution service
 cask "steam"
-cask "sublime-text-dev"
+# Controls screen display settings
+cask "switchresx"
+# Real time file synchronization software
+cask "syncthing"
+# Tool to explore all the running tasks (processes)
+cask "taskexplorer"
+# Remote access and connectivity software focused on security
+cask "teamviewer"
+# Messaging app with a focus on speed and security
 cask "telegram"
-cask "transmission"
+# Music streaming service with high fidelity sound and hi-def video quality
+cask "tidal"
+# Web browser focusing on security
+cask "tor-browser"
+# 3D printer and slicing GUI
+cask "ultimaker-cura"
+# PKG software package uninstall tool
 cask "uninstallpkg"
-cask "vdmx"
-cask "virtualbox"
-cask "virtualbox-extension-pack"
-cask "vlc"
-cask "wch-ch34x-usb-serial-driver"
-cask "wireshark"
+# Web browser focusing on customization and control
+cask "vivaldi"
+# Lossless audio decoder
 cask "xld"
+# Professional SSH client and terminal emulator
 cask "zoc"
+# Azul ZuluFX Java Standard Edition Development Kit
+cask "zulufx"
