@@ -17,7 +17,7 @@ truncation_symbol = "…/"
 read_only = " "
 
 [cmd_duration]
-min_time = "10s"
+min_time = 20_000
 format = "took [$duration](white)"
 
 [git_branch]
