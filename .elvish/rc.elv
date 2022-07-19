@@ -141,7 +141,7 @@ set E:LC_ALL = "en_US.UTF-8"
 set E:LESS = "-i -R"
 set E:XDG_CACHE_HOME = "~/.cache"
 
-#set paths = [/opt/homebrew/bin $@paths]
+set paths = [/opt/homebrew/bin $@paths]
 
 keychain --quiet --nogui --inherit any-once --agents ssh --quick ~/.ssh/id_ed25519
 
