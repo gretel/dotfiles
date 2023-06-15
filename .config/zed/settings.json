@@ -1,0 +1,19 @@
+// Zed settings
+{
+  "telemetry": {
+    "metrics": false
+  },
+  "base_keymap": "SublimeText",
+  "theme": "Rosé Pine Moon",
+  "buffer_font_size": 14,
+  "buffer_font_family": "Hack Nerd Font Mono",
+  "terminal": {
+    "blinking": "terminal_controlled",
+    "copy_on_select": false,
+    "font_family": "Hack Nerd Font Mono",
+    "shell": {
+      "program": "elvish"
+    },
+    "working_directory": "current_project_directory"
+  }
+}
