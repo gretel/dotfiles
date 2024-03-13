@@ -1,60 +1,96 @@
 add_newline = false
 
-[sudo]
-
-[battery]
-disabled = true
-
 [character]
 format = "$symbol "
 
-[crystal]
+[line_break]
 disabled = true
 
 [directory]
-truncation_length = 8
+truncation_length = 10
 truncation_symbol = "…/"
-read_only = " "
 
 [cmd_duration]
 min_time = 20_000
 format = "took [$duration](white)"
 
-[git_branch]
-symbol = " "
-truncation_length = 6
-truncation_symbol = "…"
+[hostname]
+ssh_only = true
+format = "💻 [$hostname]($style) "
+trim_at = "-"
+style = "yellow"
 
-[git_status]
-# ahead = "🏎💨"
-# behind = "😰"
-# conflicted = "🏳"
-# deleted = "🗑"
-# diverged = "😵"
-# modified = "📝"
-# renamed = "👅"
-# stashed = "📦"
-# untracked = "🤷‍"
-style = "green"
-staged = '[++\($count\)](green)'
-format = '([$all_status$ahead_behind]($style) ) '
+[time]
+time_format = "%T"
+format = "$time($style) "
+style = "bright-white"
+disabled = false
+
+[username]
+style_user = 'white bold'
+style_root = 'black bold'
+format = '[$user]($style) '
 disabled = true
+
+[git_branch]
+format = " [$symbol$branch]($style) "
+symbol = "🍣 "
+style = "bold yellow"
+
+[git_commit]
+commit_hash_length = 8
+style = "bold white"
 
 [git_state]
 format = '[\($state( $progress_current of $progress_total)\)]($style) '
-cherry_pick = "[🍒](bold red)"
+
+[git_status]
+conflicted = "⚔️ "
+ahead = "🏎️ 💨 ×${count}"
+behind = "🐢 ×${count}"
+diverged = "🔱 🏎️ 💨 ×${ahead_count} 🐢 ×${behind_count}"
+untracked = "🛤️  ×${count}"
+stashed = "📦 "
+modified = "📝 ×${count}"
+staged = "🗃️  ×${count}"
+renamed = "📛 ×${count}"
+deleted = "🗑️  ×${count}"
+style = "bright-white"
+format = "$all_status$ahead_behind"
+
+[python]
+pyenv_version_name = true
+python_binary = "python3"
+format = '[${symbol}(${version} )($virtualenv)]($style) '
+
+[aws]
+disabled = true
+#format = 'on [$symbol$profile]($style) '
+format = 'on [$symbol($profile)(\($region\) )]($style) '
+style = 'bold blue'
+symbol = '🅰 '
+[aws.profile_aliases]
+teacher = 'ts'
+default = 'def'
+[aws.region_aliases]
+eu-central-1 = 'ffm'
+
+[azure]
+disabled = false
+
+# disablements
 
 [java]
 disabled = true
 
-[line_break]
+[crystal]
 disabled = true
 
-[package]
-symbol = " "
+[shell]
+disabled = true
 
-[python]
-symbol = " "
-pyenv_version_name = true
-python_binary = "python3"
-format = '[${symbol}(${version} )($virtualenv)]($style) '
+[os]
+disabled = true
+
+[battery]
+disabled = true
