@@ -5,25 +5,10 @@ use str
 
 epm:install &silent-if-installed=$true   ^
   github.com/zzamboni/elvish-modules     ^
-  github.com/zzamboni/elvish-completions ^
   github.com/xiaq/edit.elv               ^
   github.com/iwoloschin/elvish-packages
 
 use github.com/zzamboni/elvish-modules/alias
-use github.com/zzamboni/elvish-modules/bang-bang
-use github.com/zzamboni/elvish-modules/dir
-use github.com/zzamboni/elvish-modules/util
-
-use github.com/zzamboni/elvish-completions/builtins
-use github.com/zzamboni/elvish-completions/cd
-use github.com/zzamboni/elvish-completions/comp
-
-use github.com/zzamboni/elvish-completions/git git-completions
-git-completions:init
-
-use github.com/xiaq/edit.elv/smart-matcher
-smart-matcher:apply
-
 use github.com/zzamboni/elvish-modules/long-running-notifications
 set long-running-notifications:never-notify = [
   bat
@@ -31,6 +16,9 @@ set long-running-notifications:never-notify = [
   vi
 ]
 set long-running-notifications:threshold = 20
+
+use github.com/xiaq/edit.elv/smart-matcher
+smart-matcher:apply
 
 fn have-external { |prog|
   put ?(which $prog >/dev/null 2>&1)
@@ -50,14 +38,15 @@ set E:XDG_CACHE_HOME = "~/.cache"
 var optpaths = [
   $E:GOPATH/bin
   /opt/homebrew/bin
+  /opt/homebrew/sbin
   /Users/tom/.cargo/bin
+  ~/bin
 ]
 var optpaths-filtered = [(each {|p|
     if (path:is-dir $p) { put $p }
 } $optpaths)]
 
 set paths = [
-  ~/bin
   $@optpaths-filtered
   /usr/local/bin
   /usr/local/sbin
@@ -78,7 +67,7 @@ edit:add-var activate~ $python:activate~
 edit:add-var deactivate~ $python:deactivate~
 set edit:completion:arg-completer[activate] = $edit:completion:arg-completer[python:activate]
 
-alias:new ssh kitty +kitten ssh
+alias:new kssh kitty +kitten ssh
 
 only-when-external rg {
   alias:new grep rg
@@ -104,10 +93,9 @@ only-when-external lsd {
   alias:new ltd lsd -a --tree
 }
 
-# dir
-set edit:insert:binding[Alt-b] = $dir:left-word-or-prev-dir~
-set edit:insert:binding[Alt-f] = $dir:right-word-or-next-dir~
-set edit:insert:binding[Alt-i] = $dir:history-chooser~
+only-when-external spin {
+  alias:new tail  spin
+}
 
 set edit:max-height = 30
 set edit:prompt-stale-transform = {|x| styled $x "bright-black" }
@@ -115,11 +103,6 @@ set edit:-prompt-eagerness = 10
 
 # delete small-word
 set edit:insert:binding[Alt-Backspace] = $edit:kill-small-word-left~
-
-# delete the small-word under the cursor
-# set edit:insert:binding[Alt-d] = $edit:kill-small-word-right~
-# instant preview
-# set edit:insert:binding[Alt-m] = $edit:-instant:start~
 
 # move your cursor around
 set edit:insert:binding[Alt-Left] = $edit:move-dot-left-word~
@@ -134,7 +117,7 @@ fn fzf_history {||
     edit:command-history &dedup &newest-first &cmd-only |
     to-terminated "\x00" |
     try {
-      fzf --no-multi --height=30% --no-sort --read0 --info=hidden --exact --query=$edit:current-command | slurp
+      fzf --no-multi --height=30% --no-sort --read0 --info=hidden --exact --tiebreak=chunk --query=$edit:current-command | slurp
     } catch {
       edit:redraw &full=$true
       return
@@ -195,7 +178,6 @@ only-when-external keychain {
 
 only-when-external starship {
   set E:STARSHIP_CACHE = ~/.starship/cache
-  # eval (starship init elvish | sed 's/except/catch/')
-  # Temporary fix for use of except in the output of the Starship init code
-  eval (/usr/local/bin/starship init elvish --print-full-init | sed 's/except/catch/' | slurp)
+  #eval (starship init elvish --print-full-init | sed 's/except/catch/' | slurp)
+  eval (starship init elvish --print-full-init | slurp)
 }
