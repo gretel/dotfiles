@@ -76,7 +76,7 @@ only-when-external rg {
 only-when-external bat {
   set E:BAT_CONFIG_PATH = ~/.batcfg
   set E:MANPAGER = "sh -c 'col -bx | bat -l man -p'"
-  alias:new cat bat
+  alias:new cat  bat
   alias:new more bat --paging always
 }
 
@@ -94,7 +94,7 @@ only-when-external lsd {
 }
 
 only-when-external spin {
-  alias:new tail  spin
+  alias:new tail spin
 }
 
 set edit:max-height = 30
@@ -108,38 +108,39 @@ set edit:insert:binding[Alt-Backspace] = $edit:kill-small-word-left~
 set edit:insert:binding[Alt-Left] = $edit:move-dot-left-word~
 set edit:insert:binding[Alt-Right] = $edit:move-dot-right-word~
 
-fn fzf_history {||
-  if ( not (has-external "fzf") ) {
-    edit:history:start
-    return
-  }
-  var new-cmd = (
-    edit:command-history &dedup &newest-first &cmd-only |
-    to-terminated "\x00" |
+fn history {
+  tmp E:SHELL = 'elvish'
+
+  var key line @ignored = (str:split "\x00" (
+    edit:command-history &dedup &newest-first |
+    each {|cmd| printf "%s %s\x00" $cmd[id] $cmd[cmd] } |
     try {
-      fzf --no-multi --height=30% --no-sort --read0 --info=hidden --exact --tiebreak=chunk --query=$edit:current-command | slurp
+      fzf --no-multi --no-sort --read0 --print0 --info-command="print History" ^
+      --scheme=history --expect=tab,ctrl-d --border=rounded --exact ^
+      --bind 'down:transform:if (<= $E:FZF_POS 1) { print abort } else { print down }' ^
+      --query=$edit:current-command | slurp
     } catch {
       edit:redraw &full=$true
       return
     }
-  )
+  ))
   edit:redraw &full=$true
-  set edit:current-command = (str:trim-space $new-cmd)
-}
-set edit:insert:binding[Ctrl-t] = {|| fzf_history >/dev/tty 2>&1 }
 
-fn is_readline_empty { 
-  re:match '^\s*$' $edit:current-command 
-} 
+  var id command = (str:split &max=2 ' ' $line)
 
-set edit:insert:binding[Enter] = { 
-  if (is_readline_empty) { 
-    set edit:current-command = 'fzf_history'
-    edit:smart-enter 
+  if (eq $key 'ctrl-d') {
+    store:del-cmd $id
+    edit:notify 'Deleted '$id
   } else {
-    edit:smart-enter 
-  } 
-} 
+    edit:replace-input $command
+
+    if (not-eq $key 'tab') {
+      edit:return-line
+    }
+  }
+}
+
+set edit:insert:binding[Ctrl-t] = {|| history >/dev/tty 2>&1 }
 
 only-when-external carapace {
   eval (carapace _carapace|slurp)
@@ -172,9 +173,9 @@ fn z {|@a|
   }
 }
 
-only-when-external keychain {
-  keychain --quiet --nogui --inherit any-once --agents ssh --quick ~/.ssh/id_ed25519
-}
+# only-when-external keychain {
+#   keychain --quiet --nogui --inherit any-once --agents ssh --quick ~/.ssh/id_ed25519
+# }
 
 only-when-external starship {
   set E:STARSHIP_CACHE = ~/.starship/cache
