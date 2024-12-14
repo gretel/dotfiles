@@ -15,7 +15,7 @@ set long-running-notifications:never-notify = [
   less
   vi
 ]
-set long-running-notifications:threshold = 20
+set long-running-notifications:threshold = 30
 
 use github.com/xiaq/edit.elv/smart-matcher
 smart-matcher:apply
@@ -146,6 +146,16 @@ only-when-external carapace {
   eval (carapace _carapace|slurp)
 }
 
+only-when-external zellij {
+  eval (zellij setup --generate-completion elvish|slurp)
+  alias:new zj  zellij
+  alias:new za  zellij action
+  alias:new ze  zellij edit             
+  alias:new zef zellij edit --floating
+  alias:new zr  zellij run --
+  alias:new zrf zellij run --floating --
+}
+
 set after-chdir = [{|dir| zoxide add (pwd -L) }]
 
 fn _z_cd {|directory|
@@ -159,7 +169,7 @@ fn zi {|@a|
 fn za {|@a| zoxide add $@a }
 fn zq {|@a| zoxide query $@a }
 fn zqi {|@a| zoxide query -i $@a }
-fn zr {|@a| zoxide remove $@a }
+#fn zr {|@a| zoxide remove $@a }
 fn zri {|@a|
   zoxide remove (zoxide query -i -- $@a)
 }
