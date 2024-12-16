@@ -25,6 +25,12 @@ config.window_background_opacity = 0.70
 config.window_close_confirmation = 'NeverPrompt'
 config.window_decorations = 'RESIZE'
 
+config.unix_domains = {
+  {
+    name = 'unix',
+  },
+}
+
 config.window_padding = {
   left = 6,
   right = 6,
@@ -59,9 +65,21 @@ config.leader = {
 
 config.keys = {
   {
-    key = '[',
+    key = 'p',
+    mods = 'SHIFT|CMD',
+    action = act.ActivateCommandPalette,
+  },
+  {
+    key = ']',
     mods = 'LEADER',
     action = act.ActivateCopyMode,
+  },
+  -- Turn off the default CMD-m Hide action, allowing CMD-m to
+  -- be potentially recognized and handled by the tab
+  {
+    key = '[',
+    mods = 'LEADER',
+    action = act.QuickSelect,
   },
   {
     key = '=',
@@ -70,7 +88,6 @@ config.keys = {
   },
   -- Vertical split
   {
-    -- |
     key = '.',
     mods = 'LEADER',
     action = act.SplitPane {
@@ -80,19 +97,13 @@ config.keys = {
   },
   -- Horizontal split
   {
-    -- -
     key = '/',
     mods = 'LEADER',
     action = act.SplitPane {
       direction = 'Down',
       size = { Percent = 50 },
     },
-  },
-  {
-    key = 'p',
-    mods = 'SHIFT|CMD',
-    action = act.ActivateCommandPalette,
-  },
+  }
 }
 
 -- and finally, return the configuration to wezterm
