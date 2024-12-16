@@ -13,6 +13,9 @@ use github.com/zzamboni/elvish-modules/long-running-notifications
 set long-running-notifications:never-notify = [
   bat
   less
+  subl
+  tail
+  tspin
   vi
 ]
 set long-running-notifications:threshold = 30
@@ -67,36 +70,6 @@ edit:add-var activate~ $python:activate~
 edit:add-var deactivate~ $python:deactivate~
 set edit:completion:arg-completer[activate] = $edit:completion:arg-completer[python:activate]
 
-alias:new kssh kitty +kitten ssh
-
-only-when-external rg {
-  alias:new grep rg
-}
-
-only-when-external bat {
-  set E:BAT_CONFIG_PATH = ~/.batcfg
-  set E:MANPAGER = "sh -c 'col -bx | bat -l man -p'"
-  alias:new cat  bat
-  alias:new more bat --paging always
-}
-
-only-when-external trash {
-  alias:new rm  trash
-  alias:new rmm rm
-}
-
-only-when-external lsd {
-  alias:new ls  lsd
-  alias:new l   lsd -a
-  alias:new ll  lsd -al
-  alias:new lt  lsd -a --tree --depth 3
-  alias:new ltd lsd -a --tree
-}
-
-only-when-external spin {
-  alias:new tail spin
-}
-
 set edit:max-height = 30
 set edit:prompt-stale-transform = {|x| styled $x "bright-black" }
 set edit:-prompt-eagerness = 10
@@ -140,7 +113,35 @@ fn history {
   }
 }
 
-set edit:insert:binding[Ctrl-t] = {|| history >/dev/tty 2>&1 }
+#set edit:insert:binding[Ctrl-t] = {|| history >/dev/tty 2>&1 }
+
+only-when-external rg {
+  alias:new grep rg
+}
+
+only-when-external bat {
+  set E:BAT_CONFIG_PATH = ~/.batcfg
+  set E:MANPAGER = "sh -c 'col -bx | bat -l man -p'"
+  alias:new cat  bat
+  alias:new more bat --paging always
+}
+
+only-when-external trash {
+  alias:new rm  trash
+  alias:new rmm rm
+}
+
+only-when-external lsd {
+  alias:new ls  lsd
+  alias:new l   lsd -a
+  alias:new ll  lsd -al
+  alias:new lt  lsd -a --tree --depth 3
+  alias:new ltd lsd -a --tree
+}
+
+only-when-external tspin {
+  alias:new tail tspin
+}
 
 only-when-external carapace {
   eval (carapace _carapace|slurp)
@@ -156,6 +157,7 @@ only-when-external zellij {
   alias:new zrf zellij run --floating --
 }
 
+## zoxide
 set after-chdir = [{|dir| zoxide add (pwd -L) }]
 
 fn _z_cd {|directory|
@@ -189,6 +191,5 @@ fn z {|@a|
 
 only-when-external starship {
   set E:STARSHIP_CACHE = ~/.starship/cache
-  #eval (starship init elvish --print-full-init | sed 's/except/catch/' | slurp)
   eval (starship init elvish --print-full-init | slurp)
 }
