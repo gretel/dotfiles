@@ -1,15 +1,9 @@
 use epm
 use path
-#use re
-#use str
 
 epm:install &silent-if-installed=$true   ^
   github.com/zzamboni/elvish-modules     ^
-  github.com/xiaq/edit.elv               ^
   github.com/iwoloschin/elvish-packages
-
-use github.com/xiaq/edit.elv/smart-matcher
-smart-matcher:apply
 
 use github.com/zzamboni/elvish-modules/alias
 use github.com/zzamboni/elvish-modules/long-running-notifications
@@ -53,8 +47,6 @@ fn history {
   }
 }
 
-#set edit:insert:binding[Ctrl-t] = {|| history >/dev/tty 2>&1 }
-
 # python virtualenv
 use github.com/iwoloschin/elvish-packages/python
 set python:virtualenv-directory = $E:HOME/.virtualenvs
@@ -70,8 +62,36 @@ fn only-when-external { |prog lambda|
   if (have-external $prog) { $lambda }
 }
 
+# local environment
+set E:EDITOR = "subl -w"
+set E:GOPATH = $E:HOME/go
+set E:LC_ALL = "en_US.UTF-8"
+set E:LESS = "-i -R"
+set E:XDG_CACHE_HOME = $E:HOME/.cache
+
+# local "exports"
+var optpaths = [
+  $E:GOPATH/bin
+  $E:HOME/bin
+  /opt/homebrew/bin  # macos
+  /opt/homebrew/sbin # macos
+  /Users/tom/.cargo/bin
+]
+var optpaths-filtered = [(each {|p|
+    if (path:is-dir $p) { put $p }
+} $optpaths)]
+set paths = [
+  $@optpaths-filtered
+  /usr/local/bin
+  /usr/local/sbin
+  /usr/sbin
+  /sbin
+  /usr/bin
+  /bin
+]
+
 only-when-external bat {
-  set E:BAT_CONFIG_PATH = ~/.batcfg
+  set E:BAT_CONFIG_PATH = $E:HOME/.batcfg
   set E:MANPAGER = "sh -c 'col -bx | bat -l man -p'"
   alias:new cat  bat
   alias:new more bat --paging always
@@ -147,44 +167,16 @@ fn z {|@a|
   }
 }
 
-# local environment
-set E:EDITOR = "subl -w"
-set E:GOPATH = ~/go
-set E:LC_ALL = "en_US.UTF-8"
-set E:LESS = "-i -R"
-set E:XDG_CACHE_HOME = "~/.cache"
-
-# local "exports"
-var optpaths = [
-  $E:GOPATH/bin
-  /opt/homebrew/bin  # macos
-  /opt/homebrew/sbin # macos
-  /Users/tom/.cargo/bin
-  ~/bin
-]
-var optpaths-filtered = [(each {|p|
-    if (path:is-dir $p) { put $p }
-} $optpaths)]
-set paths = [
-  $@optpaths-filtered
-  /usr/local/bin
-  /usr/local/sbin
-  /usr/sbin
-  /sbin
-  /usr/bin
-  /bin
-]
-
 # local module
 use direnv
 
-# only-when-external keychain {
-#   keychain --quiet --nogui --inherit any-once --agents ssh --quick ~/.ssh/id_ed25519
-# }
+only-when-external keychain {
+  keychain --quiet --nogui --inherit any-once --agents ssh --quick $E:HOME/.ssh/id_ed25519
+}
 
 # starship or chains
 if (have-external starship) {
-  set E:STARSHIP_CACHE = ~/.starship/cache
+  set E:STARSHIP_CACHE = $E:HOME/.starship/cache
   eval (starship init elvish --print-full-init|slurp)
 } else {
   use github.com/zzamboni/elvish-themes/chain
