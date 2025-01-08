@@ -1,5 +1,0 @@
-[flake8]
-ignore = E402,F403
-max-line-length = 160
-exclude = tests/*,.git,__pycache
-max-complexity = 10

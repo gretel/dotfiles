@@ -1,9 +1,0 @@
-chardet
-codevalidator
-esphome
-esptool
-Jinja2
-platformio
-pre-commit
-ranger-fm
-virtualenv

@@ -17,6 +17,7 @@ config.hide_mouse_cursor_when_typing = false
 config.hide_tab_bar_if_only_one_tab = true
 config.macos_window_background_blur = 18
 config.pane_focus_follows_mouse = true
+config.show_close_tab_button_in_tabs = false
 config.switch_to_last_active_tab_when_closing_tab = true
 config.tab_max_width = 3
 config.use_dead_keys = false
