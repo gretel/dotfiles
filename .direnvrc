@@ -1,0 +1,7 @@
+log_prefix() {
+  local cwd
+  cwd=$(user_rel_path "$(expand_path "$1")")
+  export DIRENV_LOG_FORMAT
+  DIRENV_LOG_FORMAT="$(tput setaf 7)$(tput dim)[$cwd]$(tput sgr0) $(tput setaf 7)$(tput bold)%s$(tput sgr0)"
+}
+log_prefix "$1"
