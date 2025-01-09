@@ -12,7 +12,6 @@ brew "git"
 brew "git-delta"
 brew "git-lfs"
 brew "gitui"
-brew "graphviz"
 brew "hadolint"
 brew "jq"
 brew "keychain"
@@ -30,7 +29,6 @@ brew "tailspin"
 brew "terminal-notifier"
 brew "tmux"
 brew "trash", link: true
-brew "trivy"
 brew "zellij"
 brew "zoxide"
 
@@ -40,7 +38,6 @@ cask "knockknock"
 cask "lulu"
 cask "murus"
 cask "reikey"
-cask "taskexplorer"
 
 # cloud
 #brew "awscli"
@@ -49,10 +46,13 @@ cask "taskexplorer"
 #brew "terraform"
 #brew "tflint"
 #brew "tfsec"
+brew "trivy"
+brew "graphviz"
 
 # programs
+cask "1password-cli"
+cask "1password@beta"
 cask "alfred"
-cask "exifcleaner"
 cask "firefox@beta"
 cask "font-hack-nerd-font"
 cask "font-meslo-lg-nerd-font"
@@ -65,17 +65,17 @@ cask "keka"
 cask "microsoft-teams"
 cask "signal"
 cask "ssdreporter-free"
-cask "sublime-text@dev", greedy: true
+cask "sublime-text"
+#cask "sublime-text@dev", greedy: true
 cask "syncthing"
-cask "uninstallpkg"
 cask "utm@beta"
 cask "wezterm@nightly", greedy: true
 
 # appstore
-mas "1Password", id: 443987910
 mas "Apple Configurator", id: 1037126344
-mas "Bitwarden", id: 1352778147
-mas "WireGuard", id: 1451685025
+#mas "1Password", id: 443987910
+#mas "Bitwarden", id: 1352778147
+#mas "WireGuard", id: 1451685025
 
 # cask "vscode"
 # vscode "bierner.github-markdown-preview"
