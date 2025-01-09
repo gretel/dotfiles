@@ -1,8 +1,6 @@
 tap "homebrew/bundle"
 tap "rsteube/homebrew-tap"
 
-cask_args appdir: "~/Applications", require_sha: true
-
 # tools
 brew "asciinema"
 brew "bat"
@@ -39,6 +37,7 @@ brew "zoxide"
 # security
 cask "blockblock"
 cask "knockknock"
+cask "lulu"
 cask "murus"
 cask "reikey"
 cask "taskexplorer"
