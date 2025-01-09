@@ -1,6 +1,0 @@
-#context = 3
-ignore = [".git", ".terraform-plans", "terraform.tfstate.backup"]
-hidden = true
-smart-case = true
-global-gitignore = true
-follow = false
