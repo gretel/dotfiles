@@ -1,6 +1,6 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-scan_timeout = 10
+scan_timeout = 20
 #add_newline = false
 
 [character]
@@ -38,7 +38,7 @@ style_user = 'white bold'
 #disabled = true
 format = " [$symbol$branch]($style) "
 style = "bold yellow"
-symbol = "🍣 "
+symbol = "🪵 "
 
 [git_commit]
 #disabled = true
@@ -87,9 +87,10 @@ symbol = '🅰 '
 eu-central-1 = 'ffm'
 
 [custom.elixir]
-format = '[$symbol(v$output)]($style)'
-command = "elixir --short-version 2>/dev/null"
-when = "test -f mix.exs"
+command = 'mise exec -- elixir --short-version 2>/dev/null'
+shell = '/bin/sh'
+detect_files = ['mix.exs']
+format = '[$symbol($output )]($style)'
 style = 'bold purple'
 symbol = '💧'
 
