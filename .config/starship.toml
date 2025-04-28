@@ -1,84 +1,105 @@
-add_newline = false
+"$schema" = 'https://starship.rs/config-schema.json'
+
+scan_timeout = 10
+#add_newline = false
 
 [character]
 format = "$symbol "
-
-[line_break]
-disabled = true
 
 [directory]
 truncation_length = 10
 truncation_symbol = "…/"
 
 [cmd_duration]
+#disabled = true
 min_time = 20_000
 format = "took [$duration](white)"
 
 [hostname]
+#disabled = true
 ssh_only = true
 format = "💻 [$hostname]($style) "
 trim_at = "-"
 style = "yellow"
 
 [time]
-time_format = "%T"
+disabled = false
 format = "$time($style) "
 style = "bright-white"
-disabled = false
+time_format = "%T"
 
 [username]
-style_user = 'white bold'
-style_root = 'black bold'
-format = '[$user]($style) '
 disabled = true
+format = '[$user]($style) '
+style_root = 'black bold'
+style_user = 'white bold'
 
 [git_branch]
+#disabled = true
 format = " [$symbol$branch]($style) "
-symbol = "🍣 "
 style = "bold yellow"
+symbol = "🍣 "
 
 [git_commit]
+#disabled = true
 commit_hash_length = 8
 style = "bold white"
 
 [git_state]
+#disabled = true
+cherry_pick = '[🍒 PICKING](bold red)'
 format = '[\($state( $progress_current of $progress_total)\)]($style) '
 
 [git_status]
-conflicted = "⚔️ "
+disabled = true
+use_git_executable = true # if 'gitoxide' is not available
 ahead = "🏎️ 💨 ×${count}"
 behind = "🐢 ×${count}"
-diverged = "🔱 🏎️ 💨 ×${ahead_count} 🐢 ×${behind_count}"
-untracked = "🛤️  ×${count}"
-stashed = "📦 "
-modified = "📝 ×${count}"
-staged = "🗃️  ×${count}"
-renamed = "📛 ×${count}"
+conflicted = "⚔️ "
 deleted = "🗑️  ×${count}"
-style = "bright-white"
+diverged = "🔱 🏎️ 💨 ×${ahead_count} 🐢 ×${behind_count}"
 format = "$all_status$ahead_behind"
+modified = "📝 ×${count}"
+renamed = "📛 ×${count}"
+staged = "🗃️  ×${count}"
+stashed = "📦 "
+style = "bright-white"
+untracked = "🛤️  ×${count}"
+
+[direnv]
+disabled = false
+symbol = "📁 "
 
 [python]
+#disabled = true
+format = '[${symbol}(${version} )($virtualenv)]($style) '
 pyenv_version_name = true
 python_binary = "python3"
-format = '[${symbol}(${version} )($virtualenv)]($style) '
 
 [aws]
 disabled = true
-#format = 'on [$symbol$profile]($style) '
 format = 'on [$symbol($profile)(\($region\) )]($style) '
+#format = 'on [$symbol$profile]($style) '
 style = 'bold blue'
 symbol = '🅰 '
-[aws.profile_aliases]
-teacher = 'ts'
-default = 'def'
+
 [aws.region_aliases]
 eu-central-1 = 'ffm'
 
-[azure]
-disabled = false
+[custom.elixir]
+format = '[$symbol(v$output)]($style)'
+command = "elixir --short-version 2>/dev/null"
+when = "test -f mix.exs"
+style = 'bold purple'
+symbol = '💧'
 
 # disablements
+
+[elixir]
+disabled = true
+
+[azure]
+disabled = true
 
 [java]
 disabled = true
