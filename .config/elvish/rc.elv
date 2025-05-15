@@ -1,19 +1,14 @@
 use epm
 use path
 
-epm:install &silent-if-installed=$true   ^
-  github.com/zzamboni/elvish-modules     ^
-  github.com/iwoloschin/elvish-packages  ^
-  github.com/zzamboni/elvish-completions
+epm:install &silent-if-installed=$true ^
+  github.com/zzamboni/elvish-modules
 
 use github.com/zzamboni/elvish-modules/alias
 use github.com/zzamboni/elvish-modules/long-running-notifications
+
 set long-running-notifications:never-notify = [ bash bat less subl tail tmux tspin vi zellij ]
 set long-running-notifications:threshold = 30
-
-use github.com/zzamboni/elvish-completions/builtins
-use github.com/zzamboni/elvish-completions/git
-use github.com/zzamboni/elvish-completions/ssh
 
 set edit:max-height = 30
 set edit:-prompt-eagerness = 10
@@ -64,16 +59,16 @@ set E:EDITOR = "subl -w"
 set E:GOPATH = $E:HOME/go
 set E:LC_ALL = "en_US.UTF-8"
 set E:LESS = "-i -R"
+set E:VIRTUAL_ENV_DISABLE_PROMPT = "yes"
 set E:XDG_CACHE_HOME = $E:HOME/.cache
 
 # local "exports"
 var optpaths = [
   $E:GOPATH/bin
   $E:HOME/bin
+  $E:HOME/.cargo/bin
   /opt/homebrew/bin  # macos
   /opt/homebrew/sbin # macos
-  /Applications/WezTerm.app/Contents/MacOS # macos
-  $E:HOME/.cargo/bin
 ]
 var optpaths-filtered = [(each {|p|
     if (path:is-dir $p) { put $p }
@@ -93,6 +88,10 @@ only-when-external bat {
   set E:MANPAGER = "sh -c 'col -bx | bat -l man -p'"
   alias:new cat  bat
   alias:new more bat --paging always
+}
+
+only-when-external carapace {
+  eval (carapace _carapace|slurp)
 }
 
 only-when-external lsd {
@@ -129,68 +128,36 @@ only-when-external wezterm {
 
 only-when-external zellij {
   eval (zellij setup --generate-completion elvish|slurp)
-  alias:new zj  zellij
-  alias:new za  zellij action
-  alias:new ze  zellij edit             
-  alias:new zef zellij edit --floating
-  alias:new zr  zellij run --
-  alias:new zrf zellij run --floating --
+  alias:new zj   zellij
+  alias:new zja  zellij action
+  alias:new zje  zellij edit             
+  alias:new zjef zellij edit --floating
+  alias:new zjr  zellij run --
+  alias:new zjrf zellij run --floating --
 }
 
-# FIXME
-#only-when-external zoxide {
-  ## zoxide
-  set after-chdir = [{|dir| zoxide add (pwd -L) }]
-  fn _z_cd {|directory|
-    cd $directory
-  }
-  fn zi {|@a|
-    _z_cd (zoxide query -i -- $@a)
-  }
-  fn za {|@a| zoxide add $@a }
-  fn zq {|@a| zoxide query $@a }
-  fn zqi {|@a| zoxide query -i $@a }
-  #fn zr {|@a| zoxide remove $@a }
-  fn zri {|@a|
-    zoxide remove (zoxide query -i -- $@a)
-  }
-  fn z {|@a|
-    if (is [] $@a) {
-      _z_cd ~
-    } else {
-      # ok `z -` is not supported
-      _z_cd (zoxide query -- $@a)
-    }
-  }
-#}
+eval (zoxide init elvish | slurp)
 
-# only-when-external carapace {
-#   eval (carapace _carapace|slurp)
-# }
+# https://mise.jdx.dev/installing-mise.html#elvish
+var mise: = (ns [&])
+eval (mise activate elvish | slurp) &ns=$mise: &on-end={|ns| set mise: = $ns }
+mise:activate
+edit:add-var mise~ {|@args| mise:mise $@args }
 
-# only-when-external keychain {
-#   keychain --quiet --nogui --inherit any-once --agents gpg,ssh --timeout 3600 --quick $E:HOME/.ssh/id_ed25519 756FF198AD03D3A6
-# }
-
-only-when-external python3 {
-  # python virtualenv
-  use github.com/iwoloschin/elvish-packages/python
-  set python:virtualenv-directory = $E:HOME/.virtualenvs
-  set E:VIRTUAL_ENV_DISABLE_PROMPT = "yes"
-  edit:add-var activate~ $python:activate~
-  edit:add-var deactivate~ $python:deactivate~
-  set edit:completion:arg-completer[activate] = $edit:completion:arg-completer[python:activate]
-}
-
-# local module
+# https://direnv.net/docs/hook.html#elvish-012
 use direnv
 
 # starship or chains
 if (have-external starship) {
   set E:STARSHIP_CACHE = $E:HOME/.starship/cache
-  eval (starship init elvish --print-full-init|slurp)
+  eval (starship init elvish --print-full-init | slurp)
 } else {
   use github.com/zzamboni/elvish-themes/chain
   set edit:prompt-stale-transform = {|x| styled $x "bright-black" }
   chain:init
+}
+
+# https://www.funtoo.org/Funtoo:Keychain
+only-when-external keychain {
+  keychain --quiet --nogui --ssh-allow-forwarded --quick $E:HOME/.ssh/id_ed25519
 }
