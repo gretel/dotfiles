@@ -1,95 +1,48 @@
--- hyper(Alt, Ctrl, Cmd) and shift_hyper(Shift, Alt, Ctrl, Cmd) are the hotkeys to be used with the modifiers
--- Default MiroWindowsManager keybindings
--- hyper + c = Center focused window x and y
--- hyper + x = Center focused window y
--- hyper + v = Center focused window x
--- hyper + [ = Maximize focused window y
--- hyper + ] = Maximize focused window x
--- shift_hyper + left = Move focused window left 1 monitor
--- shift_hyper + right = Move focused window right 1 monitor
+-- init.lua
 
--- spoon.MiroWindowsManager.sizes = { 6/5, 4/3, 3/2, 2/1, 3/1, 4/1, 6/1 }
+-- https://github.com/Hammerspoon/hammerspoon/issues/2943#issuecomment-2105644391
+function _wf_ignoreWebContent()
+    for _, app in pairs(hs.application.runningApplications()) do
+        local name = app:name()
+        if name and (name:match(" Web Content$") or app:bundleID() == "com.apple.WebKit.WebContent") then
+            hs.window.filter.ignoreAlways[name] = true
+        end
+    end
+end
 
-hs.window.animationDuration = 0
+hs.timer.doEvery(15, _wf_ignoreWebContent)
+_wf_ignoreWebContent()
 
+-- Define keyboard modifiers
 hyper = { 'alt', 'ctrl', 'cmd' }
-shift_hyper = { 'shift', 'ctrl', 'cmd', 'alt'}
 
--- window hinting
+-- Window hinting on F19
 hs.hotkey.bind({}, 'F19', hs.hints.windowHints)
+hs.hints.hintChars = {"Q","W","E","R","T","Z","A","S","D","F","G","H","Z","X","C","V","B","N"}
 
-hs.loadSpoon("MiroWindowsManager")
-spoon.MiroWindowsManager:bindHotkeys({
+-- Load jitterWM with improved behavior
+local jitterWM = hs.loadSpoon("jitterWM")
+
+-- Configure with minimal options
+jitterWM:setConfig({
+  animationDuration = 0.0,
+})
+
+-- Set up all window management hotkeys
+jitterWM:bindHotkeys({
+  -- Standard directional controls
   up = {hyper, "up"},
   right = {hyper, "right"},
   down = {hyper, "down"},
   left = {hyper, "left"},
-  fullscreen = {hyper, "="}
+  fullscreen = {hyper, "space"},
+  
+  -- Additional window positioning (all now have toggle behavior)
+  center = {hyper, "/"},         -- Center window on screen
+  maximizeHeight = {hyper, ","}, -- Make window full height
+  maximizeWidth = {hyper, "."},  -- Make window full width
+  
+  -- Multi-monitor support
+  nextScreen = {shift_hyper, "right"}, -- Move window to next screen
+  prevScreen = {shift_hyper, "left"}   -- Move window to previous screen
 })
-
--- center focused x and y
-hs.hotkey.bind(hyper, '.', function()
-	local win = hs.window.focusedWindow()
-	local f = win:frame()
-	local max = win:screen():frame()
-
-	local x = f
-
-	x.x = ((max.w - f.w) / 2) + max.x
-	x.y = ((max.h - f.h) / 2) + max.y
-	win:setFrame(x)
-end)
-
--- center focused y
-hs.hotkey.bind(hyper, ',', function()
-	local win = hs.window.focusedWindow()
-	local f = win:frame()
-	local max = win:screen():frame()
-
-	local x = f
-
-	x.y = ((max.h - f.h) / 2) + max.y
-	win:setFrame(x)
-end)
-
--- center focused x
-hs.hotkey.bind(hyper, ';', function()
-	local win = hs.window.focusedWindow()
-	local f = win:frame()
-	local max = win:screen():frame()
-
-	local x = f
-
-	x.x = ((max.w - f.w) / 2) + max.x
-	win:setFrame(x)
-end)
-
--- maximize vertically
-hs.hotkey.bind(hyper, '[', function()
-	local win = hs.window.focusedWindow()
-	local f = win:frame()
-	local max = win:screen():frame()
-
-	local x = f
-
-	x.y = max.y
-	x.h = max.h
-	win:setFrame(x)
-end)
-
--- maximize horizontally
-hs.hotkey.bind(hyper, ']', function()
-	local win = hs.window.focusedWindow()
-	local f = win:frame()
-	local max = win:screen():frame()
-
-	local x = f
-
-	x.x = max.x
-	x.w = max.w
-	win:setFrame(x)
-end)
-
--- move focused window to other screen
-hs.hotkey.bind(shift_hyper, 'right', function() hs.window.focusedWindow():moveOneScreenEast(true, true) end)
-hs.hotkey.bind(shift_hyper, 'left', function() hs.window.focusedWindow():moveOneScreenWest(true, true) end)

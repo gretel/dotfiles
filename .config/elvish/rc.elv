@@ -3,12 +3,17 @@ use path
 
 epm:install &silent-if-installed=$true   ^
   github.com/zzamboni/elvish-modules     ^
-  github.com/iwoloschin/elvish-packages
+  github.com/iwoloschin/elvish-packages  ^
+  github.com/zzamboni/elvish-completions
 
 use github.com/zzamboni/elvish-modules/alias
 use github.com/zzamboni/elvish-modules/long-running-notifications
 set long-running-notifications:never-notify = [ bash bat less subl tail tmux tspin vi zellij ]
 set long-running-notifications:threshold = 30
+
+use github.com/zzamboni/elvish-completions/builtins
+use github.com/zzamboni/elvish-completions/git
+use github.com/zzamboni/elvish-completions/ssh
 
 set edit:max-height = 30
 set edit:-prompt-eagerness = 10
@@ -47,14 +52,6 @@ fn history {
   }
 }
 
-# python virtualenv
-use github.com/iwoloschin/elvish-packages/python
-set python:virtualenv-directory = $E:HOME/.virtualenvs
-set E:VIRTUAL_ENV_DISABLE_PROMPT = "yes"
-edit:add-var activate~ $python:activate~
-edit:add-var deactivate~ $python:deactivate~
-set edit:completion:arg-completer[activate] = $edit:completion:arg-completer[python:activate]
-
 fn have-external { |prog|
   put ?(which $prog >/dev/null 2>&1)
 }
@@ -75,7 +72,8 @@ var optpaths = [
   $E:HOME/bin
   /opt/homebrew/bin  # macos
   /opt/homebrew/sbin # macos
-  /Users/tom/.cargo/bin
+  /Applications/WezTerm.app/Contents/MacOS # macos
+  $E:HOME/.cargo/bin
 ]
 var optpaths-filtered = [(each {|p|
     if (path:is-dir $p) { put $p }
@@ -95,10 +93,6 @@ only-when-external bat {
   set E:MANPAGER = "sh -c 'col -bx | bat -l man -p'"
   alias:new cat  bat
   alias:new more bat --paging always
-}
-
-only-when-external carapace {
-  eval (carapace _carapace|slurp)
 }
 
 only-when-external lsd {
@@ -143,36 +137,53 @@ only-when-external zellij {
   alias:new zrf zellij run --floating --
 }
 
-## zoxide
-set after-chdir = [{|dir| zoxide add (pwd -L) }]
-fn _z_cd {|directory|
-  cd $directory
-}
-fn zi {|@a|
-  _z_cd (zoxide query -i -- $@a)
-}
-fn za {|@a| zoxide add $@a }
-fn zq {|@a| zoxide query $@a }
-fn zqi {|@a| zoxide query -i $@a }
-#fn zr {|@a| zoxide remove $@a }
-fn zri {|@a|
-  zoxide remove (zoxide query -i -- $@a)
-}
-fn z {|@a|
-  if (is [] $@a) {
-    _z_cd ~
-  } else {
-    # ok `z -` is not supported
-    _z_cd (zoxide query -- $@a)
+# FIXME
+#only-when-external zoxide {
+  ## zoxide
+  set after-chdir = [{|dir| zoxide add (pwd -L) }]
+  fn _z_cd {|directory|
+    cd $directory
   }
+  fn zi {|@a|
+    _z_cd (zoxide query -i -- $@a)
+  }
+  fn za {|@a| zoxide add $@a }
+  fn zq {|@a| zoxide query $@a }
+  fn zqi {|@a| zoxide query -i $@a }
+  #fn zr {|@a| zoxide remove $@a }
+  fn zri {|@a|
+    zoxide remove (zoxide query -i -- $@a)
+  }
+  fn z {|@a|
+    if (is [] $@a) {
+      _z_cd ~
+    } else {
+      # ok `z -` is not supported
+      _z_cd (zoxide query -- $@a)
+    }
+  }
+#}
+
+# only-when-external carapace {
+#   eval (carapace _carapace|slurp)
+# }
+
+# only-when-external keychain {
+#   keychain --quiet --nogui --inherit any-once --agents gpg,ssh --timeout 3600 --quick $E:HOME/.ssh/id_ed25519 756FF198AD03D3A6
+# }
+
+only-when-external python3 {
+  # python virtualenv
+  use github.com/iwoloschin/elvish-packages/python
+  set python:virtualenv-directory = $E:HOME/.virtualenvs
+  set E:VIRTUAL_ENV_DISABLE_PROMPT = "yes"
+  edit:add-var activate~ $python:activate~
+  edit:add-var deactivate~ $python:deactivate~
+  set edit:completion:arg-completer[activate] = $edit:completion:arg-completer[python:activate]
 }
 
 # local module
 use direnv
-
-only-when-external keychain {
-  keychain --quiet --nogui --inherit any-once --agents ssh --quick $E:HOME/.ssh/id_ed25519
-}
 
 # starship or chains
 if (have-external starship) {
