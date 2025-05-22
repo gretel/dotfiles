@@ -20,15 +20,15 @@ hyper = { 'alt', 'ctrl', 'cmd' }
 hs.hotkey.bind({}, 'F19', hs.hints.windowHints)
 hs.hints.hintChars = {"Q","W","E","R","T","Z","A","S","D","F","G","H","Z","X","C","V","B","N"}
 
--- Load jitterWM with improved behavior
+-- Load jitterWM
 local jitterWM = hs.loadSpoon("jitterWM")
 
--- Configure with minimal options
+-- Configure WM
 jitterWM:setConfig({
   animationDuration = 0.0,
 })
 
--- Set up all window management hotkeys
+-- Set up window management hotkeys
 jitterWM:bindHotkeys({
   -- Standard directional controls
   up = {hyper, "up"},
@@ -37,12 +37,12 @@ jitterWM:bindHotkeys({
   left = {hyper, "left"},
   fullscreen = {hyper, "space"},
   
-  -- Additional window positioning (all now have toggle behavior)
+  -- Additional window positioning
   center = {hyper, "/"},         -- Center window on screen
   maximizeHeight = {hyper, ","}, -- Make window full height
   maximizeWidth = {hyper, "."},  -- Make window full width
   
   -- Multi-monitor support
-  nextScreen = {shift_hyper, "right"}, -- Move window to next screen
-  prevScreen = {shift_hyper, "left"}   -- Move window to previous screen
+  nextScreen = {hyper, "]"}, -- Move window to next screen
+  prevScreen = {hyper, "["}   -- Move window to previous screen
 })
