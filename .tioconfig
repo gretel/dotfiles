@@ -1,0 +1,17 @@
+###############################
+# tio - https://tio.github.io #
+###############################
+
+[default]
+prefix-ctrl-key = e
+
+[esp32]
+device = /dev/ttyUSB0
+color = 14
+script = tio.set{DTR=high,RTS=low}; tio.msleep(100); tio.set{DTR=low,RTS=high}; tio.msleep(100); tio.set{RTS=low}
+script-run = always
+
+[buspirate]
+device = /dev/ttyACM0
+map = INLCRNL,ODELBS
+color = 15
