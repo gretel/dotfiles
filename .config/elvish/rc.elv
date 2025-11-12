@@ -67,6 +67,7 @@ var optpaths = [
   $E:GOPATH/bin
   $E:HOME/bin
   $E:HOME/.cargo/bin
+  $E:HOME/.kelp/bin  # macos
   /opt/homebrew/bin  # macos
   /opt/homebrew/sbin # macos
 ]
@@ -91,11 +92,12 @@ only-when-external bat {
 }
 
 only-when-external carapace {
-  eval (carapace _carapace|slurp)
+  set-env CARAPACE_BRIDGES 'bash'
+  eval (carapace _carapace | slurp)
 }
 
 only-when-external lsd {
-  alias:new ls  lsd
+  #alias:new ls  lsd
   alias:new l   lsd -a
   alias:new ll  lsd -al
   alias:new lt  lsd -a --tree --depth 3
@@ -158,6 +160,6 @@ if (have-external starship) {
 }
 
 # https://www.funtoo.org/Funtoo:Keychain
-only-when-external keychain {
-  keychain --quiet --nogui --ssh-allow-forwarded --quick $E:HOME/.ssh/id_ed25519
-}
+# only-when-external keychain {
+#   keychain --quiet --nogui --ssh-allow-forwarded --quick $E:HOME/.ssh/id_ed25519
+# }
