@@ -1,0 +1,57 @@
+layout_uv() {
+  local python_version="${1:-}"  # Optional: specify version like "3.11" or "3.12"
+  local should_recreate=0
+  
+  # Check if we need to recreate venv due to version mismatch
+  if [[ -d ".venv" && -n "$python_version" ]]; then
+    local current_version
+    if [[ -f ".venv/bin/python" ]]; then
+      current_version=$(.venv/bin/python --version 2>&1 | grep -oE '[0-9]+\.[0-9]+')
+    elif [[ -f ".venv/Scripts/python.exe" ]]; then
+      current_version=$(.venv/Scripts/python.exe --version 2>&1 | grep -oE '[0-9]+\.[0-9]+')
+    fi
+    
+    if [[ -n "$current_version" && "$current_version" != "$python_version"* ]]; then
+      log_status "Python version mismatch (current: $current_version, requested: $python_version). Recreating venv."
+      rm -rf .venv
+      should_recreate=1
+    fi
+  fi
+  
+  if [[ ! -d ".venv" || $should_recreate -eq 1 ]]; then
+    if [[ ! -f "pyproject.toml" ]]; then
+      log_status "No uv project exists. Executing \`uv init\` to create one."
+      uv init --no-readme
+      rm -f main.py
+    fi
+    
+    if [[ -n "$python_version" ]]; then
+      log_status "Creating venv with Python $python_version"
+      uv venv --python "$python_version"
+    else
+      uv venv
+    fi
+    
+    # Install pip into the venv
+    uv pip install --python .venv/bin/python pip
+    
+    if [[ -f "pyproject.toml" ]]; then
+      uv sync
+    fi
+  fi
+  
+  VIRTUAL_ENV="$(pwd)/.venv"
+
+  # Ensure uv is in PATH first
+  if command -v uv >/dev/null 2>&1; then
+    PATH_add "$(dirname "$(command -v uv)")"
+  fi
+
+  if [ -d ".venv/bin" ]; then
+    PATH_add .venv/bin
+  elif [ -d ".venv/Scripts" ]; then
+    PATH_add .venv/Scripts
+  fi
+  export UV_ACTIVE=1
+  export VIRTUAL_ENV
+}
