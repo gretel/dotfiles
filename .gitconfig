@@ -9,10 +9,10 @@
   can = commit --amend --no-edit
   cf = diff --diff-filter=U
   cl = clone --recurse-submodules --depth 3
-  cs = clone --recurse-submodules --depth 1
   cm = commit -m
   cn = commit --no-edit
   co = checkout
+  cs = clone --recurse-submodules --depth 1
   d = diff
   di = diff
   ds = diff --staged
@@ -57,14 +57,16 @@
   ui = auto
 [commit]
   short = true
+	gpgsign = true
 [core]
-  editor = subl -n -w
-  pager = delta --dark
-  whitespace = trailing-space,space-before-tab
-  excludesfile = /Users/tom/.gitignore_global
   autocrlf = input
+  editor = subl -n -w
+  excludesfile = /Users/tom/.gitignore_global
+	fsmonitor = false
   ignorecase = false
+  pager = delta --dark
   safecrlf = warn
+  whitespace = trailing-space,space-before-tab
 [diff]
   algorithm = patience
   renames = copies
@@ -93,11 +95,14 @@
   fsckobjects = true
 [user]
   email = code@jitter.eu
-  name = gretel
+  name = Tom Hensel
+	signingkey = 
 [gpg]
   program = gpg
+	format = ssh
 [init]
-  templatedir = ~/.git-templates
+  #templatedir = ~/.git-templates
+	defaultBranch = main
 [advice]
   pushNonFastForward = false
   statusHints = false

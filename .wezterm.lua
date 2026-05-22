@@ -11,6 +11,7 @@ config.font_size = 12.0
 config.color_scheme = 'AdventureTime'
 
 config.automatically_reload_config = true
+config.enable_kitty_keyboard = true
 config.enable_scroll_bar = true
 config.hide_mouse_cursor_when_typing = false
 config.hide_tab_bar_if_only_one_tab = true
@@ -21,16 +22,16 @@ config.switch_to_last_active_tab_when_closing_tab = true
 config.tab_max_width = 3
 config.use_dead_keys = false
 config.use_fancy_tab_bar = true
-config.window_background_opacity = 0.70
-config.window_close_confirmation = 'NeverPrompt'
+config.window_background_opacity = 0.80
+config.window_close_confirmation = 'AlwaysPrompt'
 config.window_decorations = 'RESIZE'
 
 config.macos_fullscreen_extend_behind_notch = true
 config.macos_window_background_blur = 18
 
-config.skip_close_confirmation_for_processes_named = {
-  'elvish',
-}
+-- config.skip_close_confirmation_for_processes_named = {
+--   'elvish',
+-- }
 
 config.unix_domains = {
   {
@@ -57,6 +58,12 @@ config.window_padding = {
   bottom = 6,
 }
 
+config.leader = {
+  key = 't',
+  mods = 'CTRL',
+  timeout_milliseconds = 2000,
+}
+
 config.mouse_bindings = {
   -- Open hyperlink
   {
@@ -75,12 +82,6 @@ config.mouse_bindings = {
     mods = 'CMD',
     action = act.Nop,
   }
-}
-
-config.leader = {
-  key = 't',
-  mods = 'CTRL',
-  timeout_milliseconds = 2000,
 }
 
 config.keys = {
@@ -106,7 +107,7 @@ config.keys = {
   {
     key = 'w',
     mods = 'CMD',
-    action = wezterm.action.CloseCurrentPane { confirm = true },
+    action = act.CloseCurrentPane { confirm = true },
   },
   -- Toggle fullscreen
   {

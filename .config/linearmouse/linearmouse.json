@@ -1,0 +1,67 @@
+{
+  "$schema" : "https:\/\/schema.linearmouse.app\/0.11.2",
+  "schemes" : [
+    {
+      "if" : {
+        "device" : {
+          "category" : "mouse",
+          "productID" : "0xf99",
+          "productName" : "USB OPTICAL MOUSE ",
+          "vendorID" : "0x18f8"
+        }
+      },
+      "pointer" : {
+        "acceleration" : 0,
+        "disableAcceleration" : false,
+        "speed" : 0.85
+      },
+      "scrolling" : {
+        "reverse" : {
+          "vertical" : true
+        }
+      }
+    },
+    {
+      "if" : {
+        "device" : {
+          "category" : "trackpad",
+          "productID" : "0x265",
+          "productName" : "Magic Trackpad",
+          "serialNumber" : "CC2548509FXGTFQAH",
+          "vendorID" : "0x5ac"
+        }
+      },
+      "pointer" : {
+        "acceleration" : 3.3688,
+        "disableAcceleration" : false,
+        "redirectsToScroll" : false,
+        "speed" : 0.2487
+      },
+      "scrolling" : {
+        "acceleration" : 1,
+        "distance" : "auto",
+        "smoothed" : {
+          "horizontal" : {
+            "acceleration" : 2,
+            "bouncing" : true,
+            "enabled" : true,
+            "inertia" : 1.5,
+            "preset" : "easeInOut",
+            "response" : 1.5,
+            "speed" : 4
+          },
+          "vertical" : {
+            "acceleration" : 2.2,
+            "bouncing" : false,
+            "enabled" : true,
+            "inertia" : 1.6,
+            "preset" : "smooth",
+            "response" : 1.6,
+            "speed" : 4.4
+          }
+        },
+        "speed" : 0
+      }
+    }
+  ]
+}
