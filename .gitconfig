@@ -57,17 +57,11 @@
   ui = auto
 [commit]
   short = true
-	gpgsign = true
 [core]
   autocrlf = input
   editor = subl -n -w
-<<<<<<< HEAD
   excludesfile = ~/.gitignore_global
   fsmonitor = false
-=======
-  excludesfile = /Users/tom/.gitignore_global
-	fsmonitor = false
->>>>>>> 13ba4d1f7945310697a9c7c4c046f18e0fd3b876
   ignorecase = false
   pager = delta --dark
   safecrlf = warn
@@ -100,10 +94,10 @@
   fsckobjects = true
 [user]
   email = code@jitter.eu
-  name = Tom Hensel
-	signingkey = ssh-ed25519
+	name = DO2THX
+	signingkey = key::ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA4QmeUWSyX706AbKM2N73B+y/Cabondu2sNUuig/fBD
 [gpg]
-  format = ssh
+	format = ssh
 [init]
   defaultBranch = main
 [advice]
