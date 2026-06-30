@@ -1,5 +1,5 @@
 # bitwarden ssh agent
-export SSH_AUTH_SOCK="~/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
+export SSH_AUTH_SOCK="${HOME}/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
 
 # direnv
 eval "$(direnv hook bash)"
@@ -38,7 +38,7 @@ parse_git_changes() {
 ## Build-up what will be the final PS1 string
 set_bash_prompt(){
   PS1="${RESET}"
-  PS1+="${BOLD}${COL_USER_HOST}\u @ \h ${RESET}${COL_CURRENT_PATH}\w "
+  PS1+="${BOLD}${COL_USER_HOST}\u @ \h ${RESET}${COL_CURRENT_PATH}\w"
 
   if [ "$SHOW_GIT" = true ] && [ "$(git rev-parse --is-inside-work-tree 2> /dev/null)" = true ] ; then
     PS1+="$(parse_git_changes)"
